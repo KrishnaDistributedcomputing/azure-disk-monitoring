@@ -214,7 +214,7 @@ export default function MonitorPage() {
               ))}
             </div>
 
-            {/* Fleet Charts Row */}
+            {/* Fleet Charts Row 1 */}
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
               {/* Health Distribution */}
               <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
@@ -256,6 +256,151 @@ export default function MonitorPage() {
                     <Legend wrapperStyle={{ fontSize: '11px' }} />
                   </PieChart>
                 </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Fleet Charts Row 2 — Latency, Throughput, Cost */}
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+              {/* Latency by VM */}
+              <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">Avg Latency by VM (ms)</h3>
+                <ResponsiveContainer width="100%" height={180}>
+                  <BarChart data={fleet.map((v) => ({ name: v.vmName.replace('vm-diskmon-', ''), latency: v.avgLatencyMs }))} layout="vertical">
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={65} />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} formatter={(v: number) => `${v} ms`} />
+                    <Bar dataKey="latency" name="Avg Latency (ms)" radius={[0, 4, 4, 0]}>
+                      {fleet.map((v, i) => <Cell key={i} fill={v.avgLatencyMs > 5 ? '#ef4444' : v.avgLatencyMs > 2 ? '#f59e0b' : '#22c55e'} />)}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Throughput by VM */}
+              <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">Throughput by VM (MB/s)</h3>
+                <ResponsiveContainer width="100%" height={180}>
+                  <BarChart data={fleet.map((v) => ({ name: v.vmName.replace('vm-diskmon-', ''), throughput: v.totalThroughputMBs, cap: v.maxThroughputMBs }))} layout="vertical">
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={65} />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} />
+                    <Bar dataKey="throughput" name="Current MB/s" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Monthly Cost by VM */}
+              <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">Monthly Cost by VM ($)</h3>
+                <ResponsiveContainer width="100%" height={180}>
+                  <BarChart data={fleet.map((v) => ({ name: v.vmName.replace('vm-diskmon-', ''), cost: Math.round(v.monthlyCost), diskCost: Math.round(v.disks.reduce((s, d) => s + d.monthlyCost, 0)) }))} layout="vertical">
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={65} />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} formatter={(v: number) => `$${v}`} />
+                    <Bar dataKey="cost" name="Total (VM+Disks)" fill="#f59e0b" radius={[0, 4, 4, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Fleet Charts Row 3 — Capacity, Queue Depth, IOPS Consumed */}
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+              {/* Capacity */}
+              <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">Disk Capacity by VM (% used)</h3>
+                <div className="space-y-3">
+                  {fleet.map((v) => (
+                    <div key={v.vmName}>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-300">{v.vmName.replace('vm-diskmon-', '')}</span>
+                        <span className={`font-mono ${v.capacityPct > 80 ? 'text-red-400' : v.capacityPct > 60 ? 'text-amber-400' : 'text-emerald-400'}`}>{v.capacityPct}%</span>
+                      </div>
+                      <div className="h-3 w-full rounded-full bg-slate-700 overflow-hidden">
+                        <div className={`h-full rounded-full ${v.capacityPct > 80 ? 'bg-red-500' : v.capacityPct > 60 ? 'bg-amber-500' : 'bg-emerald-500'}`} style={{ width: `${v.capacityPct}%` }} />
+                      </div>
+                      <div className="text-[9px] text-slate-500 mt-0.5">{v.totalUsedGb} / {v.totalDiskSizeGb} GB across {v.disks.length} disks</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Queue Depth */}
+              <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">Avg Queue Depth by VM</h3>
+                <div className="space-y-3">
+                  {fleet.map((v) => (
+                    <div key={v.vmName}>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-300">{v.vmName.replace('vm-diskmon-', '')}</span>
+                        <span className={`font-mono font-bold ${v.avgQueueDepth > 32 ? 'text-red-400' : v.avgQueueDepth > 8 ? 'text-amber-400' : 'text-emerald-400'}`}>{v.avgQueueDepth}</span>
+                      </div>
+                      <div className="h-3 w-full rounded-full bg-slate-700 overflow-hidden">
+                        <div className={`h-full rounded-full ${v.avgQueueDepth > 32 ? 'bg-red-500' : v.avgQueueDepth > 8 ? 'bg-amber-500' : 'bg-blue-500'}`} style={{ width: `${Math.min(100, (v.avgQueueDepth / 64) * 100)}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* IOPS Consumed % */}
+              <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <h3 className="text-sm font-semibold text-white mb-3">IOPS Consumed % (VM Cap)</h3>
+                <div className="space-y-3">
+                  {fleet.map((v) => (
+                    <div key={v.vmName}>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-300">{v.vmName.replace('vm-diskmon-', '')}</span>
+                        <span className={`font-mono font-bold ${v.iopsConsumedPct > 80 ? 'text-red-400' : v.iopsConsumedPct > 50 ? 'text-amber-400' : 'text-emerald-400'}`}>{v.iopsConsumedPct}%</span>
+                      </div>
+                      <div className="h-3 w-full rounded-full bg-slate-700 overflow-hidden">
+                        <div className={`h-full rounded-full ${v.iopsConsumedPct > 80 ? 'bg-red-500' : v.iopsConsumedPct > 50 ? 'bg-amber-500' : 'bg-blue-500'}`} style={{ width: `${v.iopsConsumedPct}%` }} />
+                      </div>
+                      <div className="text-[9px] text-slate-500 mt-0.5">{v.totalIops.toLocaleString()} of {v.maxIops.toLocaleString()} IOPS cap</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* All Disks Metrics Table */}
+            <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden">
+              <div className="px-5 py-3 border-b border-slate-700 flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-white">All Disk Metrics ({fleet.reduce((s, v) => s + v.disks.length, 0)} disks across {fleet.length} VMs)</h3>
+                <span className="text-[10px] text-slate-500">Sorted by latency (highest first)</span>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[11px]">
+                  <thead><tr className="border-b border-slate-700 text-[9px] uppercase text-slate-500">
+                    <th className="px-3 py-2">VM</th><th className="px-3 py-2">Disk</th><th className="px-3 py-2">Type</th><th className="px-3 py-2">Size</th>
+                    <th className="px-3 py-2">IOPS</th><th className="px-3 py-2">IOPS %</th><th className="px-3 py-2">MB/s</th><th className="px-3 py-2">BW %</th>
+                    <th className="px-3 py-2">Read Lat</th><th className="px-3 py-2">Write Lat</th><th className="px-3 py-2">QD</th><th className="px-3 py-2">Used %</th>
+                    <th className="px-3 py-2">Burst</th><th className="px-3 py-2">$/mo</th><th className="px-3 py-2">Health</th>
+                  </tr></thead>
+                  <tbody>
+                    {fleet.flatMap((v) => v.disks.map((d) => ({ vm: v.vmName.replace('vm-diskmon-', ''), ...d }))).sort((a, b) => b.avgLatencyMs - a.avgLatencyMs).map((d) => (
+                      <tr key={`${d.vm}-${d.diskName}`} className="border-b border-slate-700/30 hover:bg-slate-700/20 cursor-pointer" onClick={() => { const vm = fleet.find((v) => v.vmName.includes(d.vm)); if (vm) navigate('disk', vm.vmName, d.diskName); }}>
+                        <td className="px-3 py-2 text-slate-400">{d.vm}</td>
+                        <td className="px-3 py-2 font-medium text-white text-[10px]">{d.diskName.replace(/^(osdisk-|disk-)/, '')}</td>
+                        <td className="px-3 py-2"><span className="rounded-full px-1.5 py-0.5 text-[8px] font-medium" style={{ backgroundColor: `${DISK_COLORS[d.diskType] || '#64748b'}20`, color: DISK_COLORS[d.diskType] || '#94a3b8' }}>{d.diskType}</span></td>
+                        <td className="px-3 py-2 text-slate-400">{d.diskSizeGb}G</td>
+                        <td className="px-3 py-2 font-mono text-blue-400">{d.currentIops.toLocaleString()}</td>
+                        <td className="px-3 py-2"><div className="flex items-center gap-1"><div className="h-1.5 w-10 rounded-full bg-slate-700"><div className={`h-full rounded-full ${d.iopsConsumedPct > 80 ? 'bg-red-500' : d.iopsConsumedPct > 50 ? 'bg-amber-500' : 'bg-blue-500'}`} style={{ width: `${d.iopsConsumedPct}%` }} /></div><span className="text-[9px] text-slate-500">{d.iopsConsumedPct}%</span></div></td>
+                        <td className="px-3 py-2 font-mono text-purple-400">{d.currentThroughputMBs}</td>
+                        <td className="px-3 py-2"><div className="flex items-center gap-1"><div className="h-1.5 w-10 rounded-full bg-slate-700"><div className={`h-full rounded-full ${d.bwConsumedPct > 80 ? 'bg-red-500' : 'bg-purple-500'}`} style={{ width: `${d.bwConsumedPct}%` }} /></div><span className="text-[9px] text-slate-500">{d.bwConsumedPct}%</span></div></td>
+                        <td className={`px-3 py-2 font-mono ${d.readLatencyMs > 5 ? 'text-red-400' : d.readLatencyMs > 2 ? 'text-amber-400' : 'text-emerald-400'}`}>{d.readLatencyMs}ms</td>
+                        <td className={`px-3 py-2 font-mono ${d.writeLatencyMs > 5 ? 'text-red-400' : d.writeLatencyMs > 2 ? 'text-amber-400' : 'text-emerald-400'}`}>{d.writeLatencyMs}ms</td>
+                        <td className={`px-3 py-2 font-mono ${d.queueDepth > 32 ? 'text-red-400' : d.queueDepth > 8 ? 'text-amber-400' : 'text-slate-300'}`}>{d.queueDepth}</td>
+                        <td className="px-3 py-2"><div className="flex items-center gap-1"><div className="h-1.5 w-8 rounded-full bg-slate-700"><div className={`h-full rounded-full ${d.usedPct > 80 ? 'bg-red-500' : d.usedPct > 60 ? 'bg-amber-500' : 'bg-emerald-500'}`} style={{ width: `${d.usedPct}%` }} /></div><span className="text-[9px] text-slate-500">{d.usedPct}%</span></div></td>
+                        <td className="px-3 py-2">{d.burstCreditsRemaining > 0 ? <span className={`text-[9px] ${d.burstCreditsRemaining < 30 ? 'text-red-400' : 'text-blue-400'}`}>{d.burstCreditsRemaining}%</span> : <span className="text-[9px] text-slate-600">—</span>}</td>
+                        <td className="px-3 py-2 font-mono text-amber-400">${d.monthlyCost}</td>
+                        <td className="px-3 py-2"><span className={`h-2 w-2 inline-block rounded-full ${d.healthStatus === 'healthy' ? 'bg-emerald-400' : d.healthStatus === 'warning' ? 'bg-amber-400' : 'bg-red-400'}`} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
