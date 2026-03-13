@@ -1,0 +1,12 @@
+// Q-14: Latency Percentiles (p50, p95, p99)
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName in ("Avg. Disk sec/Read", "Avg. Disk sec/Write")
+| where InstanceName !in ("_Total", "/")
+| summarize p50 = percentile(CounterValue * 1000, 50),
+            p95 = percentile(CounterValue * 1000, 95),
+            p99 = percentile(CounterValue * 1000, 99)
+    by Computer, InstanceName, CounterName
+| order by p99 desc

@@ -1,0 +1,19 @@
+// Q-09: VM Family Performance Comparison
+let VMSkuLookup = datatable(Computer: string, VMSku: string, VMFamily: string) [
+    "vm-diskmon-dsv5-01", "Standard_D4s_v5",  "D-series",
+    "vm-diskmon-dsv5-02", "Standard_D8s_v5",  "D-series",
+    "vm-diskmon-esv5-01", "Standard_E4s_v5",  "E-series",
+    "vm-diskmon-lsv3-01", "Standard_L8s_v3",  "L-series",
+    "vm-diskmon-dsv5-03", "Standard_D4s_v5",  "D-series"
+];
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName == "Disk Transfers/sec"
+| where InstanceName !in ("_Total", "/")
+| summarize AvgIOPS = avg(CounterValue), MaxIOPS = max(CounterValue)
+    by Computer, InstanceName
+| join kind=inner VMSkuLookup on Computer
+| project VMFamily, VMSku, Computer, InstanceName, AvgIOPS, MaxIOPS
+| order by VMFamily asc, AvgIOPS desc

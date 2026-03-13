@@ -1,0 +1,15 @@
+; Sequential Write — 1 MiB Block Size
+; Purpose: Measure maximum sequential write throughput
+[global]
+ioengine=libaio
+direct=1
+bs=1M
+iodepth=32
+runtime=120
+time_based
+group_reporting
+numjobs=4
+
+[seq-write]
+rw=write
+size=10G

@@ -1,0 +1,13 @@
+// Q-04: Average Read/Write Latency by VM and Disk
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName in ("Avg. Disk sec/Read", "Avg. Disk sec/Write")
+| where InstanceName !in ("_Total", "/")
+| summarize AvgLatencyMs = avg(CounterValue) * 1000 by Computer, InstanceName, CounterName
+| evaluate pivot(CounterName, take_any(AvgLatencyMs))
+| project Computer, InstanceName,
+    ReadLatencyMs = column_ifexists("Avg. Disk sec/Read", 0.0),
+    WriteLatencyMs = column_ifexists("Avg. Disk sec/Write", 0.0)
+| order by ReadLatencyMs desc

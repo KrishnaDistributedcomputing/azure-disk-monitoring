@@ -1,0 +1,11 @@
+// Q-03: Current Throughput (MB/s) by VM and Disk
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName == "Disk Bytes/sec"
+| where InstanceName !in ("_Total", "/")
+| summarize AvgThroughputMBs = avg(CounterValue) / 1048576,
+            MaxThroughputMBs = max(CounterValue) / 1048576
+    by Computer, InstanceName
+| order by AvgThroughputMBs desc

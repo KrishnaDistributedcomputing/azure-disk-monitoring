@@ -1,0 +1,15 @@
+; Random Write — 4 KiB Block Size
+; Purpose: Measure maximum random write IOPS
+[global]
+ioengine=libaio
+direct=1
+bs=4K
+iodepth=64
+runtime=120
+time_based
+group_reporting
+numjobs=4
+
+[rand-write]
+rw=randwrite
+size=10G

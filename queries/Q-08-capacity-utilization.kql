@@ -1,0 +1,9 @@
+// Q-08: Disk Capacity Utilization
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName == "% Used Space"
+| where InstanceName !in ("_Total", "/")
+| summarize AvgUsedPct = avg(CounterValue) by Computer, InstanceName
+| order by AvgUsedPct desc

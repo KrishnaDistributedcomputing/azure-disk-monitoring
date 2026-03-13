@@ -1,0 +1,15 @@
+; Sequential Read — 1 MiB Block Size
+; Purpose: Measure maximum sequential read throughput
+[global]
+ioengine=libaio
+direct=1
+bs=1M
+iodepth=32
+runtime=120
+time_based
+group_reporting
+numjobs=4
+
+[seq-read]
+rw=read
+size=10G

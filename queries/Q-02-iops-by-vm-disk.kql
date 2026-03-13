@@ -1,0 +1,10 @@
+// Q-02: Current IOPS by VM and Disk
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName == "Disk Transfers/sec"
+| where InstanceName !in ("_Total", "/")
+| summarize AvgIOPS = avg(CounterValue), MaxIOPS = max(CounterValue)
+    by Computer, InstanceName
+| order by AvgIOPS desc

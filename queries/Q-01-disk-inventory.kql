@@ -1,0 +1,16 @@
+// Q-01: Disk Inventory — All VMs and Disks
+// Lists all VMs with their attached disk instances currently reporting metrics
+Perf
+| where TimeGenerated > ago(1h)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName == "Disk Transfers/sec"
+| where InstanceName !in ("_Total", "/", "C:")
+| summarize LastSeen = max(TimeGenerated) by Computer, InstanceName
+| join kind=leftouter (
+    Heartbeat
+    | where TimeGenerated > ago(1h)
+    | summarize arg_max(TimeGenerated, *) by Computer
+    | project Computer, OSType, ResourceGroup
+) on Computer
+| project Computer, OSType, ResourceGroup, DiskInstance = InstanceName, LastSeen
+| order by Computer asc, DiskInstance asc

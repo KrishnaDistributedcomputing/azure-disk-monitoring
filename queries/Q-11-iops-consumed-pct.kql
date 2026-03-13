@@ -1,0 +1,9 @@
+// Q-11: IOPS Consumed Percentage (Platform Metrics)
+AzureMetrics
+| where TimeGenerated > ago(1h)
+| where MetricName in (
+    "Data Disk IOPS Consumed Percentage",
+    "VM Uncached IOPS Consumed Percentage"
+)
+| summarize AvgConsumedPct = avg(Average) by bin(TimeGenerated, 5m), Resource, MetricName
+| order by TimeGenerated asc

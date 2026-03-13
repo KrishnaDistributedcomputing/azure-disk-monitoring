@@ -1,0 +1,15 @@
+; Latency Probe — Low Queue Depth
+; Purpose: Measure baseline latency without saturation
+[global]
+ioengine=libaio
+direct=1
+bs=4K
+iodepth=1
+runtime=60
+time_based
+group_reporting
+numjobs=1
+
+[lat-probe]
+rw=randread
+size=10G

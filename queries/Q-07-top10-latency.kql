@@ -1,0 +1,9 @@
+// Q-07: Top 10 Disks by Latency
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName in ("Avg. Disk sec/Read", "Avg. Disk sec/Write")
+| where InstanceName !in ("_Total", "/")
+| summarize AvgLatencyMs = avg(CounterValue) * 1000 by Computer, InstanceName
+| top 10 by AvgLatencyMs desc

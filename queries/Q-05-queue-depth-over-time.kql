@@ -1,0 +1,9 @@
+// Q-05: Queue Depth Over Time
+let timeRange = 1h;
+Perf
+| where TimeGenerated > ago(timeRange)
+| where ObjectName in ("Logical Disk", "LogicalDisk")
+| where CounterName == "Current Disk Queue Length"
+| where InstanceName !in ("_Total", "/")
+| summarize AvgQueueDepth = avg(CounterValue) by bin(TimeGenerated, 1m), Computer, InstanceName
+| order by TimeGenerated asc
