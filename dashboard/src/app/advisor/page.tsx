@@ -109,7 +109,23 @@ function getLocalAnswer(question: string): { answer: string; kql?: string } {
 // ============================================================================
 export default function AIAdvisorPage() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: `👋 **Welcome to the AI Disk Advisor**\n\nI can answer questions about:\n- 💰 **Disk costs** — pricing for all 5 disk types, cost optimization\n- ⚡ **Performance** — IOPS, latency, throughput, queue depth analysis\n- 🔧 **Optimization** — right-sizing, VM caps, burst credits\n- 📊 **KQL Queries** — I'll generate the query you need\n\nPowered by disk pricing data from Azure Retail Prices API and KQL templates for Log Analytics.\n\n*Type a question below or try one of the suggested topics.*`, timestamp: new Date() },
+    { role: 'assistant', content: `Welcome to the AI Disk Advisor.
+
+I answer questions strictly based on the disk monitoring data collected in this environment. I cannot answer questions outside of Azure disk performance, pricing, and the metrics captured in our Log Analytics workspace.
+
+What I know comes from these data sources:
+
+1. Azure Monitor Perf Table — 29 guest-level disk counters (IOPS, latency, throughput, queue depth, capacity) collected every 60 seconds from all 5 VMs via Azure Monitor Agent.
+
+2. Azure Platform Metrics (AzureMetrics table) — 42 platform-level metrics including IOPS Consumed %, Bandwidth Consumed %, Burst Credits, and Cache Hit/Miss ratios.
+
+3. Azure Retail Prices API — Live pricing for all 5 managed disk types (Premium SSD, Premium SSD v2, Standard SSD, Standard HDD, Ultra Disk) and 4 VM SKUs in East US 2.
+
+4. KQL Query Templates — 17 pre-built queries for disk inventory, performance ranking, latency percentiles, trend detection, and VM/disk comparison.
+
+5. Benchmark Metadata (DiskBenchmark_CL table) — FIO and DiskSpd test run records with profile names, durations, and target disks.
+
+Ask me about disk costs, performance troubleshooting, optimization strategies, or KQL queries. I'll explain everything in plain English.`, timestamp: new Date() },
   ]);
   const [input, setInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
@@ -247,16 +263,49 @@ Always be concise. Use markdown tables for pricing. Provide KQL queries when ask
         </div>
       </div>
 
-      {/* Suggested Questions (only show at start) */}
+      {/* Data Sources & Suggested Questions (only show at start) */}
       {messages.length <= 1 && (
-        <div className="mx-auto max-w-[900px] px-6 pb-3">
-          <div className="text-xs text-slate-500 mb-2">Suggested questions:</div>
+        <div className="mx-auto max-w-[900px] px-6 pb-3 space-y-4">
+          {/* Data Sources Panel */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-5">
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+              <svg className="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" /></svg>
+              Data Sources Powering This AI
+            </h3>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { name: 'Perf Table', desc: '29 guest-level counters from AMA', detail: 'IOPS, latency, throughput, queue depth, capacity', icon: '📡', color: '#3b82f6' },
+                { name: 'AzureMetrics Table', desc: '42 platform metrics via Diagnostic Settings', detail: 'IOPS Consumed %, Burst Credits, Cache stats', icon: '📊', color: '#8b5cf6' },
+                { name: 'Azure Pricing API', desc: 'Live retail prices from prices.azure.com', detail: 'All 5 disk types + 4 VM SKUs, East US 2', icon: '💰', color: '#f59e0b' },
+                { name: 'KQL Templates', desc: '17 pre-built queries for analysis', detail: 'Inventory, ranking, percentiles, trends', icon: '🔎', color: '#22c55e' },
+                { name: 'Heartbeat Table', desc: 'VM availability and OS metadata', detail: 'Computer name, OS type, resource group', icon: '💓', color: '#ef4444' },
+                { name: 'DiskBenchmark_CL', desc: 'FIO/DiskSpd benchmark run metadata', detail: 'Profile name, duration, target disk', icon: '⚙️', color: '#06b6d4' },
+              ].map((ds) => (
+                <div key={ds.name} className="rounded-lg border border-slate-700 bg-slate-800 p-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span>{ds.icon}</span>
+                    <span className="text-xs font-semibold text-white">{ds.name}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400">{ds.desc}</p>
+                  <p className="text-[9px] text-slate-500 mt-0.5">{ds.detail}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-2">
+              <p className="text-[10px] text-amber-200">This AI only answers questions related to Azure disk performance, metrics, and costs based on the data sources above. It cannot answer general questions, access the internet, or provide information outside of this monitoring environment.</p>
+            </div>
+          </div>
+
+          {/* Suggested Questions */}
+          <div>
+            <div className="text-xs text-slate-500 mb-2">Suggested questions:</div>
           <div className="flex flex-wrap gap-2">
             {suggestedQuestions.map((q) => (
               <button key={q} onClick={() => handleSubmit(q)} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs text-slate-400 hover:text-white hover:border-blue-500/50 transition-colors">
                 {q}
               </button>
             ))}
+          </div>
           </div>
         </div>
       )}
@@ -284,8 +333,8 @@ Always be concise. Use markdown tables for pricing. Provide KQL queries when ask
             </button>
           </div>
           <div className="mt-2 flex items-center justify-between text-[10px] text-slate-600">
-            <span>Azure OpenAI GPT-4o-mini ready — configure AZURE_OPENAI_ENDPOINT in .env for live AI</span>
-            <span>Local knowledge: 5 disk types &bull; 4 VM SKUs &bull; 6 KQL templates</span>
+            <span>Data sources: Perf table (29 counters) • AzureMetrics (42 metrics) • Azure Pricing API • 17 KQL templates</span>
+            <span>Scope: Azure disk performance, costs, and optimization only</span>
           </div>
         </div>
       </div>
