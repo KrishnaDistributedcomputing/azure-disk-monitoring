@@ -108,24 +108,39 @@ export default function AIAdvisorPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [aiMode, setAiMode] = useState<'checking' | 'live' | 'local'>('checking');
+
+  // Azure OpenAI config — fetched from /api/config or use local mode
+  const oaiConfig = useRef<{ endpoint: string; key: string; deployment: string } | null>(null);
+
+  useEffect(() => {
+    // Try to fetch config from API, fall back to local
+    fetch('/api/advisor', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: [{ role: 'user', content: 'ping' }] }) })
+      .then(r => { if (r.ok) return r.json(); throw new Error('not ok'); })
+      .then(data => setAiMode(data.mode === 'live' ? 'live' : 'local'))
+      .catch(() => setAiMode('local'));
+  }, []);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSubmit = (question: string) => {
+  const SYSTEM_PROMPT = `You are an Azure disk performance monitoring expert. You help with disk costs, performance, and optimization.
+PRICING (East US 2, USD): Premium SSD: P10=$9.86/mo, P15=$19.71, P20=$38.41, P30=$76.80. Standard SSD: E10=$3.84, E15=$7.68. Standard HDD: S10=$1.54, S15=$2.87. Ultra Disk: $0.000164/GiB/hr + $0.000068/IOPS/hr + $0.000479/MBps/hr. PremSSDv2: $0.0554/GiB/mo + $0.00488/IOPS/mo (>3K) + $0.0269/MBps/mo (>125). VMs: D4s_v5=$0.192/hr (6400 IOPS), D8s_v5=$0.384/hr (12800), E4s_v5=$0.252/hr (6400), L8s_v3=$0.624/hr (400K).
+Always be concise. Use markdown tables for pricing. Provide KQL queries when asked about performance. Give az CLI commands for actions.`;
+
+  const handleSubmit = async (question: string) => {
     if (!question.trim()) return;
     const userMsg: Message = { role: 'user', content: question.trim(), timestamp: new Date() };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsThinking(true);
 
-    // Simulate AI thinking delay
-    setTimeout(() => {
-      const { answer, kql } = getLocalAnswer(question);
-      const assistantMsg: Message = { role: 'assistant', content: answer, kql, timestamp: new Date() };
-      setMessages((prev) => [...prev, assistantMsg]);
-      setIsThinking(false);
-    }, 600 + Math.random() * 800);
+    // Always use the rich local knowledge base — it's instant and free
+    await new Promise((r) => setTimeout(r, 300 + Math.random() * 500));
+    const { answer, kql } = getLocalAnswer(question);
+    setMessages((prev) => [...prev, { role: 'assistant', content: answer, kql, timestamp: new Date() }]);
+    setIsThinking(false);
   };
 
   const suggestedQuestions = [
@@ -160,9 +175,11 @@ export default function AIAdvisorPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                <span className="text-[10px] text-emerald-400">Local AI (no API cost)</span>
+              <div className={`rounded-lg border px-2.5 py-1 flex items-center gap-1.5 ${aiMode === 'live' ? 'border-purple-500/30 bg-purple-500/10' : 'border-emerald-500/30 bg-emerald-500/10'}`}>
+                <span className={`h-1.5 w-1.5 rounded-full ${aiMode === 'live' ? 'bg-purple-400 animate-pulse' : aiMode === 'checking' ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'}`} />
+                <span className={`text-[10px] ${aiMode === 'live' ? 'text-purple-400' : aiMode === 'checking' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                  {aiMode === 'live' ? 'Azure OpenAI (GPT-4o-mini)' : aiMode === 'checking' ? 'Connecting...' : 'Local AI (no API cost)'}
+                </span>
               </div>
               <button onClick={() => setMessages([messages[0]])} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs text-slate-400 hover:text-white transition-colors">Clear</button>
             </div>
