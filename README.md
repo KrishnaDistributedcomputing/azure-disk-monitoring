@@ -27,24 +27,7 @@ The dashboard contains **7 pages**, each serving a specific purpose:
 | 6 | **Help & Reference** | `/help` | Interactive cost simulator for **all 5 disk types** (Premium SSD tier picker, PremV2/Ultra sliders). Disk type capability comparison. IOPS scaling chart. VM-level disk caps table. Interactive disk selection decision guide. 8 cost optimization best practices. |
 | 7 | **Metric Info Panels** | *(embedded)* | Each metric tab (IOPS, Throughput, Latency, Queue Depth, Capacity) has an expandable info panel explaining the metric, Azure metrics collected, performance thresholds, cost impact, and optimization tips. |
 
----
 
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Azure Subscription: e62428e7-08dd-4bc2-82e2-2c51586d9105      │
-│                                                                  │
-│  5 VMs ──→ AMA (29 counters) ──→ DCR ──→ Log Analytics          │
-│    │                                         │                   │
-│    └── Diagnostic Settings (42 metrics) ─────┘                   │
-│    │                                         │                   │
-│    └── FIO / DiskSpd (7 profiles)     ┌──────┴──────┐           │
-│                                       │             │            │
-│                                  Next.js        Grafana          │
-│                                  (SWA)         (Managed)         │
-└─────────────────────────────────────────────────────────────────┘
-```
 
 ### Key Numbers
 
