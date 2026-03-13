@@ -187,7 +187,19 @@ export default function HelpPage() {
     'Ultra Disk': {
       customizable: true, color: '#8b5cf6', isHourly: true,
       hourlyCapacity: 0.000164, hourlyIops: 0.000068, hourlyThroughput: 0.000479,
-      sizes: [],
+      sizes: [
+        { label: '4 GiB', sizeGb: 4, iops: 0, throughput: 0, monthly: 0 },
+        { label: '8 GiB', sizeGb: 8, iops: 0, throughput: 0, monthly: 0 },
+        { label: '16 GiB', sizeGb: 16, iops: 0, throughput: 0, monthly: 0 },
+        { label: '32 GiB', sizeGb: 32, iops: 0, throughput: 0, monthly: 0 },
+        { label: '64 GiB', sizeGb: 64, iops: 0, throughput: 0, monthly: 0 },
+        { label: '128 GiB', sizeGb: 128, iops: 0, throughput: 0, monthly: 0 },
+        { label: '256 GiB', sizeGb: 256, iops: 0, throughput: 0, monthly: 0 },
+        { label: '512 GiB', sizeGb: 512, iops: 0, throughput: 0, monthly: 0 },
+        { label: '1024 GiB', sizeGb: 1024, iops: 0, throughput: 0, monthly: 0 },
+        { label: '2048 GiB', sizeGb: 2048, iops: 0, throughput: 0, monthly: 0 },
+        { label: '4096 GiB', sizeGb: 4096, iops: 0, throughput: 0, monthly: 0 },
+      ],
     },
   };
 
@@ -489,16 +501,40 @@ export default function HelpPage() {
             <div className="space-y-6">
               {simConfig.customizable || simConfig.isHourly ? (
                 <>
-                  {/* Capacity Slider */}
-                  <div>
-                    <div className="flex justify-between text-sm mb-2">
-                      <span className="text-slate-400">Capacity</span>
-                      <span className="font-mono text-white">{costSimSize} GiB</span>
+                  {/* Capacity — Ultra uses fixed sizes, PremV2 uses flexible GiB */}
+                  {simDiskType === 'Ultra Disk' ? (
+                    <div>
+                      <div className="flex justify-between text-sm mb-2">
+                        <span className="text-slate-400">Capacity (fixed sizes)</span>
+                        <span className="font-mono text-white">{costSimSize} GiB</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {simConfig.sizes.map((s) => (
+                          <button key={s.sizeGb} onClick={() => setCostSimSize(s.sizeGb)}
+                            className={`rounded-lg px-3 py-1.5 text-xs font-mono transition-all ${costSimSize === s.sizeGb ? 'bg-purple-600/30 text-white border-2 border-purple-500' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'}`}>
+                            {s.sizeGb >= 1024 ? `${s.sizeGb / 1024} TiB` : `${s.sizeGb} GiB`}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1.5">Azure Ultra Disk capacity must be a predefined size (powers of 2). IOPS and throughput are independently configurable.</p>
                     </div>
-                    <input type="range" min={1} max={4096} value={costSimSize} onChange={(e) => setCostSimSize(Number(e.target.value))}
-                      className="w-full h-2 rounded-full appearance-none cursor-pointer bg-slate-700" style={{ accentColor: simConfig.color }} />
-                    <div className="flex justify-between text-[10px] text-slate-500 mt-1"><span>1 GiB</span><span>4,096 GiB</span></div>
-                  </div>
+                  ) : (
+                    <div>
+                      <div className="flex justify-between text-sm mb-2">
+                        <span className="text-slate-400">Capacity</span>
+                        <span className="font-mono text-white">{costSimSize} GiB</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048].map((sz) => (
+                          <button key={sz} onClick={() => setCostSimSize(sz)}
+                            className={`rounded-lg px-3 py-1.5 text-xs font-mono transition-all ${costSimSize === sz ? 'bg-blue-600/30 text-white border-2 border-blue-500' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'}`}>
+                            {sz >= 1024 ? `${sz / 1024} TiB` : `${sz} GiB`}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1.5">Premium SSD v2 capacity can be any size in 1 GiB increments. Common sizes shown above for quick selection.</p>
+                    </div>
+                  )}
                   {/* IOPS Slider */}
                   <div>
                     <div className="flex justify-between text-sm mb-2">
