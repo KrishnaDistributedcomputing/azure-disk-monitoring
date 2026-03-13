@@ -5,6 +5,15 @@ import Link from 'next/link';
 
 const PAGES = [
   {
+    title: 'Disk FinOps',
+    path: '/finops',
+    icon: '💵',
+    color: '#10b981',
+    category: 'Finance',
+    description: 'Cost intelligence for Azure infrastructure. Covers all 23 resources: VMs, data disks, OS disks, logging, and dashboards. PAYG pricing, RI assessment, clickable per-resource breakdown with recommendations.',
+    features: ['23-resource cost analysis', 'PAYG + RI assessment', 'Clickable category drill-down', 'Per-resource recommendations', 'OS vs Data disk use cases', '6 metric optimization rules', '5 savings scenarios', 'ROI projection'],
+  },
+  {
     title: 'Metrics Dashboard',
     path: '/metrics',
     icon: '📊',
@@ -66,15 +75,6 @@ const PAGES = [
     category: 'Tools',
     description: 'AI-powered chat interface that answers questions about disk costs, performance optimization, and generates KQL queries. Uses Azure OpenAI GPT-4o-mini ($0.15/1M tokens) or runs locally with built-in knowledge.',
     features: ['Natural language Q&A', 'Cost analysis answers', 'Performance diagnostics', 'KQL query generation', 'Disk type recommendations', 'Azure OpenAI ready (GPT-4o-mini)', 'Zero-cost local mode', 'Suggested questions'],
-  },
-  {
-    title: 'Disk FinOps',
-    path: '/finops',
-    icon: '💵',
-    color: '#10b981',
-    category: 'Finance',
-    description: 'Financial operations dashboard for Azure disk storage. Cost breakdown, waste analysis, savings scenarios, optimization rules driven by metrics, and ROI projections — designed for finance and leadership audiences.',
-    features: ['Monthly cost breakdown', 'Disk waste analysis with utilization bars', 'IOPS utilization vs cost', '5 savings scenarios', '6 metric optimization rules', 'Cumulative ROI projections', 'Executive summary', 'Annual savings calculator'],
   },
 ];
 
