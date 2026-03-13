@@ -168,9 +168,12 @@ export default function FinOpsPage() {
             </div>
           </div>
           {/* Disclaimer */}
-          <div className="mt-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 flex items-start gap-2">
-            <svg className="h-3.5 w-3.5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
-            <p className="text-[10px] text-amber-200/80"><strong>Disclaimer:</strong> Costs and recommendations shown are specific to this POC deployment ({TOTAL_COMPONENTS} resources in East US 2). Your production environment will vary based on resource count, region, enterprise agreements, and reserved instance commitments. All prices are <strong>Pay-As-You-Go (PAYG)</strong> retail rates from the Azure Retail Prices API. Verify at <a href="https://azure.microsoft.com/pricing/calculator/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">azure.microsoft.com/pricing</a>.</p>
+          <div className="mt-3 rounded-xl bg-amber-500/10 border-2 border-amber-500/30 px-5 py-4 flex items-start gap-3">
+            <svg className="h-6 w-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+            <div>
+              <div className="text-sm font-bold text-amber-400 mb-1">Important Disclaimer</div>
+              <p className="text-sm text-amber-200/90 leading-relaxed">Costs and recommendations shown are specific to this POC deployment (<strong className="text-white">{TOTAL_COMPONENTS} resources in East US 2</strong>). Your production environment will vary based on resource count, region, enterprise agreements, and reserved instance commitments. All prices are <strong className="text-white">Pay-As-You-Go (PAYG)</strong> retail rates from the Azure Retail Prices API. Verify at <a href="https://azure.microsoft.com/pricing/calculator/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline font-semibold">azure.microsoft.com/pricing</a>.</p>
+            </div>
           </div>
           <nav className="mt-3 flex gap-1">
             {([
