@@ -138,33 +138,53 @@ export default function FinOpsPage() {
 
           {/* Cost Breakdown */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Current vs Optimized — Horizontal Bar */}
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-              <h3 className="text-sm font-semibold text-white mb-4">Monthly Spend by Category</h3>
+              <h3 className="text-sm font-semibold text-white mb-4">Current vs Optimized Cost by Category</h3>
               <ResponsiveContainer width="100%" height={280}>
-                <PieChart>
-                  <Pie data={MONTHLY_BREAKDOWN.map((b) => ({ name: b.category, value: b.cost, fill: b.color }))} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={3} dataKey="value" stroke="none" label={({ name, value }) => `${name}: $${value}`} />
-                  <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} formatter={(v: number) => `$${v}/mo`} />
-                </PieChart>
+                <BarChart data={MONTHLY_BREAKDOWN.map((b) => ({ name: b.category, current: b.cost, optimized: b.optimized, savings: b.cost - b.optimized }))} layout="vertical" margin={{ left: 10, right: 10 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
+                  <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                  <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#e2e8f0', fontSize: 11 }} width={100} />
+                  <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} formatter={(v: number, name: string) => [`$${v}/mo`, name]} />
+                  <Legend wrapperStyle={{ fontSize: '11px' }} />
+                  <Bar dataKey="current" name="Current" fill="#ef4444" fillOpacity={0.6} radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="optimized" name="Optimized" fill="#22c55e" radius={[0, 4, 4, 0]} />
+                </BarChart>
               </ResponsiveContainer>
             </div>
+
+            {/* Spend Breakdown — Card Style */}
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
               <h3 className="text-sm font-semibold text-white mb-4">Where Your Money Goes</h3>
-              <div className="space-y-3">
-                {MONTHLY_BREAKDOWN.map((b) => (
-                  <div key={b.category}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-slate-300">{b.category}</span>
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono font-bold text-white">${b.cost}</span>
-                        <span className="text-[10px] text-slate-500 w-10 text-right">{b.pct}%</span>
+              <div className="space-y-2">
+                {MONTHLY_BREAKDOWN.map((b) => {
+                  const saving = b.cost - b.optimized;
+                  return (
+                    <div key={b.category} className="rounded-lg border border-slate-700 bg-slate-800/50 p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="h-3 w-3 rounded-sm" style={{ backgroundColor: b.color }} />
+                          <span className="text-sm font-medium text-white">{b.category}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="font-mono text-lg font-bold text-white">${b.cost}</span>
+                          {saving > 0 && <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-400">Save ${saving}</span>}
+                        </div>
                       </div>
+                      {/* Visual proportion bar */}
+                      <div className="h-6 w-full rounded bg-slate-700 overflow-hidden flex">
+                        <div className="h-full flex items-center justify-center text-[9px] font-bold text-white" style={{ width: `${b.pct}%`, backgroundColor: b.color, minWidth: b.pct > 5 ? '0' : '20px' }}>
+                          {b.pct > 8 ? `${b.pct}%` : ''}
+                        </div>
+                        <div className="h-full flex-1 flex items-center pl-2 text-[9px] text-slate-500">
+                          {b.pct <= 8 ? `${b.pct}%` : ''}
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-slate-500 mt-1">{b.savingsAction}</div>
                     </div>
-                    <div className="h-4 w-full rounded-full bg-slate-700 overflow-hidden">
-                      <div className="h-full rounded-full transition-all" style={{ width: `${b.pct}%`, backgroundColor: b.color }} />
-                    </div>
-                    <div className="text-[10px] text-slate-500 mt-0.5">{b.savingsAction}</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
