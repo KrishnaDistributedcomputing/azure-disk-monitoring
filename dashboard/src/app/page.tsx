@@ -70,14 +70,14 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '8', icon: '📱' },
-  { label: 'VMs Monitored', value: '5', icon: '🖥️' },
-  { label: 'Disk Types', value: '5', icon: '💾' },
-  { label: 'KQL Queries', value: '17', icon: '🔎' },
-  { label: 'Perf Counters', value: '29', icon: '📡' },
-  { label: 'Platform Metrics', value: '42', icon: '📊' },
-  { label: 'FIO Profiles', value: '7', icon: '⚙️' },
-  { label: 'Data Disks', value: '13', icon: '💿' },
+  { label: 'Dashboard Pages', value: '8', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
+  { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
+  { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
+  { label: 'Perf Counters', value: '29', icon: '📡', href: '/deep-dive', desc: '13 Linux + 16 Windows via DCR → Deep Dive' },
+  { label: 'Platform Metrics', value: '42', icon: '📊', href: '/deep-dive', desc: 'IOPS consumed %, burst credits, cache → Deep Dive' },
+  { label: 'FIO Profiles', value: '7', icon: '⚙️', href: '/technical', desc: 'seq, rand, mixed, latency, QD ramp → Technical' },
+  { label: 'Data Disks', value: '13', icon: '💿', href: '/monitor', desc: '8 data + 5 OS disks across 5 VMs → Monitor' },
 ];
 
 export default function LandingPage() {
@@ -121,21 +121,26 @@ export default function LandingPage() {
               </a>
             </div>
           </div>
-          {/* Stats */}
+          {/* Stats — clickable */}
           <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
             {STATS.map((s) => (
-              <div key={s.label} className="rounded-lg border border-slate-700/50 bg-slate-800/50 backdrop-blur px-3 py-3 text-center">
+              <Link key={s.label} href={s.href} className="group rounded-lg border border-slate-700/50 bg-slate-800/50 backdrop-blur px-3 py-3 text-center transition-all hover:border-blue-500/50 hover:bg-slate-800/80 hover:scale-105 relative">
                 <span className="text-lg">{s.icon}</span>
-                <div className="text-xl font-bold text-white mt-1">{s.value}</div>
-                <div className="text-[10px] text-slate-500">{s.label}</div>
-              </div>
+                <div className="text-xl font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">{s.value}</div>
+                <div className="text-[10px] text-slate-500 group-hover:text-slate-400">{s.label}</div>
+                {/* Tooltip */}
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-[10px] text-slate-200 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                  {s.desc}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-slate-700" />
+                </div>
+              </Link>
             ))}
           </div>
         </div>
       </div>
 
       {/* Search & Pages */}
-      <div className="mx-auto max-w-[1400px] px-6 py-8">
+      <div id="pages" className="scroll-mt-8 mx-auto max-w-[1400px] px-6 py-8">
         <div className="flex flex-wrap items-center gap-4">
           <div className="relative flex-1 min-w-[260px]">
             <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
