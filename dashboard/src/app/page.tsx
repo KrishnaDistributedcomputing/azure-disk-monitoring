@@ -58,10 +58,19 @@ const PAGES = [
     description: 'Interactive cost simulator for all 5 disk types, disk capability comparison, IOPS scaling chart, VM-level caps table, disk selection decision guide, and cost optimization tips.',
     features: ['Cost simulator (5 disk types)', 'Premium SSD tier picker', 'PremV2/Ultra sliders', 'Disk capability bars', 'IOPS scaling chart', 'VM disk cap table', 'Decision guide', '8 optimization tips'],
   },
+  {
+    title: 'AI Disk Advisor',
+    path: '/advisor',
+    icon: '✨',
+    color: '#a855f7',
+    category: 'Tools',
+    description: 'AI-powered chat interface that answers questions about disk costs, performance optimization, and generates KQL queries. Uses Azure OpenAI GPT-4o-mini ($0.15/1M tokens) or runs locally with built-in knowledge.',
+    features: ['Natural language Q&A', 'Cost analysis answers', 'Performance diagnostics', 'KQL query generation', 'Disk type recommendations', 'Azure OpenAI ready (GPT-4o-mini)', 'Zero-cost local mode', 'Suggested questions'],
+  },
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '7', icon: '📱' },
+  { label: 'Dashboard Pages', value: '8', icon: '📱' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️' },
   { label: 'Disk Types', value: '5', icon: '💾' },
   { label: 'KQL Queries', value: '17', icon: '🔎' },
