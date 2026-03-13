@@ -284,10 +284,62 @@ function TechStackSection({ stack }: { stack: typeof TECH_STACK }) {
   );
 }
 
+// ============================================================================
+// Interactive Data Flow Section with clickable, expandable steps
+// ============================================================================
+const DATA_FLOW_STEPS = [
+  { step: 1, title: 'Azure Monitor Agent (AMA)', desc: 'Installed as VM extension on all 5 VMs. Collects guest-level performance counters every 60 seconds.', detail: 'Linux: 13 counters (Logical Disk) | Windows: 16 counters (LogicalDisk + PhysicalDisk)', color: 'border-blue-500', data: '29 perf counters per VM', snippet: 'AMA runs inside each VM and captures OS-level disk metrics: reads/sec, writes/sec, latency, queue depth, capacity. It reports to Log Analytics via a Data Collection Rule. AMA replaces the legacy MMA agent and supports both Linux and Windows.', learnUrl: 'https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview' },
+  { step: 2, title: 'Data Collection Rule (DCR)', desc: 'Defines which counters to collect and routes data to Log Analytics. Single DCR shared by all VMs.', detail: 'Counters: Disk Reads/sec, Writes/sec, Transfers/sec, Bytes/sec, Avg Disk sec/Read, sec/Write, Queue Length, % Used Space, Free MB', color: 'border-purple-500', data: 'dcr-diskmon-perf-poc', snippet: 'A DCR is a centralized configuration that tells AMA exactly what to collect. Our DCR specifies 29 disk performance counters at 60-second intervals. When you associate a new VM with this DCR, it automatically starts collecting the same metrics — no per-VM configuration needed.', learnUrl: 'https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview' },
+  { step: 3, title: 'Diagnostic Settings', desc: 'Exports platform-level metrics (AllMetrics) from each VM to Log Analytics. No agent required.', detail: '42 metrics including IOPS/Bandwidth Consumed %, Burst Credits, Cache Hit/Miss', color: 'border-emerald-500', data: 'AzureMetrics table', snippet: 'Platform metrics are emitted by Azure infrastructure — not the guest OS. They include critical metrics like "Data Disk IOPS Consumed %" (how close to your ceiling) and "Burst IO Credits" (remaining burst capacity). These cannot be collected by AMA and require Diagnostic Settings.', learnUrl: 'https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/diagnostic-settings' },
+  { step: 4, title: 'Log Analytics Workspace', desc: 'Central telemetry store. All metrics land in Perf and AzureMetrics tables. KQL engine for ad-hoc analysis.', detail: 'Tables: Perf (guest), AzureMetrics (platform), Heartbeat (availability), InsightsMetrics (VM Insights)', color: 'border-amber-500', data: 'law-diskmon-poc-eastus2', snippet: 'All telemetry converges in one workspace. Guest metrics go to the Perf table, platform metrics to AzureMetrics. KQL queries can join these tables to correlate guest-level latency with platform-level IOPS consumed % — showing WHY latency spiked (because you hit the IOPS ceiling).', learnUrl: 'https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview' },
+  { step: 5, title: 'Visualization Layer', desc: 'Next.js dashboard (Azure Static Web Apps) and Grafana query Log Analytics to render charts.', detail: 'Static export: client-side rendering, mock data when offline, live KQL when connected.', color: 'border-red-500', data: 'swa-diskmon-poc', snippet: 'The dashboard runs entirely in the browser as a static site. It uses mock data generators that simulate realistic disk metrics for demos. When connected to Log Analytics (via API route), it executes live KQL queries. Grafana provides a secondary portal-native view.', learnUrl: 'https://learn.microsoft.com/en-us/azure/static-web-apps/overview' },
+];
+
+function DataFlowSection() {
+  const [expandedStep, setExpandedStep] = useState<number | null>(null);
+  return (
+    <div className="rounded-xl border border-slate-700 bg-slate-800 p-6">
+      <h2 className="text-xl font-bold text-white mb-2">Data Collection Pipeline</h2>
+      <p className="text-xs text-slate-400 mb-4">Click any step to learn more and find the Microsoft Learn documentation.</p>
+      <div className="space-y-4">
+        {DATA_FLOW_STEPS.map((s) => (
+          <div key={s.step} className={`rounded-xl border-l-4 ${s.color} border border-slate-700 overflow-hidden transition-all ${expandedStep === s.step ? 'ring-1 ring-blue-500/20' : ''}`}>
+            <button onClick={() => setExpandedStep(expandedStep === s.step ? null : s.step)} className="w-full text-left p-5 hover:bg-slate-700/20 transition-colors">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-slate-700 text-lg font-bold text-white">{s.step}</div>
+                <div className="flex-1">
+                  <h3 className="text-base font-bold text-white">{s.title}</h3>
+                  <p className="text-sm text-slate-300 mt-1">{s.desc}</p>
+                  <p className="text-xs text-slate-500 mt-1">{s.detail}</p>
+                  <span className="mt-2 inline-block rounded-full bg-slate-700 px-2.5 py-0.5 text-[10px] font-mono text-slate-300">{s.data}</span>
+                </div>
+                <svg className={`h-5 w-5 text-slate-400 transition-transform flex-shrink-0 mt-1 ${expandedStep === s.step ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+              </div>
+            </button>
+            {expandedStep === s.step && (
+              <div className="border-t border-slate-700 px-5 py-4 ml-14 space-y-3 bg-slate-800/50">
+                <p className="text-sm text-slate-300 leading-relaxed">{s.snippet}</p>
+                <a href={s.learnUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 px-3 py-1.5 text-xs font-medium text-blue-400 hover:bg-blue-500/20 transition-colors">
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                  Microsoft Learn
+                </a>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function TechDetailsPage() {
   const [activeSection, setActiveSection] = useState<Section>('architecture');
   const [metricFilter, setMetricFilter] = useState<string>('all');
   const [pricingTab, setPricingTab] = useState<'disks' | 'vms' | 'ultra' | 'premv2'>('disks');
+  const [currency, setCurrency] = useState<'USD' | 'CAD'>('USD');
+  const CAD_RATE = 1.36; // approximate USD to CAD conversion
+  const cx = (usd: number) => currency === 'CAD' ? +(usd * CAD_RATE).toFixed(2) : usd;
+  const sym = currency === 'CAD' ? 'C$' : '$';
 
   const filteredMetrics = metricFilter === 'all' ? ALL_METRICS : ALL_METRICS.filter((m) => m.category === metricFilter);
   const metricCategories = [...new Set(ALL_METRICS.map((m) => m.category))];
@@ -357,27 +409,7 @@ export default function TechDetailsPage() {
           <>
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-6">
               <h2 className="text-xl font-bold text-white mb-4">Data Collection Pipeline</h2>
-              <div className="space-y-6">
-                {[
-                  { step: 1, title: 'Azure Monitor Agent (AMA)', desc: 'Installed as VM extension on all 5 VMs. Collects guest-level performance counters every 60 seconds.', detail: 'Linux: 13 counters (Logical Disk) | Windows: 16 counters (LogicalDisk + PhysicalDisk)', color: 'border-blue-500', data: '29 perf counters per VM' },
-                  { step: 2, title: 'Data Collection Rule (DCR)', desc: 'Defines which counters to collect and routes data to Log Analytics. Single DCR shared by all VMs.', detail: 'Counters: Disk Reads/sec, Writes/sec, Transfers/sec, Bytes/sec, Avg Disk sec/Read, sec/Write, Queue Length, % Used Space, Free MB', color: 'border-purple-500', data: 'dcr-diskmon-perf-poc' },
-                  { step: 3, title: 'Diagnostic Settings', desc: 'Exports platform-level metrics (AllMetrics) from each VM to Log Analytics. No agent required.', detail: '42 metrics including IOPS/Bandwidth Consumed %, Burst Credits, Cache Hit/Miss', color: 'border-emerald-500', data: 'AzureMetrics table' },
-                  { step: 4, title: 'Log Analytics Workspace', desc: 'Central telemetry store. All metrics land in Perf and AzureMetrics tables. KQL engine for ad-hoc analysis.', detail: 'Tables: Perf (guest), AzureMetrics (platform), Heartbeat (availability), InsightsMetrics (VM Insights)', color: 'border-amber-500', data: 'law-diskmon-poc-eastus2' },
-                  { step: 5, title: 'Visualization Layer', desc: 'Next.js dashboard (Azure Static Web Apps) and Grafana query Log Analytics to render charts.', detail: 'Static export mode: all client-side rendering. Mock data when offline, live KQL when connected.', color: 'border-red-500', data: 'swa-diskmon-poc' },
-                ].map((s) => (
-                  <div key={s.step} className={`rounded-xl border-l-4 ${s.color} bg-slate-800/50 border border-slate-700 p-5`}>
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-slate-700 text-lg font-bold text-white">{s.step}</div>
-                      <div className="flex-1">
-                        <h3 className="text-base font-bold text-white">{s.title}</h3>
-                        <p className="text-sm text-slate-300 mt-1">{s.desc}</p>
-                        <p className="text-xs text-slate-500 mt-1">{s.detail}</p>
-                        <span className="mt-2 inline-block rounded-full bg-slate-700 px-2.5 py-0.5 text-[10px] font-mono text-slate-300">{s.data}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <DataFlowSection />
             </div>
           </>
         )}
@@ -388,6 +420,7 @@ export default function TechDetailsPage() {
             <div className="flex flex-wrap items-center gap-3">
               <h2 className="text-xl font-bold text-white">Complete Metrics Catalog</h2>
               <span className="rounded-full bg-blue-500/20 px-2.5 py-0.5 text-xs text-blue-400">{ALL_METRICS.length} metrics</span>
+              <span className="text-[10px] text-slate-500">Click any row for details</span>
               <select value={metricFilter} onChange={(e) => setMetricFilter(e.target.value)} className="ml-auto rounded-lg border border-slate-600 bg-slate-700 px-3 py-1.5 text-xs text-slate-200 focus:border-blue-500 focus:outline-none">
                 <option value="all">All Categories ({ALL_METRICS.length})</option>
                 {metricCategories.map((c) => <option key={c} value={c}>{c} ({ALL_METRICS.filter((m) => m.category === c).length})</option>)}
@@ -450,9 +483,21 @@ export default function TechDetailsPage() {
         {/* ========== LIVE PRICING ========== */}
         {activeSection === 'pricing' && (
           <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-3">
               <h2 className="text-xl font-bold text-white">Live Azure Pricing (East US 2)</h2>
-              <div className="flex items-center gap-2 text-xs text-emerald-400"><span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" /> Source: prices.azure.com — Pay-as-you-go</div>
+              <div className="flex items-center gap-4">
+                {/* Currency Toggle */}
+                <div className="flex rounded-lg border border-slate-700 bg-slate-800">
+                  <button onClick={() => setCurrency('USD')} className={`px-3 py-1 text-xs font-medium rounded-l-lg transition-colors ${currency === 'USD' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}>USD $</button>
+                  <button onClick={() => setCurrency('CAD')} className={`px-3 py-1 text-xs font-medium rounded-r-lg transition-colors ${currency === 'CAD' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}>CAD C$</button>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-emerald-400"><span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" /> Source: prices.azure.com</div>
+              </div>
+            </div>
+            {/* Disclaimer */}
+            <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 flex items-start gap-2">
+              <svg className="h-4 w-4 text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+              <p className="text-[11px] text-amber-200/80"><strong>Disclaimer:</strong> All prices shown are for <strong>illustration purposes only</strong> and are based on Azure Retail Prices API (East US 2, Pay-as-you-go). Actual costs may vary based on your enterprise agreement, reserved instances, region, and applicable taxes. {currency === 'CAD' ? 'CAD prices use an approximate exchange rate of 1 USD = 1.36 CAD and are not official Azure CAD pricing.' : 'Base currency is USD.'} Always verify pricing at <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">azure.microsoft.com/pricing</a>.</p>
             </div>
             <div className="flex gap-2">
               {(['disks', 'vms', 'ultra', 'premv2'] as const).map((t) => (

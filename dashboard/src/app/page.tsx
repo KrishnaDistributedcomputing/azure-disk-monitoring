@@ -1,358 +1,213 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import StatCard from '@/components/StatCard';
-import DiskInventoryTable from '@/components/DiskInventoryTable';
-import TimeSeriesChart from '@/components/TimeSeriesChart';
-import DiskTypeComparison from '@/components/DiskTypeComparison';
-import VmFamilyComparison from '@/components/VmFamilyComparison';
-import LatencyPercentiles from '@/components/LatencyPercentiles';
-import DistributionChart from '@/components/DistributionChart';
-import MetricInfoPanel from '@/components/MetricInfoPanel';
-import {
-  generateOverviewStats,
-  generateDiskInventory,
-  generateIopsTimeSeries,
-  generateThroughputTimeSeries,
-  generateLatencyTimeSeries,
-  generateQueueDepthTimeSeries,
-  generateDiskTypeComparison,
-  generateVmFamilyComparison,
-  generateLatencyPercentiles,
-} from '@/lib/mock-data';
 
-type TimeRange = '1h' | '24h' | '7d' | '30d';
-type Tab = 'overview' | 'iops' | 'throughput' | 'latency' | 'queue' | 'capacity' | 'comparison';
-
-const TAB_LABELS: { key: Tab; label: string }[] = [
-  { key: 'overview', label: 'Overview' },
-  { key: 'iops', label: 'IOPS' },
-  { key: 'throughput', label: 'Throughput' },
-  { key: 'latency', label: 'Latency' },
-  { key: 'queue', label: 'Queue Depth' },
-  { key: 'capacity', label: 'Capacity' },
-  { key: 'comparison', label: 'Comparison' },
+const PAGES = [
+  {
+    title: 'Metrics Dashboard',
+    path: '/metrics',
+    icon: '📊',
+    color: '#3b82f6',
+    category: 'Monitoring',
+    description: 'Main dashboard with 7 metric tabs: Overview, IOPS, Throughput, Latency, Queue Depth, Capacity, and Comparison. Features sparkline grids, ranking views, and a filterable disk inventory table.',
+    features: ['7 metric tabs', 'Sparkline grid view', 'Ranking bar view', 'Disk inventory table', 'Metric info panels with cost impact', 'Time range picker (1h/24h/7d/30d)', 'Auto-refresh every 60s'],
+  },
+  {
+    title: 'Single Pane Monitor',
+    path: '/monitor',
+    icon: '🖥️',
+    color: '#22c55e',
+    category: 'Monitoring',
+    description: 'Fleet-level monitoring with three drill-down levels: All VMs → VM Detail → Disk Detail. Health scores, IOPS/throughput gauges, and VM Start/Stop/Deallocate controls.',
+    features: ['Fleet → VM → Disk drill-down', 'Health score gauges', 'VM Start/Stop/Deallocate', 'Filter by VM family & health', 'Sort by health, IOPS, latency, cost', 'Per-disk time series charts', 'Provisioned vs actual comparison'],
+  },
+  {
+    title: 'Technical Details',
+    path: '/technical',
+    icon: '🏗️',
+    color: '#8b5cf6',
+    category: 'Documentation',
+    description: 'Solution architecture with Mermaid.js diagrams, clickable data flow pipeline, interactive technology stack with Microsoft Learn links, live Azure pricing with USD/CAD toggle.',
+    features: ['Mermaid.js architecture diagram', 'Clickable data flow pipeline', 'Interactive tech stack cards', 'Microsoft Learn links', 'Live Azure pricing (USD/CAD)', 'Pricing disclaimer', 'Benchmark profiles'],
+  },
+  {
+    title: 'Deep Dive',
+    path: '/deep-dive',
+    icon: '🔍',
+    color: '#06b6d4',
+    category: 'Documentation',
+    description: 'Complete catalog of 17 KQL queries (with full syntax-highlighted code), 29 guest-level performance counters (13 Linux + 16 Windows), and 42 platform metrics grouped by category.',
+    features: ['17 KQL queries with code', 'Expandable query cards', 'Category filtering', '29 perf counters (Linux + Windows)', '42 platform metrics by category', 'Source distribution charts', 'Dashboard mapping'],
+  },
+  {
+    title: 'Design Document',
+    path: '/design',
+    icon: '📐',
+    color: '#f59e0b',
+    category: 'Documentation',
+    description: '8-section technical design document covering Overview, Infrastructure, Data Collection, Query Layer, Visualization, Benchmarks, Security, and Operations — all with Mermaid diagrams.',
+    features: ['8 design sections', 'Key design decisions', 'Mermaid diagrams per section', 'Bicep module structure', 'Tagging strategy', 'Security POC vs production', 'Operational commands'],
+  },
+  {
+    title: 'Help & Reference',
+    path: '/help',
+    icon: '💡',
+    color: '#ef4444',
+    category: 'Tools',
+    description: 'Interactive cost simulator for all 5 disk types, disk capability comparison, IOPS scaling chart, VM-level caps table, disk selection decision guide, and cost optimization tips.',
+    features: ['Cost simulator (5 disk types)', 'Premium SSD tier picker', 'PremV2/Ultra sliders', 'Disk capability bars', 'IOPS scaling chart', 'VM disk cap table', 'Decision guide', '8 optimization tips'],
+  },
 ];
 
-const TIME_RANGE_LABELS: { key: TimeRange; label: string }[] = [
-  { key: '1h', label: 'Last 1h' },
-  { key: '24h', label: 'Last 24h' },
-  { key: '7d', label: 'Last 7d' },
-  { key: '30d', label: 'Last 30d' },
+const STATS = [
+  { label: 'Dashboard Pages', value: '7', icon: '📱' },
+  { label: 'VMs Monitored', value: '5', icon: '🖥️' },
+  { label: 'Disk Types', value: '5', icon: '💾' },
+  { label: 'KQL Queries', value: '17', icon: '🔎' },
+  { label: 'Perf Counters', value: '29', icon: '📡' },
+  { label: 'Platform Metrics', value: '42', icon: '📊' },
+  { label: 'FIO Profiles', value: '7', icon: '⚙️' },
+  { label: 'Data Disks', value: '13', icon: '💿' },
 ];
 
-function timeRangeToHours(range: TimeRange): number {
-  switch (range) {
-    case '1h': return 1;
-    case '24h': return 24;
-    case '7d': return 168;
-    case '30d': return 720;
-    default: return 1;
-  }
-}
+export default function LandingPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
 
-// SVG Icons
-const ServerIcon = () => (
-  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.602H7.923a3.375 3.375 0 00-3.285 2.602l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m19.5 0a3 3 0 01-3 3H5.25a3 3 0 01-3-3m19.5 0a3 3 0 00-3-3H5.25a3 3 0 00-3 3" />
-  </svg>
-);
+  const categories = [...new Set(PAGES.map((p) => p.category))];
 
-const DiskIcon = () => (
-  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" />
-  </svg>
-);
-
-const BoltIcon = () => (
-  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-  </svg>
-);
-
-const ClockIcon = () => (
-  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);
-
-export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState<Tab>('overview');
-  const [timeRange, setTimeRange] = useState<TimeRange>('1h');
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  // Auto-refresh every 60 seconds
-  useEffect(() => {
-    const interval = setInterval(() => setRefreshKey((k) => k + 1), 60_000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Generate data (in production, these would be API calls to Log Analytics)
-  const overview = useMemo(() => generateOverviewStats(), [refreshKey]);
-  const inventory = useMemo(() => generateDiskInventory(), [refreshKey]);
-  const hours = timeRangeToHours(timeRange);
-  const iopsSeries = useMemo(() => generateIopsTimeSeries(Math.min(hours, 24)), [timeRange, refreshKey]);
-  const throughputSeries = useMemo(() => generateThroughputTimeSeries(Math.min(hours, 24)), [timeRange, refreshKey]);
-  const latencySeries = useMemo(() => generateLatencyTimeSeries(Math.min(hours, 24)), [timeRange, refreshKey]);
-  const queueSeries = useMemo(() => generateQueueDepthTimeSeries(Math.min(hours, 24)), [timeRange, refreshKey]);
-  const diskTypeComp = useMemo(() => generateDiskTypeComparison(), [refreshKey]);
-  const vmFamilyComp = useMemo(() => generateVmFamilyComparison(), [refreshKey]);
-  const latencyPct = useMemo(() => generateLatencyPercentiles(), [refreshKey]);
+  const filteredPages = useMemo(() => {
+    let result = PAGES;
+    if (categoryFilter !== 'all') result = result.filter((p) => p.category === categoryFilter);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter((p) => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.features.some((f) => f.toLowerCase().includes(q)));
+    }
+    return result;
+  }, [searchQuery, categoryFilter]);
 
   return (
     <div className="min-h-screen bg-slate-900">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-slate-700/50 bg-slate-900/95 backdrop-blur">
-        <div className="mx-auto max-w-[1600px] px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-blue-600 p-2">
-                <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-lg font-bold text-white">Azure Disk Performance Monitor</h1>
-                <p className="text-xs text-slate-400">
-                  Subscription: e62428e7-08dd-4bc2-82e2-2c51586d9105 &bull; Region: East US 2
-                </p>
-              </div>
+      {/* Hero */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-emerald-600/10" />
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(59,130,246,0.08) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(139,92,246,0.08) 0%, transparent 50%)' }} />
+        <div className="relative mx-auto max-w-[1400px] px-6 pt-16 pb-12">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center rounded-2xl bg-blue-600/20 border border-blue-500/30 p-4 mb-6">
+              <svg className="h-10 w-10 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" /></svg>
             </div>
-            <div className="flex items-center gap-4">
-              {/* Time Range Picker */}
-              <div className="flex rounded-lg border border-slate-700 bg-slate-800">
-                {TIME_RANGE_LABELS.map(({ key, label }) => (
-                  <button
-                    key={key}
-                    className={`px-3 py-1.5 text-xs font-medium transition-colors ${
-                      timeRange === key
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-400 hover:text-white'
-                    } ${key === '1h' ? 'rounded-l-lg' : ''} ${key === '30d' ? 'rounded-r-lg' : ''}`}
-                    onClick={() => setTimeRange(key)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              {/* Refresh */}
-              <button
-                onClick={() => setRefreshKey((k) => k + 1)}
-                className="rounded-lg border border-slate-700 bg-slate-800 p-2 text-slate-400 transition-colors hover:text-white"
-                title="Refresh data"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
-                </svg>
-              </button>
-              <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-xs font-medium text-emerald-400">
-                Live
-              </span>
-              {/* Monitor Page Link */}
-              <Link
-                href="/monitor"
-                className="rounded-lg border border-blue-500/50 bg-blue-600/20 px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:bg-blue-600/30"
-                title="Single Pane of Glass — Drill-Down Monitor"
-              >
-                Single Pane
-              </Link>
-              {/* Technical Details Link */}
-              <Link
-                href="/technical"
-                className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-emerald-400 hover:border-emerald-500/50"
-                title="Technical Details, Metrics & Live Pricing"
-              >
-                Technical
-              </Link>
-              {/* Help Page Link */}
-              <Link
-                href="/help"
-                className="rounded-lg border border-slate-700 bg-slate-800 p-2 text-slate-400 transition-colors hover:text-blue-400 hover:border-blue-500/50"
-                title="Help & Reference Guide"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-                </svg>
-              </Link>
+            <h1 className="text-4xl font-extrabold text-white sm:text-5xl">
+              Azure Disk Performance
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400">Monitoring Platform</span>
+            </h1>
+            <p className="mt-4 text-lg text-slate-400 max-w-2xl mx-auto">Single pane of glass to monitor disk performance across Azure VMs — with drill-down, cost simulation, live pricing, and comprehensive documentation.</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link href="/monitor" className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25">Open Monitor</Link>
+              <Link href="/metrics" className="rounded-xl border border-slate-600 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-colors">View Metrics</Link>
+              <a href="https://github.com/KrishnaDistributedcomputing/azure-disk-monitoring" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-600 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-colors flex items-center gap-2">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                GitHub
+              </a>
             </div>
           </div>
-
-          {/* Tab Navigation */}
-          <nav className="mt-4 flex gap-1">
-            {TAB_LABELS.map(({ key, label }) => (
-              <button
-                key={key}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  activeTab === key
-                    ? 'bg-blue-600/20 text-blue-400'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                }`}
-                onClick={() => setActiveTab(key)}
-              >
-                {label}
-              </button>
+          {/* Stats */}
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+            {STATS.map((s) => (
+              <div key={s.label} className="rounded-lg border border-slate-700/50 bg-slate-800/50 backdrop-blur px-3 py-3 text-center">
+                <span className="text-lg">{s.icon}</span>
+                <div className="text-xl font-bold text-white mt-1">{s.value}</div>
+                <div className="text-[10px] text-slate-500">{s.label}</div>
+              </div>
             ))}
-          </nav>
+          </div>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-[1600px] px-6 py-6">
-        {/* ===== OVERVIEW TAB ===== */}
-        {activeTab === 'overview' && (
-          <div className="space-y-6">
-            {/* Stat Cards */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <StatCard
-                title="Total VMs Monitored"
-                value={overview.totalVMs}
-                subtitle="5 VMs across 3 families"
-                icon={<ServerIcon />}
-                color="blue"
-              />
-              <StatCard
-                title="Total Disks"
-                value={overview.totalDisks}
-                subtitle="8 data disks + 5 OS disks"
-                icon={<DiskIcon />}
-                color="purple"
-              />
-              <StatCard
-                title="High IOPS Disks"
-                value={overview.highIopsDisks}
-                subtitle="Disks > 2,000 IOPS provisioned"
-                icon={<BoltIcon />}
-                color="amber"
-              />
-              <StatCard
-                title="High Latency Disks"
-                value={overview.highLatencyDisks}
-                subtitle="Avg latency > 5 ms"
-                icon={<ClockIcon />}
-                color="red"
-              />
-            </div>
-
-            {/* Distribution Charts */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <DistributionChart data={overview.diskTypeDistribution} title="Disk Type Distribution" />
-              <DistributionChart data={overview.vmFamilyDistribution} title="VM Family Distribution" />
-            </div>
-
-            {/* Disk Inventory Table */}
-            <div>
-              <h2 className="mb-4 text-xl font-bold text-white">Disk Inventory</h2>
-              <DiskInventoryTable data={inventory} />
-            </div>
+      {/* Search & Pages */}
+      <div className="mx-auto max-w-[1400px] px-6 py-8">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="relative flex-1 min-w-[260px]">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+            <input type="text" placeholder="Search pages, features, metrics..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full rounded-xl border border-slate-700 bg-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none" />
+            {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>}
           </div>
-        )}
-
-        {/* ===== IOPS TAB ===== */}
-        {activeTab === 'iops' && (
-          <div className="space-y-6">
-            <MetricInfoPanel metric="iops" />
-            <TimeSeriesChart
-              data={iopsSeries}
-              title={`IOPS Over Time (${timeRange})`}
-              yAxisLabel="IOPS"
-            />
-            <DiskTypeComparison data={diskTypeComp} />
+          <div className="flex rounded-xl border border-slate-700 bg-slate-800/80">
+            <button onClick={() => setCategoryFilter('all')} className={`px-4 py-2.5 text-xs font-medium rounded-l-xl transition-colors ${categoryFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}>All ({PAGES.length})</button>
+            {categories.map((c, i) => (
+              <button key={c} onClick={() => setCategoryFilter(c)} className={`px-4 py-2.5 text-xs font-medium transition-colors ${categoryFilter === c ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'} ${i === categories.length - 1 ? 'rounded-r-xl' : ''}`}>{c} ({PAGES.filter((p) => p.category === c).length})</button>
+            ))}
           </div>
-        )}
+          <span className="text-xs text-slate-500">{filteredPages.length} pages</span>
+        </div>
 
-        {/* ===== THROUGHPUT TAB ===== */}
-        {activeTab === 'throughput' && (
-          <div className="space-y-6">
-            <MetricInfoPanel metric="throughput" />
-            <TimeSeriesChart
-              data={throughputSeries}
-              title={`Throughput Over Time (${timeRange})`}
-              yAxisLabel="MB/s"
-            />
-          </div>
-        )}
-
-        {/* ===== LATENCY TAB ===== */}
-        {activeTab === 'latency' && (
-          <div className="space-y-6">
-            <MetricInfoPanel metric="latency" />
-            <TimeSeriesChart
-              data={latencySeries}
-              title={`Latency Over Time (${timeRange})`}
-              yAxisLabel="ms"
-            />
-            <LatencyPercentiles data={latencyPct} />
-          </div>
-        )}
-
-        {/* ===== QUEUE DEPTH TAB ===== */}
-        {activeTab === 'queue' && (
-          <div className="space-y-6">
-            <MetricInfoPanel metric="queue" />
-            <TimeSeriesChart
-              data={queueSeries}
-              title={`Queue Depth Over Time (${timeRange})`}
-              yAxisLabel="Queue Depth"
-            />
-          </div>
-        )}
-
-        {/* ===== CAPACITY TAB ===== */}
-        {activeTab === 'capacity' && (
-          <div className="space-y-6">
-            <MetricInfoPanel metric="capacity" />
-            <h2 className="text-xl font-bold text-white">Disk Capacity Utilization</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {inventory.map((disk) => (
-                <div key={`${disk.vmName}-${disk.diskName}`} className="card">
-                  <div className="mb-3 flex items-center justify-between">
-                    <span className="text-xs font-medium text-slate-400">{disk.diskName.replace('disk-diskmon-', '')}</span>
-                    <span className="rounded-full bg-slate-700 px-2 py-0.5 text-[10px] font-medium text-slate-300">
-                      {disk.diskType}
-                    </span>
-                  </div>
-                  <div className="mb-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-300">{disk.vmName.replace('vm-diskmon-', '')}</span>
-                      <span className={`font-mono font-bold ${disk.usedPct > 80 ? 'text-red-400' : disk.usedPct > 60 ? 'text-amber-400' : 'text-emerald-400'}`}>
-                        {disk.usedPct}%
-                      </span>
-                    </div>
-                    <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-slate-700">
-                      <div
-                        className={`h-full rounded-full transition-all ${
-                          disk.usedPct > 80 ? 'bg-red-500' : disk.usedPct > 60 ? 'bg-amber-500' : 'bg-emerald-500'
-                        }`}
-                        style={{ width: `${disk.usedPct}%` }}
-                      />
+        {/* Page Cards */}
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {filteredPages.map((page) => (
+            <Link key={page.path} href={page.path} className="group rounded-2xl border border-slate-700 bg-slate-800 overflow-hidden transition-all hover:border-slate-500 hover:shadow-xl hover:shadow-blue-900/10 hover:scale-[1.01]">
+              <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${page.color}, ${page.color}80)` }} />
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{page.icon}</span>
+                    <div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{page.title}</h3>
+                      <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: page.color + '20', color: page.color }}>{page.category}</span>
                     </div>
                   </div>
-                  <p className="text-xs text-slate-500">{disk.diskSizeGb} GB &bull; Tier: {disk.diskTier}</p>
+                  <svg className="h-5 w-5 text-slate-600 group-hover:text-blue-400 transition-all group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                 </div>
-              ))}
-            </div>
+                <p className="text-sm text-slate-400 leading-relaxed mb-4">{page.description}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {page.features.slice(0, 5).map((f) => (
+                    <span key={f} className="rounded-lg bg-slate-700/50 px-2 py-0.5 text-[10px] text-slate-400">{f}</span>
+                  ))}
+                  {page.features.length > 5 && <span className="rounded-lg bg-slate-700/50 px-2 py-0.5 text-[10px] text-slate-500">+{page.features.length - 5} more</span>}
+                </div>
+              </div>
+              <div className="border-t border-slate-700/50 px-6 py-2.5 flex items-center justify-between">
+                <code className="text-[11px] font-mono text-slate-500">{page.path}</code>
+                <span className="text-[10px] text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">Open →</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {filteredPages.length === 0 && (
+          <div className="mt-12 text-center py-16">
+            <p className="text-slate-500">No pages match &quot;{searchQuery}&quot;</p>
+            <button onClick={() => { setSearchQuery(''); setCategoryFilter('all'); }} className="mt-3 text-sm text-blue-400 hover:underline">Clear filters</button>
           </div>
         )}
 
-        {/* ===== COMPARISON TAB ===== */}
-        {activeTab === 'comparison' && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-bold text-white">VM Family Comparison</h2>
-            <VmFamilyComparison data={vmFamilyComp} />
-
-            <h2 className="text-xl font-bold text-white">Disk Type Comparison</h2>
-            <DiskTypeComparison data={diskTypeComp} />
-
-            <h2 className="text-xl font-bold text-white">Latency Percentiles by Disk</h2>
-            <LatencyPercentiles data={latencyPct} />
+        {/* Quick Links */}
+        <div className="mt-12 rounded-2xl border border-slate-700 bg-slate-800/50 p-8">
+          <h2 className="text-xl font-bold text-white mb-6">Quick Links</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { label: 'Azure Portal', desc: 'View deployed resources', url: 'https://portal.azure.com', icon: '☁️' },
+              { label: 'GitHub Repo', desc: 'Source code & IaC', url: 'https://github.com/KrishnaDistributedcomputing/azure-disk-monitoring', icon: '🐙' },
+              { label: 'Azure Pricing', desc: 'Official pricing calculator', url: 'https://azure.microsoft.com/en-us/pricing/calculator/', icon: '💰' },
+              { label: 'Azure Monitor Docs', desc: 'Microsoft Learn', url: 'https://learn.microsoft.com/en-us/azure/azure-monitor/', icon: '📚' },
+            ].map((link) => (
+              <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-700 bg-slate-800 p-4 transition-all hover:border-blue-500/50 group">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{link.icon}</span>
+                  <div>
+                    <div className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">{link.label}</div>
+                    <div className="text-[11px] text-slate-500">{link.desc}</div>
+                  </div>
+                </div>
+              </a>
+            ))}
           </div>
-        )}
-      </main>
+        </div>
+      </div>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        Azure Disk Performance Monitoring POC &bull; Subscription: e62428e7-08dd-4bc2-82e2-2c51586d9105 &bull; Data refreshes every 60s
+      <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        Azure Disk Performance Monitoring POC &bull; East US 2 &bull;
+        <a href="https://github.com/KrishnaDistributedcomputing/azure-disk-monitoring" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">GitHub</a>
       </footer>
     </div>
   );
