@@ -73,7 +73,7 @@ const RECOMMENDATIONS = [
   { priority: 'Low', title: 'Multiple Log Analytics workspaces', description: 'Log Analytics in DefaultResourceGroup-EUS ($12.80) and CCA ($8.40) may be redundant. Consider consolidating into a single workspace.', savings: '$5-$10/mo', action: 'az monitor log-analytics workspace list -o table → review counts' },
 ];
 
-type Tab = 'overview' | 'resource-groups' | 'services' | 'recommendations' | 'trend' | 'tags';
+type Tab = 'overview' | 'resource-groups' | 'services' | 'recommendations' | 'trend' | 'tags' | 'new-resources';
 
 // ============================================================================
 // TAG-BASED COST DATA (from Azure Cost Management API + az resource list)
@@ -128,6 +128,38 @@ const TAG_RECOMMENDATIONS = [
   { severity: 'low' as const, title: 'Set up cost alerts by tag', description: 'Create budget alerts filtered by Environment=poc and project=disk-monitoring to get notified when the POC exceeds $100/mo.', savings: 'Cost governance', cmd: 'az consumption budget create --amount 100 --budget-name "diskmon-budget" --category Cost --time-grain Monthly' },
 ];
 
+// ============================================================================
+// NEWLY ADDED RESOURCES (from Azure Resource Graph — last 30 days)
+// Estimated monthly cost based on 7-day prorated Azure Cost Management data
+// ============================================================================
+const NEW_RESOURCES = [
+  { name: 'oai-diskmon-poc', type: 'Azure OpenAI', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-12', estMonthlyCost: 0.00, status: 'Active', reason: 'AI Disk Advisor backend for the monitoring dashboard' },
+  { name: 'afd-diskmon-poc', type: 'Front Door', rg: 'rg-diskmon-poc-eastus2', location: 'Global', created: '2026-03-11', estMonthlyCost: 0.42, status: 'Active', reason: 'CDN + custom domain for SWA (low usage POC)' },
+  { name: 'swa-diskmon-poc', type: 'Static Web App', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-10', estMonthlyCost: 9.00, status: 'Active', reason: 'Next.js monitoring dashboard — Standard tier' },
+  { name: 'kv-kv-d3ocert7badhy', type: 'Key Vault', rg: 'rg-kv-ai-4e8c9', location: 'Sweden Central', created: '2026-03-08', estMonthlyCost: 0.03, status: 'Active', reason: 'Secrets for KV AI project deployment' },
+  { name: 'kv-ai-d3ocert7badhy', type: 'Azure AI Account', rg: 'rg-kv-ai-4e8c9', location: 'Sweden Central', created: '2026-03-08', estMonthlyCost: 0.00, status: 'Active', reason: 'AI Foundry account for KV AI experiments' },
+  { name: 'kvstd3ocert7badhy', type: 'Storage Account', rg: 'rg-kv-ai-4e8c9', location: 'Sweden Central', created: '2026-03-08', estMonthlyCost: 0.52, status: 'Active', reason: 'Blob storage for AI project data' },
+  { name: 'vm-diskmon-linux-02', type: 'Virtual Machine', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-05', estMonthlyCost: 8.12, status: 'Deallocated', reason: 'D4s_v5 Linux VM for disk benchmarking — deallocated to save costs' },
+  { name: 'vm-diskmon-win-01', type: 'Virtual Machine', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-05', estMonthlyCost: 7.89, status: 'Deallocated', reason: 'D4s_v5 Windows VM for DiskSpd benchmarking' },
+  { name: 'disk-ultra-bench', type: 'Managed Disk', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-05', estMonthlyCost: 25.61, status: 'Attached', reason: 'Ultra Disk 64 GiB — highest IOPS test target' },
+  { name: 'disk-premv2-bench', type: 'Managed Disk', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-05', estMonthlyCost: 11.86, status: 'Attached', reason: 'Premium SSD v2 64 GiB — flexible IOPS/throughput test' },
+  { name: 'grafana-diskmon-poc', type: 'Managed Grafana', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-04', estMonthlyCost: 0.00, status: 'Active', reason: 'Azure Managed Grafana for metric dashboards (free tier)' },
+  { name: 'dcr-diskmon-perf-poc', type: 'Data Collection Rule', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-04', estMonthlyCost: 0.00, status: 'Active', reason: 'DCR with 29 perf counters for AMA disk metrics' },
+  { name: 'law-diskmon-poc-eastus2', type: 'Log Analytics', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-04', estMonthlyCost: 4.20, status: 'Active', reason: 'Central workspace — 5 GB/day free tier + overage' },
+];
+
+const NEW_RES_TOTAL = NEW_RESOURCES.reduce((s, r) => s + r.estMonthlyCost, 0);
+const NEW_BY_TYPE = (() => {
+  const m = new Map<string, { count: number; cost: number }>();
+  NEW_RESOURCES.forEach(r => {
+    const e = m.get(r.type) || { count: 0, cost: 0 };
+    e.count++;
+    e.cost += r.estMonthlyCost;
+    m.set(r.type, e);
+  });
+  return Array.from(m.entries()).map(([type, v]) => ({ type, ...v })).sort((a, b) => b.cost - a.cost);
+})();
+
 export default function CostAnalyzerPage() {
   const [tab, setTab] = useState<Tab>('overview');
   const [expandedRg, setExpandedRg] = useState<string | null>(null);
@@ -168,6 +200,7 @@ export default function CostAnalyzerPage() {
               { key: 'resource-groups' as Tab, label: `Resource Groups (${COST_BY_RG.length})` },
               { key: 'services' as Tab, label: `Services (${COST_BY_SERVICE.length})` },
               { key: 'tags' as Tab, label: '🏷️ Tags' },
+              { key: 'new-resources' as Tab, label: `🆕 New Resources (${NEW_RESOURCES.length})` },
               { key: 'recommendations' as Tab, label: `Savings (${RECOMMENDATIONS.length})` },
               { key: 'trend' as Tab, label: 'Daily Trend' },
             ]).map(({ key, label }) => (
@@ -587,6 +620,176 @@ export default function CostAnalyzerPage() {
                   </div>
                   <div className="text-xs text-slate-400 mb-1">Values: <span className="text-slate-300">{t.values}</span></div>
                   <div className="text-sm text-slate-300">{t.purpose}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>)}
+
+        {/* ============= NEW RESOURCES TAB ============= */}
+        {tab === 'new-resources' && (<>
+          {/* Summary Banner */}
+          <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-5" role="note">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h3 className="text-lg font-bold text-blue-200">🆕 Recently Added Resources</h3>
+                <p className="text-sm text-blue-100/80 mt-1"><strong>{NEW_RESOURCES.length} resources</strong> created in the last 30 days, adding an estimated <strong>${NEW_RES_TOTAL.toFixed(2)}/mo</strong> to your subscription costs.</p>
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-blue-300">${NEW_RES_TOTAL.toFixed(2)}</div>
+                <div className="text-xs text-blue-200/60">Est. monthly impact</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+            {[
+              { label: 'New Resources', value: NEW_RESOURCES.length, icon: '📦', color: '#0078d4' },
+              { label: 'Resource Types', value: NEW_BY_TYPE.length, icon: '🔧', color: '#8764b8' },
+              { label: 'Est. Monthly Cost', value: `$${NEW_RES_TOTAL.toFixed(2)}`, icon: '💰', color: '#57a300' },
+              { label: '% of Total Spend', value: `${((NEW_RES_TOTAL / TOTAL_COST) * 100).toFixed(1)}%`, icon: '📊', color: '#f59e0b' },
+            ].map(s => (
+              <div key={s.label} className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-lg" aria-hidden="true">{s.icon}</span>
+                  <span className="text-sm text-slate-400">{s.label}</span>
+                </div>
+                <div className="text-3xl font-bold" style={{ color: s.color }}>{s.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Cost by Resource Type */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+              <h3 className="text-base font-bold text-white mb-1">New Cost by Resource Type</h3>
+              <p className="text-sm text-slate-400 mb-4">Estimated monthly cost per type of newly created resource</p>
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={NEW_BY_TYPE} layout="vertical" margin={{ left: 110, right: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" />
+                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} />
+                  <YAxis type="category" dataKey="type" tick={{ fill: '#d2d0ce', fontSize: 12 }} width={105} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}/mo`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <Bar dataKey="cost" fill="#0078d4" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+              <h3 className="text-base font-bold text-white mb-1">Resource Creation Timeline</h3>
+              <p className="text-sm text-slate-400 mb-4">When each resource was created and its cost impact</p>
+              <div className="space-y-3 max-h-[260px] overflow-y-auto">
+                {NEW_RESOURCES.map((r, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-20 text-right">
+                      <span className="text-xs font-mono text-slate-400">{r.created}</span>
+                    </div>
+                    <div className="h-3 w-3 rounded-full bg-blue-500 flex-shrink-0" aria-hidden="true" />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium text-white truncate block">{r.name}</span>
+                    </div>
+                    <span className="text-sm font-mono font-bold text-white flex-shrink-0">${r.estMonthlyCost.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Full Resource Table */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden mt-6">
+            <div className="p-5 border-b border-slate-700">
+              <h3 className="text-base font-bold text-white">All New Resources (Last 30 Days)</h3>
+              <p className="text-sm text-slate-400 mt-1">Resources detected via Azure Resource Graph <code className="text-xs font-mono text-emerald-400 ml-1">properties.creationTime &gt; ago(30d)</code></p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm" role="table">
+                <thead>
+                  <tr className="border-b border-slate-700 text-slate-300 text-sm">
+                    <th className="px-5 py-3 text-left font-semibold" scope="col">Resource</th>
+                    <th className="px-5 py-3 text-left font-semibold" scope="col">Type</th>
+                    <th className="px-5 py-3 text-left font-semibold" scope="col">Resource Group</th>
+                    <th className="px-5 py-3 text-left font-semibold" scope="col">Created</th>
+                    <th className="px-5 py-3 text-center font-semibold" scope="col">Status</th>
+                    <th className="px-5 py-3 text-right font-semibold" scope="col">Est. $/mo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {NEW_RESOURCES.map((r, i) => {
+                    const statusColor = r.status === 'Active' || r.status === 'Attached' ? '#57a300' : r.status === 'Deallocated' ? '#f59e0b' : '#a19f9d';
+                    return (
+                      <tr key={i} className="border-b border-slate-700/50 hover:bg-slate-700/20 transition-colors">
+                        <td className="px-5 py-3.5">
+                          <div>
+                            <span className="font-mono font-semibold text-white text-sm">{r.name}</span>
+                            <p className="text-xs text-slate-400 mt-0.5">{r.reason}</p>
+                          </div>
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <span className="rounded-full px-2.5 py-1 text-xs font-semibold bg-blue-600/20 text-blue-400">{r.type}</span>
+                        </td>
+                        <td className="px-5 py-3.5 text-sm font-mono text-slate-300">{r.rg}</td>
+                        <td className="px-5 py-3.5 text-sm font-mono text-slate-300">{r.created}</td>
+                        <td className="px-5 py-3.5 text-center">
+                          <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: statusColor + '20', color: statusColor }}>
+                            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: statusColor }} aria-hidden="true" />
+                            {r.status}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3.5 text-right">
+                          <span className={`font-mono font-bold ${r.estMonthlyCost > 5 ? 'text-amber-400' : 'text-white'}`}>${r.estMonthlyCost.toFixed(2)}</span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                <tfoot>
+                  <tr className="font-bold text-white bg-slate-800">
+                    <td className="px-5 py-4" colSpan={5}>Total ({NEW_RESOURCES.length} new resources)</td>
+                    <td className="px-5 py-4 text-right font-mono">${NEW_RES_TOTAL.toFixed(2)}/mo</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          {/* Cost impact analysis */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
+              <div className="text-sm font-bold text-amber-300 mb-2">⚠️ Highest-Cost New Resource</div>
+              <div className="text-lg font-bold text-white">{NEW_RESOURCES.sort((a, b) => b.estMonthlyCost - a.estMonthlyCost)[0].name}</div>
+              <div className="text-sm text-slate-300 mt-1">{NEW_RESOURCES.sort((a, b) => b.estMonthlyCost - a.estMonthlyCost)[0].type} — ${NEW_RESOURCES.sort((a, b) => b.estMonthlyCost - a.estMonthlyCost)[0].estMonthlyCost.toFixed(2)}/mo</div>
+              <div className="text-xs text-slate-400 mt-2">{NEW_RESOURCES.sort((a, b) => b.estMonthlyCost - a.estMonthlyCost)[0].reason}</div>
+            </div>
+            <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5">
+              <div className="text-sm font-bold text-blue-300 mb-2">📊 Zero-Cost Resources</div>
+              <div className="text-lg font-bold text-white">{NEW_RESOURCES.filter(r => r.estMonthlyCost === 0).length} resources</div>
+              <div className="text-sm text-slate-300 mt-1">Free-tier or pay-per-use with no current consumption</div>
+              <div className="text-xs text-slate-400 mt-2">{NEW_RESOURCES.filter(r => r.estMonthlyCost === 0).map(r => r.name).join(', ')}</div>
+            </div>
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
+              <div className="text-sm font-bold text-emerald-300 mb-2">💡 Deallocated VMs</div>
+              <div className="text-lg font-bold text-white">{NEW_RESOURCES.filter(r => r.status === 'Deallocated').length} VMs stopped</div>
+              <div className="text-sm text-slate-300 mt-1">Saving ~${NEW_RESOURCES.filter(r => r.status === 'Deallocated').reduce((s, r) => s + r.estMonthlyCost * 2.5, 0).toFixed(0)}/mo vs running 24/7</div>
+              <div className="text-xs text-slate-400 mt-2">Current charge is only for deallocated disk storage</div>
+            </div>
+          </div>
+
+          {/* CLI for refresh */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 p-5 mt-6">
+            <h3 className="text-base font-bold text-white mb-3">🔄 Refresh This Data</h3>
+            <p className="text-sm text-slate-400 mb-3">Run these commands to get up-to-date new resource data from your subscription.</p>
+            <div className="space-y-2">
+              {[
+                { label: 'Resources created last 30 days', cmd: 'az graph query -q "resources | where todatetime(properties.creationTime) > ago(30d) | extend created=tostring(properties.creationTime) | project name, type, resourceGroup, created | order by created desc" --subscriptions e62428e7-08dd-4bc2-82e2-2c51586d9105 -o table' },
+                { label: 'Cost per resource (last 7 days)', cmd: 'az rest --method post --uri "https://management.azure.com/subscriptions/e62428e7-.../providers/Microsoft.CostManagement/query?api-version=2023-11-01" --body @cost-by-resource.json' },
+              ].map((c) => (
+                <div key={c.label} className="rounded-lg bg-slate-800 border border-slate-700 p-3">
+                  <div className="text-xs text-slate-400 mb-1">{c.label}</div>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 text-xs font-mono text-emerald-400 overflow-x-auto">{c.cmd}</code>
+                    <button onClick={() => navigator.clipboard.writeText(c.cmd)} className="rounded bg-slate-700 px-2.5 py-1.5 text-xs text-slate-300 hover:text-white flex-shrink-0">Copy</button>
+                  </div>
                 </div>
               ))}
             </div>
