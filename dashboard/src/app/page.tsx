@@ -5,6 +5,15 @@ import Link from 'next/link';
 
 const PAGES = [
   {
+    title: 'Subscription Cost Analyzer',
+    path: '/cost-analyzer',
+    icon: '💳',
+    color: '#0ea5e9',
+    category: 'Finance',
+    description: 'Full subscription cost analysis using Azure Cost Management API. Costs grouped by resource group and service type, with daily trends and actionable savings recommendations.',
+    features: ['Live Azure cost data', 'Cost by resource group', 'Cost by service type', '8 savings recommendations', 'Daily spend trend', 'Azure CLI commands for refresh'],
+  },
+  {
     title: 'Disk FinOps',
     path: '/finops',
     icon: '💵',
@@ -79,7 +88,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '9', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '10', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
