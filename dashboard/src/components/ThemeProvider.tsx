@@ -35,9 +35,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
           onClick={toggle}
           className="fixed bottom-5 right-5 z-[100] rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 p-3"
           style={{
-            backgroundColor: theme === 'dark' ? '#f8fafc' : '#1e293b',
-            color: theme === 'dark' ? '#1e293b' : '#f8fafc',
-            boxShadow: theme === 'dark' ? '0 4px 20px rgba(248,250,252,0.15)' : '0 4px 20px rgba(0,0,0,0.25)',
+            backgroundColor: theme === 'dark' ? '#f3f2f1' : '#292827',
+            color: theme === 'dark' ? '#1b1a19' : '#f3f2f1',
+            boxShadow: theme === 'dark' ? '0 2px 8px rgba(243,242,241,0.15)' : '0 2px 8px rgba(0,0,0,0.3)',
           }}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
         >
