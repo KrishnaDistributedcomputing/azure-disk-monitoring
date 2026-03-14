@@ -1,0 +1,1244 @@
+﻿[
+  {
+    "location": "eastus",
+    "name": "cs2100320031f40ac50",
+    "rg": "cloud-shell-storage-eastus",
+    "type": "Microsoft.Storage/storageAccounts"
+  },
+  {
+    "location": "eastus",
+    "name": "cs2100320031f40ac50-cde9d5d8-9a20-424c-bd53-808c5d6fce2e",
+    "rg": "cloud-shell-storage-eastus",
+    "type": "Microsoft.EventGrid/systemTopics"
+  },
+  {
+    "location": "eastus",
+    "name": "DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS",
+    "rg": "DefaultResourceGroup-EUS",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "eastus",
+    "name": "SecurityCenterFree(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+    "rg": "DefaultResourceGroup-EUS",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "eastus",
+    "name": "Security(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+    "rg": "DefaultResourceGroup-EUS",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "eastus",
+    "name": "SQLAdvancedThreatProtection(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+    "rg": "DefaultResourceGroup-EUS",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "eastus",
+    "name": "SQLVulnerabilityAssessment(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+    "rg": "DefaultResourceGroup-EUS",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "eastus",
+    "name": "cs2100320059fb17711",
+    "rg": "cloud-shell-storage-eastus",
+    "type": "Microsoft.Storage/storageAccounts"
+  },
+  {
+    "location": "eastus",
+    "name": "cs2100320059fb17711-c7ab383e-6767-4501-93bc-d48ae60da234",
+    "rg": "cloud-shell-storage-eastus",
+    "type": "Microsoft.EventGrid/systemTopics"
+  },
+  {
+    "location": "eastus2",
+    "name": "csi-education-vertical",
+    "rg": "DefaultResourceGroup-EUS",
+    "type": "Microsoft.Web/staticSites"
+  },
+  {
+    "location": "global",
+    "name": "AGManager",
+    "rg": "Default-ActivityLogAlerts",
+    "type": "Microsoft.Insights/actiongroups"
+  },
+  {
+    "location": "global",
+    "name": "AGOwner",
+    "rg": "Default-ActivityLogAlerts",
+    "type": "Microsoft.Insights/actiongroups"
+  },
+  {
+    "location": "canadacentral",
+    "name": "myai",
+    "rg": "rg-coolwolf260227",
+    "type": "Microsoft.CognitiveServices/accounts"
+  },
+  {
+    "location": "canadacentral",
+    "name": "quizdemobz2si9y0",
+    "rg": "quiz-demo-rg-ca",
+    "type": "Microsoft.Storage/storageAccounts"
+  },
+  {
+    "location": "canadacentral",
+    "name": "quizdemobz2si9y0-979cf198-2eff-4305-92ff-7fab2646005e",
+    "rg": "quiz-demo-rg-ca",
+    "type": "Microsoft.EventGrid/systemTopics"
+  },
+  {
+    "location": "canadacentral",
+    "name": "azvm-compute-pg",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.DBforPostgreSQL/flexibleServers"
+  },
+  {
+    "location": "canadacentral",
+    "name": "azvmetlacr",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "canadacentral",
+    "name": "workspace-rgazvmcomputeXJ1W",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "canadacentral",
+    "name": "azvm-etl-env",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "canadacentral",
+    "name": "azvm-etl-job",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.App/jobs"
+  },
+  {
+    "location": "canadacentral",
+    "name": "azvm-compute-plan",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.Web/serverFarms"
+  },
+  {
+    "location": "canadacentral",
+    "name": "azvm-compute-app",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.Web/sites"
+  },
+  {
+    "location": "eastus2",
+    "name": "azvm-sku-lookup-swa",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.Web/staticSites"
+  },
+  {
+    "location": "canadacentral",
+    "name": "azurevmsku-pg",
+    "rg": "rg-azvm-compute",
+    "type": "Microsoft.DBforPostgreSQL/flexibleServers"
+  },
+  {
+    "location": "canadacentral",
+    "name": "helloaksacrvn4uctqm6bftg",
+    "rg": "rg-helloworld-canadacentral",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "canadacentral",
+    "name": "helloaks-aks",
+    "rg": "rg-helloworld-canadacentral",
+    "type": "Microsoft.ContainerService/managedClusters"
+  },
+  {
+    "location": "canadacentral",
+    "name": "e8f38b8d-3af5-4e2f-8468-0c887b249854",
+    "rg": "MC_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "canadacentral",
+    "name": "kubernetes",
+    "rg": "MC_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/loadBalancers"
+  },
+  {
+    "location": "canadacentral",
+    "name": "helloaks-aks-agentpool",
+    "rg": "MC_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  },
+  {
+    "location": "canadacentral",
+    "name": "aks-agentpool-10876664-nsg",
+    "rg": "mc_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "canadacentral",
+    "name": "aks-agentpool-10876664-routetable",
+    "rg": "mc_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/routeTables"
+  },
+  {
+    "location": "canadacentral",
+    "name": "aks-vnet-10876664",
+    "rg": "mc_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/virtualNetworks"
+  },
+  {
+    "location": "canadacentral",
+    "name": "NetworkWatcher_canadacentral",
+    "rg": "NetworkWatcherRG",
+    "type": "Microsoft.Network/networkWatchers"
+  },
+  {
+    "location": "canadacentral",
+    "name": "aks-system-25332908-vmss",
+    "rg": "MC_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Compute/virtualMachineScaleSets"
+  },
+  {
+    "location": "canadacentral",
+    "name": "kubernetes-a4ab3ad195ef6495cbe084e718b1b511",
+    "rg": "mc_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "canadacentral",
+    "name": "helloaks-logs",
+    "rg": "rg-helloworld-canadacentral",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "canadacentral",
+    "name": "helloaks-ai",
+    "rg": "rg-helloworld-canadacentral",
+    "type": "Microsoft.Insights/components"
+  },
+  {
+    "location": "global",
+    "name": "Application Insights Smart Detection",
+    "rg": "rg-helloworld-canadacentral",
+    "type": "microsoft.insights/actiongroups"
+  },
+  {
+    "location": "global",
+    "name": "Failure Anomalies - helloaks-ai",
+    "rg": "rg-helloworld-canadacentral",
+    "type": "microsoft.alertsmanagement/smartDetectorAlertRules"
+  },
+  {
+    "location": "canadacentral",
+    "name": "aks-vnet-10876664-aks-appgateway-nsg-canadacentral",
+    "rg": "mc_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "canadacentral",
+    "name": "aks-vnet-10876664-aks-virtualkubelet-nsg-canadacentral",
+    "rg": "mc_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "australiaeast",
+    "name": "NetworkWatcher_australiaeast",
+    "rg": "NetworkWatcherRG",
+    "type": "Microsoft.Network/networkWatchers"
+  },
+  {
+    "location": "eastus2",
+    "name": "NetworkWatcher_eastus2",
+    "rg": "NetworkWatcherRG",
+    "type": "Microsoft.Network/networkWatchers"
+  },
+  {
+    "location": "southeastasia",
+    "name": "NetworkWatcher_southeastasia",
+    "rg": "NetworkWatcherRG",
+    "type": "Microsoft.Network/networkWatchers"
+  },
+  {
+    "location": "canadacentral",
+    "name": "gsse62428e708",
+    "rg": "rg-globalsensorstorm-global",
+    "type": "Microsoft.DocumentDB/databaseAccounts"
+  },
+  {
+    "location": "canadacentral",
+    "name": "restdir-db-3yj6wtfbtsi32",
+    "rg": "restdir-rg",
+    "type": "Microsoft.DBforPostgreSQL/flexibleServers"
+  },
+  {
+    "location": "canadacentral",
+    "name": "restdiracr3yj6wtfbtsi32",
+    "rg": "restdir-rg",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "canadacentral",
+    "name": "restdir-plan-3yj6wtfbtsi32",
+    "rg": "restdir-rg",
+    "type": "Microsoft.Web/serverFarms"
+  },
+  {
+    "location": "canadacentral",
+    "name": "restdir-web-3yj6wtfbtsi32",
+    "rg": "restdir-rg",
+    "type": "Microsoft.Web/sites"
+  },
+  {
+    "location": "canadacentral",
+    "name": "Security(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+    "rg": "DefaultResourceGroup-CCA",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "canadacentral",
+    "name": "SecurityCenterFree(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+    "rg": "DefaultResourceGroup-CCA",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "canadacentral",
+    "name": "SQLVulnerabilityAssessment(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+    "rg": "DefaultResourceGroup-CCA",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "canadacentral",
+    "name": "TEST2-asr",
+    "rg": "DemoVM_group-asr",
+    "type": "Microsoft.Compute/availabilitySets"
+  },
+  {
+    "location": "canadacentral",
+    "name": "DemoVM-vnet-asr-default-nsg-canadacentral",
+    "rg": "demovm_group-asr",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "canadacentral",
+    "name": "DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA",
+    "rg": "DefaultResourceGroup-CCA",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "canadacentral",
+    "name": "SQLAdvancedThreatProtection(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+    "rg": "DefaultResourceGroup-CCA",
+    "type": "Microsoft.OperationsManagement/solutions"
+  },
+  {
+    "location": "westus2",
+    "name": "container-app-sh4tpwkxz5f5m-oidcUserIdentity-msi",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  },
+  {
+    "location": "centralus",
+    "name": "appspace-582f7d43-b7bf",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.App/spaces"
+  },
+  {
+    "location": "westus2",
+    "name": "workspaceuweh7tyko4kho",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "westus2",
+    "name": "vnetuweh7tyko4kho",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.Network/virtualNetworks"
+  },
+  {
+    "location": "westus2",
+    "name": "app-sh4tpwkxz5f5m",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.Web/staticSites"
+  },
+  {
+    "location": "westus2",
+    "name": "app-insights-sh4tpwkxz5f5m",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.Insights/components"
+  },
+  {
+    "location": "westus2",
+    "name": "container-app-environment-sh4tpwkxz5f5m",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "westus2",
+    "name": "container-app-sh4tpwkxz5f5m",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "westus2",
+    "name": "container-app-db-sh4tpwkxz5f5m",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "westus2",
+    "name": "builder0024b",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.App/builders"
+  },
+  {
+    "location": "global",
+    "name": "Failure Anomalies - app-insights-sh4tpwkxz5f5m",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "microsoft.alertsmanagement/smartDetectorAlertRules"
+  },
+  {
+    "location": "westus2",
+    "name": "vnetuweh7tyko4kho-subnetuweh7tyko4kho-nsg-westus2",
+    "rg": "appspacesragapp9b9f8efe",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "westus2",
+    "name": "mcaps82e22c51586d9105",
+    "rg": "McapsGovernance",
+    "type": "Microsoft.Storage/storageAccounts"
+  },
+  {
+    "location": "westus2",
+    "name": "mcaps82e22c51586d9105-0a830ee4-0481-42a4-ad4d-f73db4e3d761",
+    "rg": "mcapsgovernance",
+    "type": "Microsoft.EventGrid/systemTopics"
+  },
+  {
+    "location": "westus2",
+    "name": "capp-svc-lb-ip",
+    "rg": "ME_container-app-environment-sh4tpwkxz5f5m_appspacesragapp9b9f8efe_westus2",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "westus2",
+    "name": "capp-svc-lb",
+    "rg": "ME_container-app-environment-sh4tpwkxz5f5m_appspacesragapp9b9f8efe_westus2",
+    "type": "Microsoft.Network/loadBalancers"
+  },
+  {
+    "location": "westus3",
+    "name": "myai",
+    "rg": "rg-boldorca260227",
+    "type": "Microsoft.CognitiveServices/accounts"
+  },
+  {
+    "location": "westus3",
+    "name": "acrboldorca260227",
+    "rg": "rg-boldorca260227",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "aifastfox260227",
+    "rg": "rg-fastfox260227",
+    "type": "Microsoft.CognitiveServices/accounts"
+  },
+  {
+    "location": "swedencentral",
+    "name": "acrfastfox260227",
+    "rg": "rg-fastfox260227",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-logs-d3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvacrd3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-kv-d3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.KeyVault/vaults"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-ai-d3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.CognitiveServices/accounts"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvstd3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.Storage/storageAccounts"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-env-d3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-hub-d3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.MachineLearningServices/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-proj-d3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.MachineLearningServices/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-app-d3ocert7badhy",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvstd3ocert7badhy-c9652129-88c3-432e-b955-1e3b5ddddc5f",
+    "rg": "rg-kv-ai-4e8c9",
+    "type": "Microsoft.EventGrid/systemTopics"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-logs-3pdxk76f4qr66",
+    "rg": "rg-kv-ai-e1ba8",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvacr3pdxk76f4qr66",
+    "rg": "rg-kv-ai-e1ba8",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-env-3pdxk76f4qr66",
+    "rg": "rg-kv-ai-e1ba8",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-app-3pdxk76f4qr66",
+    "rg": "rg-kv-ai-e1ba8",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-logs-jgsg3kjyj24ta",
+    "rg": "rg-kv-ai-51143",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvacrjgsg3kjyj24ta",
+    "rg": "rg-kv-ai-51143",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-env-jgsg3kjyj24ta",
+    "rg": "rg-kv-ai-51143",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-app-jgsg3kjyj24ta",
+    "rg": "rg-kv-ai-51143",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-logs-ox2d4usfrvj7o",
+    "rg": "rg-kv-ai-b2cae",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvacrox2d4usfrvj7o",
+    "rg": "rg-kv-ai-b2cae",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-env-ox2d4usfrvj7o",
+    "rg": "rg-kv-ai-b2cae",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-app-ox2d4usfrvj7o",
+    "rg": "rg-kv-ai-b2cae",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-logs-px75cbk6s3oio",
+    "rg": "rg-kv-ai-57877",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvacrpx75cbk6s3oio",
+    "rg": "rg-kv-ai-57877",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-env-px75cbk6s3oio",
+    "rg": "rg-kv-ai-57877",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-app-px75cbk6s3oio",
+    "rg": "rg-kv-ai-57877",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-logs-wnwrdk66kgor4",
+    "rg": "rg-kv-ai-b97a3",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kvacrwnwrdk66kgor4",
+    "rg": "rg-kv-ai-b97a3",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-env-wnwrdk66kgor4",
+    "rg": "rg-kv-ai-b97a3",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "swedencentral",
+    "name": "kv-app-wnwrdk66kgor4",
+    "rg": "rg-kv-ai-b97a3",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "australiaeast",
+    "name": "helloau-logs",
+    "rg": "rg-helloworld-australiaeast",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "australiaeast",
+    "name": "helloauacrxp66tt4q5c6ki",
+    "rg": "rg-helloworld-australiaeast",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "australiaeast",
+    "name": "helloau-aks",
+    "rg": "rg-helloworld-australiaeast",
+    "type": "Microsoft.ContainerService/managedClusters"
+  },
+  {
+    "location": "australiaeast",
+    "name": "helloau-ai",
+    "rg": "rg-helloworld-australiaeast",
+    "type": "Microsoft.Insights/components"
+  },
+  {
+    "location": "australiaeast",
+    "name": "b77e71b2-4800-4506-9b16-d1ba0871d22f",
+    "rg": "MC_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "australiaeast",
+    "name": "kubernetes",
+    "rg": "MC_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/loadBalancers"
+  },
+  {
+    "location": "australiaeast",
+    "name": "helloau-aks-agentpool",
+    "rg": "MC_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  },
+  {
+    "location": "australiaeast",
+    "name": "aks-agentpool-24464435-nsg",
+    "rg": "mc_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "australiaeast",
+    "name": "aks-agentpool-24464435-routetable",
+    "rg": "mc_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/routeTables"
+  },
+  {
+    "location": "australiaeast",
+    "name": "aks-vnet-24464435",
+    "rg": "mc_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/virtualNetworks"
+  },
+  {
+    "location": "australiaeast",
+    "name": "aks-system-14014227-vmss",
+    "rg": "MC_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Compute/virtualMachineScaleSets"
+  },
+  {
+    "location": "global",
+    "name": "Failure Anomalies - helloau-ai",
+    "rg": "rg-helloworld-australiaeast",
+    "type": "microsoft.alertsmanagement/smartDetectorAlertRules"
+  },
+  {
+    "location": "australiaeast",
+    "name": "kubernetes-a420127c245384434b75327f68f1931c",
+    "rg": "mc_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "australiaeast",
+    "name": "aks-vnet-24464435-aks-appgateway-nsg-australiaeast",
+    "rg": "mc_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "australiaeast",
+    "name": "aks-vnet-24464435-aks-virtualkubelet-nsg-australiaeast",
+    "rg": "mc_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "eastus2",
+    "name": "hellous-logs",
+    "rg": "rg-helloworld-eastus2",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "hellousacrjlewmla5rvcsw",
+    "rg": "rg-helloworld-eastus2",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "eastus2",
+    "name": "hellous-aks",
+    "rg": "rg-helloworld-eastus2",
+    "type": "Microsoft.ContainerService/managedClusters"
+  },
+  {
+    "location": "eastus2",
+    "name": "0ce63da7-04b2-425b-bb4c-b0c14ba363b6",
+    "rg": "MC_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "eastus2",
+    "name": "kubernetes",
+    "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/loadBalancers"
+  },
+  {
+    "location": "eastus2",
+    "name": "hellous-aks-agentpool",
+    "rg": "MC_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  },
+  {
+    "location": "eastus2",
+    "name": "aks-agentpool-36567262-nsg",
+    "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "eastus2",
+    "name": "hellous-ai",
+    "rg": "rg-helloworld-eastus2",
+    "type": "Microsoft.Insights/components"
+  },
+  {
+    "location": "eastus2",
+    "name": "aks-agentpool-36567262-routetable",
+    "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/routeTables"
+  },
+  {
+    "location": "eastus2",
+    "name": "aks-vnet-36567262",
+    "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/virtualNetworks"
+  },
+  {
+    "location": "eastus2",
+    "name": "aks-system-25884707-vmss",
+    "rg": "MC_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Compute/virtualMachineScaleSets"
+  },
+  {
+    "location": "global",
+    "name": "Failure Anomalies - hellous-ai",
+    "rg": "rg-helloworld-eastus2",
+    "type": "microsoft.alertsmanagement/smartDetectorAlertRules"
+  },
+  {
+    "location": "eastus2",
+    "name": "aks-vnet-36567262-aks-virtualkubelet-nsg-eastus2",
+    "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "eastus2",
+    "name": "aks-vnet-36567262-aks-appgateway-nsg-eastus2",
+    "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "eastus2",
+    "name": "kubernetes-a484fdac8701b4d96824d0ba6aa71995",
+    "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-cosmos",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.DocumentDB/databaseAccounts"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-swa",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.Web/staticSites"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-signalr",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.SignalRService/SignalR"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-logs",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-env",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/managedEnvironments"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-appi",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.Insights/components"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-orch",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-ping-eastus",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-ping-australiaeast",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-ping-eastus2",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-ping-westus2",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-ping-westeurope",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "eastus2",
+    "name": "arp-dev-ping-southeastasia",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.App/containerApps"
+  },
+  {
+    "location": "eastus",
+    "name": "ca4fabaea789acr",
+    "rg": "rg-arp-dev-core",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "global",
+    "name": "Failure Anomalies - arp-dev-appi",
+    "rg": "rg-arp-dev-core",
+    "type": "microsoft.alertsmanagement/smartDetectorAlertRules"
+  },
+  {
+    "location": "eastus2",
+    "name": "law-diskmon-poc-eastus2",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-lsv3-01-premssd-256",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-dsv5-02-stdhdd-512",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-dsv5-02-premssd-512",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "vnet-diskmon-poc-eastus2",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Network/virtualNetworks"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-dsv5-01-stdssd-256",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-dsv5-01-premssd-256",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-dsv5-03-premssd-256",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-lsv3-01-ultra-256",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "disk-diskmon-esv5-01-premssdv2-256",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "dcr-diskmon-perf-poc",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Insights/dataCollectionRules"
+  },
+  {
+    "location": "eastus2",
+    "name": "nic-vm-diskmon-dsv5-02",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Network/networkInterfaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "nic-vm-diskmon-dsv5-01",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Network/networkInterfaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-02",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-01",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines"
+  },
+  {
+    "location": "eastus2",
+    "name": "nic-vm-diskmon-esv5-01",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Network/networkInterfaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-esv5-01",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines"
+  },
+  {
+    "location": "eastus2",
+    "name": "nic-vm-diskmon-dsv5-03",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Network/networkInterfaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "nic-vm-diskmon-lsv3-01",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Network/networkInterfaces"
+  },
+  {
+    "location": "eastus2",
+    "name": "osdisk-vm-diskmon-dsv5-02",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "osdisk-vm-diskmon-dsv5-01",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-03",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines"
+  },
+  {
+    "location": "eastus2",
+    "name": "osdisk-vm-diskmon-esv5-01",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "osdisk-vm-diskmon-dsv5-03",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-lsv3-01",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines"
+  },
+  {
+    "location": "eastus2",
+    "name": "osdisk-vm-diskmon-lsv3-01",
+    "rg": "RG-DISKMON-POC-EASTUS2",
+    "type": "Microsoft.Compute/disks"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-01/AzureMonitorLinuxAgent",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-02/AzureMonitorLinuxAgent",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-esv5-01/AzureMonitorLinuxAgent",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-lsv3-01/AzureMonitorLinuxAgent",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-03/AzureMonitorWindowsAgent",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-02/DependencyAgentLinux",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "grafana-diskmon-poc",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Dashboard/grafana"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-01/DependencyAgentLinux",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-esv5-01/DependencyAgentLinux",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-lsv3-01/DependencyAgentLinux",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "vm-diskmon-dsv5-03/InstallDiskSpd",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Compute/virtualMachines/extensions"
+  },
+  {
+    "location": "eastus2",
+    "name": "swa-diskmon-poc",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Web/staticSites"
+  },
+  {
+    "location": "eastus2",
+    "name": "vnet-diskmon-poc-eastus2-snet-diskmon-vms-poc-nsg-eastus2",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "global",
+    "name": "afd-diskmon-poc",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.Cdn/profiles"
+  },
+  {
+    "location": "eastus2",
+    "name": "oai-diskmon-poc",
+    "rg": "rg-diskmon-poc-eastus2",
+    "type": "Microsoft.CognitiveServices/accounts"
+  },
+  {
+    "location": "southeastasia",
+    "name": "helloas-logs",
+    "rg": "rg-helloworld-southeastasia",
+    "type": "Microsoft.OperationalInsights/workspaces"
+  },
+  {
+    "location": "southeastasia",
+    "name": "helloasacrmpmypzbzbwy5o",
+    "rg": "rg-helloworld-southeastasia",
+    "type": "Microsoft.ContainerRegistry/registries"
+  },
+  {
+    "location": "southeastasia",
+    "name": "helloas-aks",
+    "rg": "rg-helloworld-southeastasia",
+    "type": "Microsoft.ContainerService/managedClusters"
+  },
+  {
+    "location": "southeastasia",
+    "name": "helloas-ai",
+    "rg": "rg-helloworld-southeastasia",
+    "type": "Microsoft.Insights/components"
+  },
+  {
+    "location": "southeastasia",
+    "name": "3f0be21c-8289-4acd-a3a6-c4e887012037",
+    "rg": "MC_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "southeastasia",
+    "name": "kubernetes",
+    "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/loadBalancers"
+  },
+  {
+    "location": "southeastasia",
+    "name": "helloas-aks-agentpool",
+    "rg": "MC_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+  },
+  {
+    "location": "southeastasia",
+    "name": "aks-agentpool-33923197-nsg",
+    "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "southeastasia",
+    "name": "aks-agentpool-33923197-routetable",
+    "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/routeTables"
+  },
+  {
+    "location": "southeastasia",
+    "name": "aks-vnet-33923197",
+    "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/virtualNetworks"
+  },
+  {
+    "location": "southeastasia",
+    "name": "aks-system-64489558-vmss",
+    "rg": "MC_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Compute/virtualMachineScaleSets"
+  },
+  {
+    "location": "global",
+    "name": "Failure Anomalies - helloas-ai",
+    "rg": "rg-helloworld-southeastasia",
+    "type": "microsoft.alertsmanagement/smartDetectorAlertRules"
+  },
+  {
+    "location": "southeastasia",
+    "name": "kubernetes-ae7618639eab84e4eaea5f68885910aa",
+    "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/publicIPAddresses"
+  },
+  {
+    "location": "southeastasia",
+    "name": "aks-vnet-33923197-aks-appgateway-nsg-southeastasia",
+    "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  },
+  {
+    "location": "southeastasia",
+    "name": "aks-vnet-33923197-aks-virtualkubelet-nsg-southeastasia",
+    "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+    "type": "Microsoft.Network/networkSecurityGroups"
+  }
+]

@@ -5,6 +5,15 @@ import Link from 'next/link';
 
 const PAGES = [
   {
+    title: 'Workload Map',
+    path: '/workloads',
+    icon: '🗂️',
+    color: '#f97316',
+    category: 'Finance',
+    description: 'Logical grouping of all subscription resources by the workload they host. 10 workloads across 28 resource groups with cost flow from environment → category → workload → resource group.',
+    features: ['10 workloads identified', 'Environment/category filters', 'Cost treemap & bar charts', 'Resource group drill-down', 'Per-workload recommendations', 'Region cost breakdown'],
+  },
+  {
     title: 'Subscription Cost Analyzer',
     path: '/cost-analyzer',
     icon: '💳',
@@ -88,7 +97,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '10', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '11', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
