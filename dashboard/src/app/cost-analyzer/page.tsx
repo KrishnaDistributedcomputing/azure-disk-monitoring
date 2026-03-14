@@ -158,6 +158,30 @@ const NEW_RESOURCES = [
 ];
 
 const NEW_RES_TOTAL = NEW_RESOURCES.reduce((s, r) => s + r.estMonthlyCost, 0);
+
+// Build cumulative cost timeline data — sorted by date ascending
+const CREATION_TIMELINE = (() => {
+  const sorted = [...NEW_RESOURCES].sort((a, b) => a.created.localeCompare(b.created));
+  let cumCost = 0;
+  let cumCount = 0;
+  const points: { date: string; dateLabel: string; cost: number; cumCost: number; cumCount: number; resources: string[] }[] = [];
+  const byDate = new Map<string, { cost: number; names: string[] }>();
+  sorted.forEach(r => {
+    const e = byDate.get(r.created) || { cost: 0, names: [] };
+    e.cost += r.estMonthlyCost;
+    e.names.push(r.name);
+    byDate.set(r.created, e);
+  });
+  Array.from(byDate.entries()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([date, v]) => {
+    cumCost += v.cost;
+    cumCount += v.names.length;
+    const d = new Date(date + 'T00:00:00');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    points.push({ date, dateLabel: `${months[d.getMonth()]} ${d.getDate()}`, cost: v.cost, cumCost: Math.round(cumCost * 100) / 100, cumCount, resources: v.names });
+  });
+  return points;
+})();
+
 const NEW_BY_TYPE = (() => {
   const m = new Map<string, { count: number; cost: number }>();
   NEW_RESOURCES.forEach(r => {
@@ -667,6 +691,65 @@ export default function CostAnalyzerPage() {
                 <div className="text-3xl font-bold" style={{ color: s.color }}>{s.value}</div>
               </div>
             ))}
+          </div>
+
+          {/* Cumulative Cost Timeline — Stock chart style */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 p-5 mt-6">
+            <div className="flex items-center justify-between mb-1">
+              <div>
+                <h3 className="text-base font-bold text-white">Resource Cost Timeline</h3>
+                <p className="text-sm text-slate-400">Cumulative monthly cost as new resources were created</p>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-white">${NEW_RES_TOTAL.toFixed(2)} <span className="text-sm font-normal text-slate-400">USD</span></div>
+                <div className="text-xs text-slate-400">Est. monthly &bull; {NEW_RESOURCES.length} resources</div>
+              </div>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={CREATION_TIMELINE} margin={{ top: 15, right: 20, left: 10, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="costGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#e81123" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#e81123" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
+                <XAxis dataKey="dateLabel" tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} />
+                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} width={60} />
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (!active || !payload?.length) return null;
+                    const d = payload[0].payload;
+                    return (
+                      <div className="rounded-lg border border-slate-700 bg-slate-800 p-3 shadow-lg text-sm">
+                        <div className="font-bold text-white text-base">${d.cumCost.toFixed(2)} <span className="text-xs font-normal text-slate-400">USD</span></div>
+                        <div className="text-slate-400 text-xs mt-1">{formatDate(d.date)}</div>
+                        <div className="text-xs text-slate-300 mt-1.5">{d.cumCount} total resources &bull; +${d.cost.toFixed(2)} added this day</div>
+                        <div className="text-xs text-slate-400 mt-1">{d.resources.join(', ')}</div>
+                      </div>
+                    );
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="cumCost"
+                  stroke="#e81123"
+                  strokeWidth={2.5}
+                  fill="url(#costGradient)"
+                  dot={{ fill: '#e81123', stroke: '#292827', strokeWidth: 2, r: 4 }}
+                  activeDot={{ fill: '#e81123', stroke: '#fff', strokeWidth: 2, r: 6 }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+            {/* Timeline markers below chart */}
+            <div className="flex items-center justify-between mt-3 px-2">
+              {CREATION_TIMELINE.map((p, i) => (
+                <div key={i} className="text-center flex-1">
+                  <div className="text-xs font-bold text-white">+{p.resources.length}</div>
+                  <div className="text-xs text-slate-400">{p.dateLabel}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Cost by Resource Type */}
