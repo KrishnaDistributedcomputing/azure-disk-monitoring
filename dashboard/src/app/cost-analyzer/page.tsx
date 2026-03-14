@@ -688,15 +688,13 @@ export default function CostAnalyzerPage() {
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
               <h3 className="text-base font-bold text-white mb-1">Resource Creation Timeline</h3>
               <p className="text-sm text-slate-400 mb-4">When each resource was created and its cost impact</p>
-              <div className="space-y-3 max-h-[260px] overflow-y-auto">
+              <div className="space-y-1 max-h-[280px] overflow-y-auto pr-1">
                 {NEW_RESOURCES.map((r, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-20 text-right">
-                      <span className="text-xs font-mono text-slate-400">{formatDate(r.created)}</span>
-                    </div>
-                    <div className="h-3 w-3 rounded-full bg-blue-500 flex-shrink-0" aria-hidden="true" />
+                  <div key={i} className="flex items-center gap-3 py-1.5 border-b border-slate-700/30 last:border-0">
+                    <div className="h-2.5 w-2.5 rounded-full bg-blue-500 flex-shrink-0" aria-hidden="true" />
                     <div className="flex-1 min-w-0">
-                      <span className="text-sm font-medium text-white truncate block">{r.name}</span>
+                      <span className="text-sm font-semibold text-white truncate block">{r.name}</span>
+                      <span className="text-xs text-slate-400">{formatDate(r.created)}</span>
                     </div>
                     <span className="text-sm font-mono font-bold text-white flex-shrink-0">${r.estMonthlyCost.toFixed(2)}</span>
                   </div>

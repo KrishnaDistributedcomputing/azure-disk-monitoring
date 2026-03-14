@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
-  PieChart, Pie, Treemap,
+  PieChart, Pie,
 } from 'recharts';
 
 // ============================================================================
@@ -356,21 +356,15 @@ const STATUS_COLORS: Record<string, string> = {
 type Tab = 'overview' | 'map' | 'sankey' | 'recommendations';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-function TreemapCell(props: any) {
-  const { x, y, width, height, name, color, cost } = props;
-  if (width < 30 || height < 25) return null;
-  return (
-    <g>
-      <rect x={x} y={y} width={width} height={height} fill={color} opacity={0.8} rx={4} />
-      {width > 60 && height > 35 && (
-        <>
-          <text x={x + 6} y={y + 16} fill="#fff" fontSize={11} fontWeight={600}>{name}</text>
-          <text x={x + 6} y={y + 30} fill="rgba(255,255,255,0.7)" fontSize={10}>${cost?.toFixed(2)}</text>
-        </>
-      )}
-    </g>
-  );
-}
+const AZURE_ICONS: Record<string, string> = {
+  Monitoring: '📊',
+  Containers: '☸️',
+  'Web App': '🌐',
+  'AI/ML': '🧠',
+  Database: '🌍',
+  Infrastructure: '🏗️',
+  DevOps: '🔧',
+};
 
 export default function WorkloadMapPage() {
   const [tab, setTab] = useState<Tab>('overview');
@@ -392,14 +386,8 @@ export default function WorkloadMapPage() {
     return result;
   }, [envFilter, catFilter, sortBy]);
 
-  // Data for charts
-  const treemapData = WORKLOADS.map(w => ({
-    name: w.name.length > 25 ? w.name.substring(0, 22) + '...' : w.name,
-    fullName: w.name,
-    size: Math.max(w.totalCost, 1),
-    cost: w.totalCost,
-    color: w.color,
-  }));
+  // Data for charts — sorted by cost descending
+  const sortedWorkloads = [...WORKLOADS].sort((a, b) => b.totalCost - a.totalCost);
 
   const costByEnv = envs.map(e => ({
     name: e,
@@ -508,16 +496,52 @@ export default function WorkloadMapPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Treemap */}
               <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-                <h3 className="text-base font-semibold text-white mb-4">Cost by Workload (Treemap)</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <Treemap
-                    data={treemapData}
-                    dataKey="size"
-                    aspectRatio={4 / 3}
-                    stroke="#1e293b"
-                    content={<TreemapCell />}
-                  />
-                </ResponsiveContainer>
+                <h3 className="text-base font-semibold text-white mb-4">Cost by Workload</h3>
+                <div className="grid grid-cols-3 gap-2" style={{ gridAutoRows: 'min-content' }}>
+                  {sortedWorkloads.map((w, i) => {
+                    // First item gets a tall spanning cell
+                    const isLarge = i === 0;
+                    const isMedium = i === 1 || i === 2;
+                    return (
+                      <div
+                        key={w.id}
+                        className={`rounded-lg p-3 flex flex-col justify-between transition-transform hover:scale-[1.02] ${
+                          isLarge ? 'col-span-1 row-span-3' : isMedium ? 'row-span-2' : ''
+                        }`}
+                        style={{
+                          backgroundColor: w.color,
+                          minHeight: isLarge ? 200 : isMedium ? 120 : 70,
+                        }}
+                      >
+                        <div className="flex items-start gap-2">
+                          <span className="text-lg" style={{ filter: 'brightness(10)' }} aria-hidden="true">
+                            {AZURE_ICONS[w.category] || w.icon}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <div className={`font-bold text-white leading-tight ${isLarge ? 'text-base' : isMedium ? 'text-sm' : 'text-xs'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+                              {w.name}
+                            </div>
+                            {(isLarge || isMedium) && (
+                              <div className="text-xs text-white/70 mt-0.5" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                                {w.category} · {w.environment}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="mt-auto">
+                          <div className={`font-bold text-white ${isLarge ? 'text-2xl' : isMedium ? 'text-lg' : 'text-sm'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+                            ${w.totalCost.toFixed(2)}
+                          </div>
+                          {isLarge && (
+                            <div className="text-xs text-white/70 mt-0.5" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                              {((w.totalCost / TOTAL_COST) * 100).toFixed(0)}% of total · {w.resourceGroups.reduce((s, rg) => s + rg.resourceCount, 0)} resources
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Cost by Category */}
