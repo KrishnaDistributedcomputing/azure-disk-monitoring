@@ -138,11 +138,11 @@ export default function LandingPage() {
               Azure Disk Performance
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400">Monitoring Platform</span>
             </h1>
-            <p className="mt-4 text-lg text-slate-400 max-w-2xl mx-auto">Single pane of glass to monitor disk performance across Azure VMs — with drill-down, cost simulation, live pricing, and comprehensive documentation.</p>
+            <p className="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">Single pane of glass to monitor disk performance across Azure VMs — with drill-down, cost simulation, live pricing, and comprehensive documentation.</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/monitor" className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25">Open Monitor</Link>
-              <Link href="/metrics" className="rounded-xl border border-slate-600 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-colors">View Metrics</Link>
-              <a href="https://github.com/KrishnaDistributedcomputing/azure-disk-monitoring" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-600 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-colors flex items-center gap-2">
+              <Link href="/monitor" className="rounded-xl bg-blue-600 px-7 py-3.5 text-base font-semibold text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25">Open Monitor</Link>
+              <Link href="/metrics" className="rounded-xl border border-slate-600 bg-slate-800 px-7 py-3.5 text-base font-semibold text-slate-200 hover:text-white hover:border-slate-500 transition-colors">View Metrics</Link>
+              <a href="https://github.com/KrishnaDistributedcomputing/azure-disk-monitoring" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-600 bg-slate-800 px-7 py-3.5 text-base font-semibold text-slate-200 hover:text-white hover:border-slate-500 transition-colors flex items-center gap-2">
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
                 GitHub
               </a>
@@ -151,12 +151,12 @@ export default function LandingPage() {
           {/* Stats — clickable */}
           <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
             {STATS.map((s) => (
-              <Link key={s.label} href={s.href} className="group rounded-lg border border-slate-700/50 bg-slate-800/50 backdrop-blur px-3 py-3 text-center transition-all hover:border-blue-500/50 hover:bg-slate-800/80 hover:scale-105 relative">
-                <span className="text-lg">{s.icon}</span>
-                <div className="text-xl font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">{s.value}</div>
-                <div className="text-[10px] text-slate-500 group-hover:text-slate-400">{s.label}</div>
+              <Link key={s.label} href={s.href} className="group rounded-lg border border-slate-700/50 bg-slate-800/50 backdrop-blur px-3 py-4 text-center transition-all hover:border-blue-500/50 hover:bg-slate-800/80 hover:scale-105 relative">
+                <span className="text-xl" aria-hidden="true">{s.icon}</span>
+                <div className="text-2xl font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">{s.value}</div>
+                <div className="text-xs text-slate-400 group-hover:text-slate-300 font-medium">{s.label}</div>
                 {/* Tooltip */}
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-[10px] text-slate-200 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-xs text-slate-100 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg" role="tooltip">
                   {s.desc}
                   <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-slate-700" />
                 </div>
@@ -171,16 +171,16 @@ export default function LandingPage() {
         <div className="flex flex-wrap items-center gap-4">
           <div className="relative flex-1 min-w-[260px]">
             <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
-            <input type="text" placeholder="Search pages, features, metrics..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full rounded-xl border border-slate-700 bg-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none" />
+            <input type="text" placeholder="Search pages, features, metrics..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search pages" className="w-full rounded-xl border border-slate-700 bg-slate-800/80 pl-10 pr-4 py-3 text-base text-slate-200 placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
             {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>}
           </div>
-          <div className="flex rounded-xl border border-slate-700 bg-slate-800/80">
-            <button onClick={() => setCategoryFilter('all')} className={`px-4 py-2.5 text-xs font-medium rounded-l-xl transition-colors ${categoryFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}>All ({PAGES.length})</button>
+          <fieldset className="flex rounded-xl border border-slate-700 bg-slate-800/80" role="radiogroup" aria-label="Filter by category">
+            <button onClick={() => setCategoryFilter('all')} className={`px-4 py-2.5 text-sm font-semibold rounded-l-xl transition-colors ${categoryFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white'}`} aria-pressed={categoryFilter === 'all'}>All ({PAGES.length})</button>
             {categories.map((c, i) => (
-              <button key={c} onClick={() => setCategoryFilter(c)} className={`px-4 py-2.5 text-xs font-medium transition-colors ${categoryFilter === c ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'} ${i === categories.length - 1 ? 'rounded-r-xl' : ''}`}>{c} ({PAGES.filter((p) => p.category === c).length})</button>
+              <button key={c} onClick={() => setCategoryFilter(c)} className={`px-4 py-2.5 text-sm font-semibold transition-colors ${categoryFilter === c ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white'} ${i === categories.length - 1 ? 'rounded-r-xl' : ''}`} aria-pressed={categoryFilter === c}>{c} ({PAGES.filter((p) => p.category === c).length})</button>
             ))}
-          </div>
-          <span className="text-xs text-slate-500">{filteredPages.length} pages</span>
+          </fieldset>
+          <span className="text-sm text-slate-400 font-medium">{filteredPages.length} pages</span>
         </div>
 
         {/* Page Cards */}
@@ -191,25 +191,25 @@ export default function LandingPage() {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl">{page.icon}</span>
+                    <span className="text-3xl" aria-hidden="true">{page.icon}</span>
                     <div>
                       <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{page.title}</h3>
-                      <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: page.color + '20', color: page.color }}>{page.category}</span>
+                      <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold" style={{ backgroundColor: page.color + '20', color: page.color }}>{page.category}</span>
                     </div>
                   </div>
                   <svg className="h-5 w-5 text-slate-600 group-hover:text-blue-400 transition-all group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                 </div>
-                <p className="text-sm text-slate-400 leading-relaxed mb-4">{page.description}</p>
+                <p className="text-sm text-slate-300 leading-relaxed mb-4">{page.description}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {page.features.slice(0, 5).map((f) => (
-                    <span key={f} className="rounded-lg bg-slate-700/50 px-2 py-0.5 text-[10px] text-slate-400">{f}</span>
+                    <span key={f} className="rounded-lg bg-slate-700/50 px-2.5 py-1 text-xs text-slate-300">{f}</span>
                   ))}
-                  {page.features.length > 5 && <span className="rounded-lg bg-slate-700/50 px-2 py-0.5 text-[10px] text-slate-500">+{page.features.length - 5} more</span>}
+                  {page.features.length > 5 && <span className="rounded-lg bg-slate-700/50 px-2.5 py-1 text-xs text-slate-400">+{page.features.length - 5} more</span>}
                 </div>
               </div>
-              <div className="border-t border-slate-700/50 px-6 py-2.5 flex items-center justify-between">
-                <code className="text-[11px] font-mono text-slate-500">{page.path}</code>
-                <span className="text-[10px] text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">Open →</span>
+              <div className="border-t border-slate-700/50 px-6 py-3 flex items-center justify-between">
+                <code className="text-xs font-mono text-slate-400">{page.path}</code>
+                <span className="text-xs text-blue-400 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Open →</span>
               </div>
             </Link>
           ))}

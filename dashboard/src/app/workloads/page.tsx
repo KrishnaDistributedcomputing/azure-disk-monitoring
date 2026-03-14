@@ -433,51 +433,51 @@ export default function WorkloadMapPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200">
+    <div className="min-h-screen bg-slate-900 text-slate-200" role="main">
       {/* Header */}
       <div className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30">
         <div className="mx-auto max-w-[1400px] px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Link href="/" className="text-slate-500 hover:text-white transition-colors">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+              <Link href="/" className="text-slate-400 hover:text-white transition-colors p-1" aria-label="Back to home">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
               </Link>
               <span className="text-2xl">🗂️</span>
               <div>
-                <h1 className="text-xl font-bold text-white">Workload Map</h1>
-                <p className="text-xs text-slate-500">Resources grouped by the workload they host</p>
+                <h1 className="text-2xl font-bold text-white">Workload Map</h1>
+                <p className="text-sm text-slate-400">Resources grouped by the workload they host</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <div className="text-xs text-slate-500">Month-to-Date</div>
-                <div className="text-lg font-bold text-white">${TOTAL_COST.toFixed(2)}</div>
+                <div className="text-sm text-slate-400">Month-to-Date</div>
+                <div className="text-xl font-bold text-white">${TOTAL_COST.toFixed(2)}</div>
               </div>
-              <div className="h-8 w-px bg-slate-700" />
+              <div className="h-8 w-px bg-slate-700" aria-hidden="true" />
               <div className="text-right">
-                <div className="text-xs text-slate-500">Workloads</div>
-                <div className="text-lg font-bold text-white">{WORKLOADS.length}</div>
+                <div className="text-sm text-slate-400">Workloads</div>
+                <div className="text-xl font-bold text-white">{WORKLOADS.length}</div>
               </div>
-              <div className="h-8 w-px bg-slate-700" />
+              <div className="h-8 w-px bg-slate-700" aria-hidden="true" />
               <div className="text-right">
-                <div className="text-xs text-slate-500">Resource Groups</div>
-                <div className="text-lg font-bold text-white">{TOTAL_RGS}</div>
+                <div className="text-sm text-slate-400">Resource Groups</div>
+                <div className="text-xl font-bold text-white">{TOTAL_RGS}</div>
               </div>
-              <div className="h-8 w-px bg-slate-700" />
+              <div className="h-8 w-px bg-slate-700" aria-hidden="true" />
               <div className="text-right">
-                <div className="text-xs text-slate-500">Resources</div>
-                <div className="text-lg font-bold text-white">{TOTAL_RESOURCES}</div>
+                <div className="text-sm text-slate-400">Resources</div>
+                <div className="text-xl font-bold text-white">{TOTAL_RESOURCES}</div>
               </div>
             </div>
           </div>
           {/* Tabs */}
-          <div className="mt-3 flex gap-1">
+          <nav className="mt-3 flex gap-1" aria-label="Page sections" role="tablist">
             {TABS.map(t => (
-              <button key={t.key} onClick={() => setTab(t.key)} className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${tab === t.key ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
-                {t.icon} {t.label}
+              <button key={t.key} onClick={() => setTab(t.key)} role="tab" aria-selected={tab === t.key} className={`px-5 py-2.5 text-sm font-semibold rounded-lg transition-colors ${tab === t.key ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}`}>
+                <span aria-hidden="true">{t.icon}</span> {t.label}
               </button>
             ))}
-          </div>
+          </nav>
         </div>
       </div>
 
@@ -486,20 +486,20 @@ export default function WorkloadMapPage() {
         {tab === 'overview' && (
           <div className="space-y-6">
             {/* Disclaimer */}
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 text-sm text-amber-200/80">
-              <strong className="text-amber-300">📌 How this page works:</strong> Resources are grouped into <strong>logical workloads</strong> based on naming patterns, resource group structure, and inter-resource dependencies. Costs are from the Azure Cost Management API (month-to-date). One resource group can belong to exactly one workload.
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 text-base text-amber-100" role="note">
+              <strong className="text-amber-200">📌 How this page works:</strong> Resources are grouped into <strong>logical workloads</strong> based on naming patterns, resource group structure, and inter-resource dependencies. Costs are from the Azure Cost Management API (month-to-date). One resource group can belong to exactly one workload.
             </div>
 
             {/* Summary Row */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {costByEnv.map(e => (
-                <div key={e.name} className="rounded-xl border border-slate-700 bg-slate-800 p-4">
+                <div key={e.name} className="rounded-xl border border-slate-700 bg-slate-800 p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="h-3 w-3 rounded-full" style={{ backgroundColor: e.color }} />
-                    <span className="text-sm font-medium text-slate-300">{e.name}</span>
+                    <div className="h-3.5 w-3.5 rounded-full" style={{ backgroundColor: e.color }} aria-hidden="true" />
+                    <span className="text-base font-semibold text-slate-200">{e.name}</span>
                   </div>
-                  <div className="text-2xl font-bold text-white">${e.cost.toFixed(2)}</div>
-                  <div className="text-xs text-slate-500 mt-1">{WORKLOADS.filter(w => w.environment === e.name).length} workload(s) · {((e.cost / TOTAL_COST) * 100).toFixed(0)}% of total</div>
+                  <div className="text-3xl font-bold text-white">${e.cost.toFixed(2)}</div>
+                  <div className="text-sm text-slate-400 mt-1">{WORKLOADS.filter(w => w.environment === e.name).length} workload(s) · {((e.cost / TOTAL_COST) * 100).toFixed(0)}% of total</div>
                 </div>
               ))}
             </div>
@@ -508,7 +508,7 @@ export default function WorkloadMapPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Treemap */}
               <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-                <h3 className="text-sm font-semibold text-white mb-4">Cost by Workload (Treemap)</h3>
+                <h3 className="text-base font-semibold text-white mb-4">Cost by Workload (Treemap)</h3>
                 <ResponsiveContainer width="100%" height={300}>
                   <Treemap
                     data={treemapData}
@@ -522,13 +522,13 @@ export default function WorkloadMapPage() {
 
               {/* Cost by Category */}
               <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-                <h3 className="text-sm font-semibold text-white mb-4">Cost by Category</h3>
+                <h3 className="text-base font-semibold text-white mb-4">Cost by Category</h3>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={costByCat} layout="vertical" margin={{ left: 80, right: 20 }}>
+                  <BarChart data={costByCat} layout="vertical" margin={{ left: 90, right: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                    <YAxis type="category" dataKey="name" tick={{ fill: '#94a3b8', fontSize: 11 }} width={75} />
-                    <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12 }} />
+                    <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#cbd5e1', fontSize: 13 }} />
+                    <YAxis type="category" dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 13 }} width={85} />
+                    <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 14 }} />
                     <Bar dataKey="cost" radius={[0, 4, 4, 0]}>
                       {costByCat.map((c, i) => <Cell key={i} fill={c.color} />)}
                     </Bar>
@@ -539,13 +539,13 @@ export default function WorkloadMapPage() {
 
             {/* Cost by Region */}
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-              <h3 className="text-sm font-semibold text-white mb-4">Cost by Azure Region</h3>
-              <ResponsiveContainer width="100%" height={250}>
+              <h3 className="text-base font-semibold text-white mb-4">Cost by Azure Region</h3>
+              <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={regionData} margin={{ left: 20, right: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 10 }} angle={-30} textAnchor="end" height={60} />
-                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12 }} />
+                  <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} angle={-25} textAnchor="end" height={70} />
+                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#cbd5e1', fontSize: 13 }} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 14 }} />
                   <Bar dataKey="cost" fill="#3b82f6" radius={[4, 4, 0, 0]}>
                     {regionData.map((_, i) => <Cell key={i} fill={['#3b82f6', '#8b5cf6', '#06b6d4', '#22c55e', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'][i % 8]} />)}
                   </Bar>
@@ -555,43 +555,43 @@ export default function WorkloadMapPage() {
 
             {/* Workload Table */}
             <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden">
-              <div className="p-4 border-b border-slate-700 flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-white">All Workloads</h3>
-                <span className="text-xs text-slate-500">Sorted by cost (highest first)</span>
+              <div className="p-5 border-b border-slate-700 flex items-center justify-between">
+                <h3 className="text-base font-semibold text-white">All Workloads</h3>
+                <span className="text-sm text-slate-400">Sorted by cost (highest first)</span>
               </div>
-              <table className="w-full text-sm">
+              <table className="w-full text-sm" role="table">
                 <thead>
-                  <tr className="border-b border-slate-700 text-slate-400 text-xs">
-                    <th className="px-4 py-3 text-left">Workload</th>
-                    <th className="px-4 py-3 text-left">Category</th>
-                    <th className="px-4 py-3 text-left">Environment</th>
-                    <th className="px-4 py-3 text-right">Resource Groups</th>
-                    <th className="px-4 py-3 text-right">Resources</th>
-                    <th className="px-4 py-3 text-right">MTD Cost</th>
-                    <th className="px-4 py-3 text-center">Status</th>
+                  <tr className="border-b border-slate-700 text-slate-300 text-sm">
+                    <th className="px-5 py-3.5 text-left font-semibold" scope="col">Workload</th>
+                    <th className="px-5 py-3.5 text-left font-semibold" scope="col">Category</th>
+                    <th className="px-5 py-3.5 text-left font-semibold" scope="col">Environment</th>
+                    <th className="px-5 py-3.5 text-right font-semibold" scope="col">Resource Groups</th>
+                    <th className="px-5 py-3.5 text-right font-semibold" scope="col">Resources</th>
+                    <th className="px-5 py-3.5 text-right font-semibold" scope="col">MTD Cost</th>
+                    <th className="px-5 py-3.5 text-center font-semibold" scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[...WORKLOADS].sort((a, b) => b.totalCost - a.totalCost).map(w => (
                     <tr key={w.id} className="border-b border-slate-700/50 hover:bg-slate-700/20 transition-colors">
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <span>{w.icon}</span>
-                          <span className="font-medium text-white">{w.name}</span>
+                      <td className="px-5 py-3.5">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-lg" aria-hidden="true">{w.icon}</span>
+                          <span className="font-semibold text-white text-sm">{w.name}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-3">
-                        <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: w.color + '20', color: w.color }}>{w.category}</span>
+                      <td className="px-5 py-3.5">
+                        <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: w.color + '20', color: w.color }}>{w.category}</span>
                       </td>
-                      <td className="px-4 py-3">
-                        <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: ENV_COLORS[w.environment] + '20', color: ENV_COLORS[w.environment] }}>{w.environment}</span>
+                      <td className="px-5 py-3.5">
+                        <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: ENV_COLORS[w.environment] + '20', color: ENV_COLORS[w.environment] }}>{w.environment}</span>
                       </td>
-                      <td className="px-4 py-3 text-right text-slate-300">{w.resourceGroups.length}</td>
-                      <td className="px-4 py-3 text-right text-slate-300">{w.resourceGroups.reduce((s, rg) => s + rg.resourceCount, 0)}</td>
-                      <td className="px-4 py-3 text-right font-mono font-semibold text-white">${w.totalCost.toFixed(2)}</td>
-                      <td className="px-4 py-3 text-center">
-                        <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: STATUS_COLORS[w.status] + '20', color: STATUS_COLORS[w.status] }}>
-                          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: STATUS_COLORS[w.status] }} />
+                      <td className="px-5 py-3.5 text-right text-slate-200 text-sm">{w.resourceGroups.length}</td>
+                      <td className="px-5 py-3.5 text-right text-slate-200 text-sm">{w.resourceGroups.reduce((s, rg) => s + rg.resourceCount, 0)}</td>
+                      <td className="px-5 py-3.5 text-right font-mono font-bold text-white text-sm">${w.totalCost.toFixed(2)}</td>
+                      <td className="px-5 py-3.5 text-center">
+                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: STATUS_COLORS[w.status] + '20', color: STATUS_COLORS[w.status] }}>
+                          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: STATUS_COLORS[w.status] }} aria-hidden="true" />
                           {w.status}
                         </span>
                       </td>
@@ -599,11 +599,11 @@ export default function WorkloadMapPage() {
                   ))}
                 </tbody>
                 <tfoot>
-                  <tr className="bg-slate-800 font-semibold text-white">
-                    <td className="px-4 py-3" colSpan={3}>Total ({WORKLOADS.length} workloads)</td>
-                    <td className="px-4 py-3 text-right">{TOTAL_RGS}</td>
-                    <td className="px-4 py-3 text-right">{TOTAL_RESOURCES}</td>
-                    <td className="px-4 py-3 text-right font-mono">${TOTAL_COST.toFixed(2)}</td>
+                  <tr className="bg-slate-800 font-bold text-white text-sm">
+                    <td className="px-5 py-4" colSpan={3}>Total ({WORKLOADS.length} workloads)</td>
+                    <td className="px-5 py-4 text-right">{TOTAL_RGS}</td>
+                    <td className="px-5 py-4 text-right">{TOTAL_RESOURCES}</td>
+                    <td className="px-5 py-4 text-right font-mono">${TOTAL_COST.toFixed(2)}</td>
                     <td />
                   </tr>
                 </tfoot>
@@ -617,24 +617,24 @@ export default function WorkloadMapPage() {
           <div className="space-y-4">
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex rounded-lg border border-slate-700 bg-slate-800">
-                <button onClick={() => setEnvFilter('all')} className={`px-3 py-1.5 text-xs font-medium rounded-l-lg ${envFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}>All Envs</button>
+              <fieldset className="flex rounded-lg border border-slate-700 bg-slate-800" role="radiogroup" aria-label="Filter by environment">
+                <button onClick={() => setEnvFilter('all')} className={`px-4 py-2 text-sm font-medium rounded-l-lg ${envFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white'}`} aria-pressed={envFilter === 'all'}>All Envs</button>
                 {envs.map((e, i) => (
-                  <button key={e} onClick={() => setEnvFilter(e)} className={`px-3 py-1.5 text-xs font-medium ${envFilter === e ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'} ${i === envs.length - 1 ? 'rounded-r-lg' : ''}`}>{e}</button>
+                  <button key={e} onClick={() => setEnvFilter(e)} className={`px-4 py-2 text-sm font-medium ${envFilter === e ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white'} ${i === envs.length - 1 ? 'rounded-r-lg' : ''}`} aria-pressed={envFilter === e}>{e}</button>
                 ))}
-              </div>
-              <div className="flex rounded-lg border border-slate-700 bg-slate-800">
-                <button onClick={() => setCatFilter('all')} className={`px-3 py-1.5 text-xs font-medium rounded-l-lg ${catFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}>All Categories</button>
+              </fieldset>
+              <fieldset className="flex rounded-lg border border-slate-700 bg-slate-800" role="radiogroup" aria-label="Filter by category">
+                <button onClick={() => setCatFilter('all')} className={`px-4 py-2 text-sm font-medium rounded-l-lg ${catFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white'}`} aria-pressed={catFilter === 'all'}>All Categories</button>
                 {cats.map((c, i) => (
-                  <button key={c} onClick={() => setCatFilter(c)} className={`px-3 py-1.5 text-xs font-medium ${catFilter === c ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'} ${i === cats.length - 1 ? 'rounded-r-lg' : ''}`}>{c}</button>
+                  <button key={c} onClick={() => setCatFilter(c)} className={`px-4 py-2 text-sm font-medium ${catFilter === c ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white'} ${i === cats.length - 1 ? 'rounded-r-lg' : ''}`} aria-pressed={catFilter === c}>{c}</button>
                 ))}
-              </div>
-              <select value={sortBy} onChange={e => setSortBy(e.target.value as any)} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500">
+              </fieldset>
+              <select value={sortBy} onChange={e => setSortBy(e.target.value as any)} className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500" aria-label="Sort workloads">
                 <option value="cost">Sort by Cost</option>
                 <option value="name">Sort by Name</option>
                 <option value="resources">Sort by Resources</option>
               </select>
-              <span className="text-xs text-slate-500">{filtered.length} workload(s)</span>
+              <span className="text-sm text-slate-400 font-medium">{filtered.length} workload(s)</span>
             </div>
 
             {/* Cards */}
@@ -644,55 +644,55 @@ export default function WorkloadMapPage() {
               return (
                 <div key={w.id} className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden transition-all hover:border-slate-600">
                   {/* Header */}
-                  <button onClick={() => setExpandedWorkload(isExpanded ? null : w.id)} className="w-full text-left px-6 py-4 flex items-center gap-4 hover:bg-slate-700/20 transition-colors">
-                    <span className="text-3xl">{w.icon}</span>
+                  <button onClick={() => setExpandedWorkload(isExpanded ? null : w.id)} className="w-full text-left px-6 py-5 flex items-center gap-4 hover:bg-slate-700/20 transition-colors" aria-expanded={isExpanded} aria-controls={`workload-detail-${w.id}`}>
+                    <span className="text-3xl" aria-hidden="true">{w.icon}</span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
+                      <div className="flex items-center gap-2.5 flex-wrap">
                         <h3 className="text-lg font-bold text-white">{w.name}</h3>
-                        <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: ENV_COLORS[w.environment] + '20', color: ENV_COLORS[w.environment] }}>{w.environment}</span>
-                        <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: w.color + '20', color: w.color }}>{w.category}</span>
-                        <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: STATUS_COLORS[w.status] + '20', color: STATUS_COLORS[w.status] }}>
-                          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: STATUS_COLORS[w.status] }} />
+                        <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: ENV_COLORS[w.environment] + '20', color: ENV_COLORS[w.environment] }}>{w.environment}</span>
+                        <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: w.color + '20', color: w.color }}>{w.category}</span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: STATUS_COLORS[w.status] + '20', color: STATUS_COLORS[w.status] }}>
+                          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: STATUS_COLORS[w.status] }} aria-hidden="true" />
                           {w.status}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 mt-1 line-clamp-1">{w.description}</p>
+                      <p className="text-sm text-slate-400 mt-1.5 line-clamp-2">{w.description}</p>
                     </div>
                     <div className="flex items-center gap-6 flex-shrink-0">
                       <div className="text-right">
-                        <div className="text-xs text-slate-500">RGs</div>
-                        <div className="text-sm font-semibold text-white">{w.resourceGroups.length}</div>
+                        <div className="text-sm text-slate-400">RGs</div>
+                        <div className="text-base font-bold text-white">{w.resourceGroups.length}</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xs text-slate-500">Resources</div>
-                        <div className="text-sm font-semibold text-white">{totalRes}</div>
+                        <div className="text-sm text-slate-400">Resources</div>
+                        <div className="text-base font-bold text-white">{totalRes}</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xs text-slate-500">MTD Cost</div>
-                        <div className="text-lg font-bold text-white">${w.totalCost.toFixed(2)}</div>
+                        <div className="text-sm text-slate-400">MTD Cost</div>
+                        <div className="text-xl font-bold text-white">${w.totalCost.toFixed(2)}</div>
                       </div>
-                      <svg className={`h-5 w-5 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                      <svg className={`h-5 w-5 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                     </div>
                   </button>
 
                   {/* Expanded Detail */}
                   {isExpanded && (
-                    <div className="border-t border-slate-700 px-6 py-5 bg-slate-800/50 space-y-5">
-                      <p className="text-sm text-slate-300 leading-relaxed">{w.description}</p>
+                    <div id={`workload-detail-${w.id}`} className="border-t border-slate-700 px-6 py-6 bg-slate-800/50 space-y-6">
+                      <p className="text-base text-slate-200 leading-relaxed">{w.description}</p>
 
                       {/* Resource Groups */}
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Resource Groups</h4>
-                        <div className="space-y-2">
+                        <h4 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Resource Groups</h4>
+                        <div className="space-y-2.5">
                           {w.resourceGroups.map(rg => (
-                            <div key={rg.name} className="flex items-center justify-between rounded-lg bg-slate-900/50 border border-slate-700/50 px-4 py-2.5">
+                            <div key={rg.name} className="flex items-center justify-between rounded-lg bg-slate-900/50 border border-slate-700/50 px-5 py-3">
                               <div>
-                                <span className="text-sm font-mono text-blue-400">{rg.name}</span>
-                                <span className="ml-2 text-xs text-slate-500">{rg.location}</span>
+                                <span className="text-sm font-mono font-medium text-blue-300">{rg.name}</span>
+                                <span className="ml-2 text-sm text-slate-400">{rg.location}</span>
                               </div>
-                              <div className="flex items-center gap-4">
-                                <span className="text-xs text-slate-400">{rg.resourceCount} resources</span>
-                                <span className="text-sm font-mono font-semibold text-white">${rg.cost.toFixed(2)}</span>
+                              <div className="flex items-center gap-5">
+                                <span className="text-sm text-slate-300">{rg.resourceCount} resources</span>
+                                <span className="text-base font-mono font-bold text-white">${rg.cost.toFixed(2)}</span>
                                 {/* Cost bar */}
                                 <div className="w-20 h-2 rounded-full bg-slate-700 overflow-hidden">
                                   <div className="h-full rounded-full" style={{ width: `${Math.min(100, (rg.cost / TOTAL_COST) * 100 * 5)}%`, backgroundColor: w.color }} />
@@ -705,14 +705,14 @@ export default function WorkloadMapPage() {
 
                       {/* Resources */}
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Resources</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <h4 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Resources</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                           {w.resources.map((r, i) => (
-                            <div key={i} className="flex items-center gap-3 rounded-lg bg-slate-900/50 border border-slate-700/50 px-3 py-2">
-                              <div className="flex-shrink-0 h-8 w-8 rounded-lg bg-slate-700 flex items-center justify-center text-xs font-bold text-white">{r.count || 1}</div>
+                            <div key={i} className="flex items-center gap-3 rounded-lg bg-slate-900/50 border border-slate-700/50 px-4 py-3">
+                              <div className="flex-shrink-0 h-9 w-9 rounded-lg bg-slate-700 flex items-center justify-center text-sm font-bold text-white">{r.count || 1}</div>
                               <div className="min-w-0">
-                                <div className="text-xs font-medium text-white">{r.type}</div>
-                                <div className="text-[11px] text-slate-500 truncate">{r.name}</div>
+                                <div className="text-sm font-semibold text-white">{r.type}</div>
+                                <div className="text-sm text-slate-400 truncate">{r.name}</div>
                               </div>
                             </div>
                           ))}
@@ -722,11 +722,11 @@ export default function WorkloadMapPage() {
                       {/* Recommendations */}
                       {w.recommendations.length > 0 && (
                         <div>
-                          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Recommendations</h4>
-                          <div className="space-y-1.5">
+                          <h4 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Recommendations</h4>
+                          <div className="space-y-2">
                             {w.recommendations.map((rec, i) => (
-                              <div key={i} className="flex items-start gap-2 text-sm text-slate-300">
-                                <span className="text-amber-400 mt-0.5">→</span>
+                              <div key={i} className="flex items-start gap-3 text-base text-slate-200">
+                                <span className="text-amber-400 mt-0.5" aria-hidden="true">→</span>
                                 <span>{rec}</span>
                               </div>
                             ))}
@@ -744,23 +744,23 @@ export default function WorkloadMapPage() {
         {/* ============= COST BREAKDOWN TAB ============= */}
         {tab === 'sankey' && (
           <div className="space-y-6">
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 text-sm text-amber-200/80">
-              <strong className="text-amber-300">Flow:</strong> Subscription → Environment → Category → Workload → Resource Groups. This shows how your ${TOTAL_COST.toFixed(2)} MTD spend flows from top-level classification down to individual resource groups.
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 text-base text-amber-100" role="note">
+              <strong className="text-amber-200">Flow:</strong> Subscription → Environment → Category → Workload → Resource Groups. This shows how your ${TOTAL_COST.toFixed(2)} MTD spend flows from top-level classification down to individual resource groups.
             </div>
 
             {/* Environment → Category flow  */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Environment breakdown */}
               <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-                <h3 className="text-sm font-semibold text-white mb-4">By Environment</h3>
-                <div className="space-y-3">
+                <h3 className="text-base font-semibold text-white mb-4">By Environment</h3>
+                <div className="space-y-4">
                   {costByEnv.map(e => (
                     <div key={e.name}>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-slate-300 font-medium">{e.name}</span>
-                        <span className="text-white font-semibold">${e.cost.toFixed(2)} ({((e.cost / TOTAL_COST) * 100).toFixed(0)}%)</span>
+                      <div className="flex justify-between text-sm mb-1.5">
+                        <span className="text-slate-200 font-semibold">{e.name}</span>
+                        <span className="text-white font-bold">${e.cost.toFixed(2)} ({((e.cost / TOTAL_COST) * 100).toFixed(0)}%)</span>
                       </div>
-                      <div className="h-3 rounded-full bg-slate-700 overflow-hidden">
+                      <div className="h-4 rounded-full bg-slate-700 overflow-hidden" role="progressbar" aria-valuenow={Math.round((e.cost / TOTAL_COST) * 100)} aria-valuemin={0} aria-valuemax={100} aria-label={`${e.name}: $${e.cost.toFixed(2)}`}>
                         <div className="h-full rounded-full transition-all" style={{ width: `${(e.cost / TOTAL_COST) * 100}%`, backgroundColor: e.color }} />
                       </div>
                     </div>
@@ -770,28 +770,28 @@ export default function WorkloadMapPage() {
 
               {/* Category pie chart */}
               <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-                <h3 className="text-sm font-semibold text-white mb-4">By Category</h3>
+                <h3 className="text-base font-semibold text-white mb-4">By Category</h3>
                 <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie data={costByCat} dataKey="cost" nameKey="name" cx="50%" cy="50%" outerRadius={80} innerRadius={40} paddingAngle={2} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
                       {costByCat.map((c, i) => <Cell key={i} fill={c.color} />)}
                     </Pie>
-                    <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12 }} />
+                    <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 14 }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
 
               {/* Region breakdown */}
               <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-                <h3 className="text-sm font-semibold text-white mb-4">By Region</h3>
-                <div className="space-y-3">
+                <h3 className="text-base font-semibold text-white mb-4">By Region</h3>
+                <div className="space-y-4">
                   {regionData.map((r, i) => (
                     <div key={r.name}>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-slate-300">{r.name}</span>
-                        <span className="text-white font-semibold">${r.cost.toFixed(2)}</span>
+                      <div className="flex justify-between text-sm mb-1.5">
+                        <span className="text-slate-200">{r.name}</span>
+                        <span className="text-white font-bold">${r.cost.toFixed(2)}</span>
                       </div>
-                      <div className="h-2.5 rounded-full bg-slate-700 overflow-hidden">
+                      <div className="h-3 rounded-full bg-slate-700 overflow-hidden" role="progressbar" aria-label={`${r.name}: $${r.cost.toFixed(2)}`}>
                         <div className="h-full rounded-full" style={{ width: `${(r.cost / regionData[0].cost) * 100}%`, backgroundColor: ['#3b82f6', '#8b5cf6', '#06b6d4', '#22c55e', '#f59e0b', '#ef4444', '#ec4899'][i % 7] }} />
                       </div>
                     </div>
@@ -802,23 +802,23 @@ export default function WorkloadMapPage() {
 
             {/* Detailed RG-level breakdown per workload */}
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-              <h3 className="text-sm font-semibold text-white mb-4">Workload → Resource Group Cost Flow</h3>
-              <div className="space-y-4">
+              <h3 className="text-base font-semibold text-white mb-4">Workload → Resource Group Cost Flow</h3>
+              <div className="space-y-5">
                 {[...WORKLOADS].sort((a, b) => b.totalCost - a.totalCost).map(w => (
                   <div key={w.id}>
                     <div className="flex items-center gap-2 mb-2">
-                      <span>{w.icon}</span>
-                      <span className="text-sm font-semibold text-white">{w.name}</span>
-                      <span className="text-xs text-slate-500 ml-auto">${w.totalCost.toFixed(2)}</span>
+                      <span aria-hidden="true">{w.icon}</span>
+                      <span className="text-base font-semibold text-white">{w.name}</span>
+                      <span className="text-sm text-slate-300 ml-auto font-mono">${w.totalCost.toFixed(2)}</span>
                     </div>
-                    <div className="ml-8 space-y-1">
+                    <div className="ml-8 space-y-1.5">
                       {w.resourceGroups.sort((a, b) => b.cost - a.cost).map(rg => (
-                        <div key={rg.name} className="flex items-center gap-2">
-                          <div className="h-1.5 rounded-full bg-slate-700 flex-1 overflow-hidden">
+                        <div key={rg.name} className="flex items-center gap-3">
+                          <div className="h-2.5 rounded-full bg-slate-700 flex-1 overflow-hidden">
                             <div className="h-full rounded-full" style={{ width: `${Math.max(2, (rg.cost / TOTAL_COST) * 100 * 4)}%`, backgroundColor: w.color }} />
                           </div>
-                          <span className="text-[11px] font-mono text-slate-400 w-52 truncate text-right">{rg.name}</span>
-                          <span className="text-[11px] font-mono text-white w-14 text-right">${rg.cost.toFixed(2)}</span>
+                          <span className="text-xs font-mono text-slate-300 w-56 truncate text-right">{rg.name}</span>
+                          <span className="text-sm font-mono font-semibold text-white w-16 text-right">${rg.cost.toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
@@ -832,26 +832,26 @@ export default function WorkloadMapPage() {
         {/* ============= RECOMMENDATIONS TAB ============= */}
         {tab === 'recommendations' && (
           <div className="space-y-6">
-            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 text-sm text-emerald-200/80">
-              <strong className="text-emerald-300">💡 {allRecommendations.length} recommendations</strong> across {WORKLOADS.length} workloads. These are based on resource placement, environment type, and usage patterns.
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-5 text-base text-emerald-100" role="note">
+              <strong className="text-emerald-200">💡 {allRecommendations.length} recommendations</strong> across {WORKLOADS.length} workloads. These are based on resource placement, environment type, and usage patterns.
             </div>
 
             {/* Grouped by workload */}
             {[...WORKLOADS].sort((a, b) => b.totalCost - a.totalCost).map(w => (
               <div key={w.id} className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden">
-                <div className="px-5 py-3 border-b border-slate-700 flex items-center justify-between bg-slate-800/80">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{w.icon}</span>
-                    <span className="font-semibold text-white">{w.name}</span>
-                    <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: ENV_COLORS[w.environment] + '20', color: ENV_COLORS[w.environment] }}>{w.environment}</span>
+                <div className="px-5 py-4 border-b border-slate-700 flex items-center justify-between bg-slate-800/80">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xl" aria-hidden="true">{w.icon}</span>
+                    <span className="text-base font-bold text-white">{w.name}</span>
+                    <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: ENV_COLORS[w.environment] + '20', color: ENV_COLORS[w.environment] }}>{w.environment}</span>
                   </div>
-                  <span className="text-sm font-mono text-slate-300">${w.totalCost.toFixed(2)}/mo</span>
+                  <span className="text-base font-mono font-semibold text-slate-200">${w.totalCost.toFixed(2)}/mo</span>
                 </div>
-                <div className="px-5 py-3 space-y-2">
+                <div className="px-5 py-4 space-y-3">
                   {w.recommendations.map((rec, i) => (
-                    <div key={i} className="flex items-start gap-3 py-1.5">
-                      <span className="text-amber-400 mt-0.5 flex-shrink-0">→</span>
-                      <span className="text-sm text-slate-300 leading-relaxed">{rec}</span>
+                    <div key={i} className="flex items-start gap-3 py-1">
+                      <span className="text-amber-400 mt-0.5 flex-shrink-0" aria-hidden="true">→</span>
+                      <span className="text-base text-slate-200 leading-relaxed">{rec}</span>
                     </div>
                   ))}
                 </div>
@@ -860,23 +860,23 @@ export default function WorkloadMapPage() {
 
             {/* Quick summary */}
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
-              <h3 className="text-sm font-semibold text-white mb-3">Quick Wins Summary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3">
-                  <div className="text-xs text-red-400 font-semibold mb-1">🔴 Delete Unused Resources</div>
-                  <div className="text-sm text-slate-300">5 of 6 KV AI deployments may be unused. Delete to save ~$11/mo. Cosmos DB demo if inactive: $6/mo.</div>
+              <h3 className="text-base font-semibold text-white mb-4">Quick Wins Summary</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4">
+                  <div className="text-sm text-red-400 font-bold mb-1.5">🔴 Delete Unused Resources</div>
+                  <div className="text-base text-slate-200">5 of 6 KV AI deployments may be unused. Delete to save ~$11/mo. Cosmos DB demo if inactive: $6/mo.</div>
                 </div>
-                <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3">
-                  <div className="text-xs text-amber-400 font-semibold mb-1">🟡 Consolidate Multi-Region</div>
-                  <div className="text-sm text-slate-300">4 AKS demo clusters in 4 regions cost $47/mo. Consolidate to 1 region: save ~$35/mo.</div>
+                <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-4">
+                  <div className="text-sm text-amber-400 font-bold mb-1.5">🟡 Consolidate Multi-Region</div>
+                  <div className="text-base text-slate-200">4 AKS demo clusters in 4 regions cost $47/mo. Consolidate to 1 region: save ~$35/mo.</div>
                 </div>
-                <div className="rounded-lg bg-blue-500/10 border border-blue-500/20 p-3">
-                  <div className="text-xs text-blue-400 font-semibold mb-1">🔵 Deallocate When Idle</div>
-                  <div className="text-sm text-slate-300">Disk monitoring VMs cost ~$25-30/mo in compute. Deallocate when not benchmarking.</div>
+                <div className="rounded-lg bg-blue-500/10 border border-blue-500/20 p-4">
+                  <div className="text-sm text-blue-400 font-bold mb-1.5">🔵 Deallocate When Idle</div>
+                  <div className="text-base text-slate-200">Disk monitoring VMs cost ~$25-30/mo in compute. Deallocate when not benchmarking.</div>
                 </div>
-                <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3">
-                  <div className="text-xs text-emerald-400 font-semibold mb-1">🟢 Efficient Architectures</div>
-                  <div className="text-sm text-slate-300">ARP Dev ($0.65/mo) uses Container Apps + serverless Cosmos — exemplary cost efficiency.</div>
+                <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4">
+                  <div className="text-sm text-emerald-400 font-bold mb-1.5">🟢 Efficient Architectures</div>
+                  <div className="text-base text-slate-200">ARP Dev ($0.65/mo) uses Container Apps + serverless Cosmos — exemplary cost efficiency.</div>
                 </div>
               </div>
             </div>
@@ -886,7 +886,7 @@ export default function WorkloadMapPage() {
 
       {/* Footer */}
       <div className="border-t border-slate-800 mt-8">
-        <div className="mx-auto max-w-[1400px] px-6 py-4 flex items-center justify-between text-xs text-slate-600">
+        <div className="mx-auto max-w-[1400px] px-6 py-5 flex items-center justify-between text-sm text-slate-400">
           <span>Workload grouping based on resource naming, RG structure, and dependencies. Group membership is manually curated.</span>
           <span>Costs: Azure Cost Management API (month-to-date)</span>
         </div>
