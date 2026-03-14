@@ -132,6 +132,15 @@ const TAG_RECOMMENDATIONS = [
 // NEWLY ADDED RESOURCES (from Azure Resource Graph — last 30 days)
 // Estimated monthly cost based on 7-day prorated Azure Cost Management data
 // ============================================================================
+function formatDate(iso: string): string {
+  const d = new Date(iso + 'T00:00:00');
+  const day = d.getDate();
+  const suffix = day === 1 || day === 21 || day === 31 ? 'st' : day === 2 || day === 22 ? 'nd' : day === 3 || day === 23 ? 'rd' : 'th';
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  return `${day}${suffix} ${months[d.getMonth()]} ${d.getFullYear()}, ${days[d.getDay()]}`;
+}
+
 const NEW_RESOURCES = [
   { name: 'oai-diskmon-poc', type: 'Azure OpenAI', rg: 'rg-diskmon-poc-eastus2', location: 'East US 2', created: '2026-03-12', estMonthlyCost: 0.00, status: 'Active', reason: 'AI Disk Advisor backend for the monitoring dashboard' },
   { name: 'afd-diskmon-poc', type: 'Front Door', rg: 'rg-diskmon-poc-eastus2', location: 'Global', created: '2026-03-11', estMonthlyCost: 0.42, status: 'Active', reason: 'CDN + custom domain for SWA (low usage POC)' },
@@ -683,7 +692,7 @@ export default function CostAnalyzerPage() {
                 {NEW_RESOURCES.map((r, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <div className="flex-shrink-0 w-20 text-right">
-                      <span className="text-xs font-mono text-slate-400">{r.created}</span>
+                      <span className="text-xs font-mono text-slate-400">{formatDate(r.created)}</span>
                     </div>
                     <div className="h-3 w-3 rounded-full bg-blue-500 flex-shrink-0" aria-hidden="true" />
                     <div className="flex-1 min-w-0">
@@ -729,7 +738,7 @@ export default function CostAnalyzerPage() {
                           <span className="rounded-full px-2.5 py-1 text-xs font-semibold bg-blue-600/20 text-blue-400">{r.type}</span>
                         </td>
                         <td className="px-5 py-3.5 text-sm font-mono text-slate-300">{r.rg}</td>
-                        <td className="px-5 py-3.5 text-sm font-mono text-slate-300">{r.created}</td>
+                        <td className="px-5 py-3.5 text-sm text-slate-300">{formatDate(r.created)}</td>
                         <td className="px-5 py-3.5 text-center">
                           <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: statusColor + '20', color: statusColor }}>
                             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: statusColor }} aria-hidden="true" />
