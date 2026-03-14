@@ -1,0 +1,1 @@
+{"timeframe":"MonthToDate","dataset":{"aggregation":{"totalCost":{"function":"Sum","name":"Cost"}},"grouping":[{"name":"createdBy","type":"Tag"}],"granularity":"None"},"type":"ActualCost"}

@@ -73,7 +73,60 @@ const RECOMMENDATIONS = [
   { priority: 'Low', title: 'Multiple Log Analytics workspaces', description: 'Log Analytics in DefaultResourceGroup-EUS ($12.80) and CCA ($8.40) may be redundant. Consider consolidating into a single workspace.', savings: '$5-$10/mo', action: 'az monitor log-analytics workspace list -o table → review counts' },
 ];
 
-type Tab = 'overview' | 'resource-groups' | 'services' | 'recommendations' | 'trend';
+type Tab = 'overview' | 'resource-groups' | 'services' | 'recommendations' | 'trend' | 'tags';
+
+// ============================================================================
+// TAG-BASED COST DATA (from Azure Cost Management API + az resource list)
+// ============================================================================
+const TAG_COVERAGE = { total: 178, tagged: 98, untagged: 80, pctTagged: 55 };
+
+const COST_BY_ENV_TAG = [
+  { tag: 'poc', cost: 98.44, resources: 41, color: '#f59e0b' },
+  { tag: 'demo', cost: 53.86, resources: 22, color: '#8b5cf6' },
+  { tag: 'dev', cost: 48.51, resources: 35, color: '#3b82f6' },
+  { tag: '(untagged)', cost: 119.19, resources: 80, color: '#6b7280' },
+];
+
+const COST_BY_PROJECT_TAG = [
+  { tag: 'disk-monitoring', cost: 98.44, resources: 41, color: '#3b82f6' },
+  { tag: 'helloworld-aks', cost: 47.43, resources: 61, color: '#8b5cf6' },
+  { tag: 'kv-ai', cost: 20.73, resources: 30, color: '#f59e0b' },
+  { tag: 'restaurant-directory', cost: 18.79, resources: 4, color: '#ef4444' },
+  { tag: 'app-spaces-rag', cost: 14.60, resources: 12, color: '#a855f7' },
+  { tag: 'azvm-compute', cost: 13.74, resources: 9, color: '#22c55e' },
+  { tag: 'global-sensor-storm', cost: 6.43, resources: 1, color: '#14b8a6' },
+  { tag: 'arp-dev', cost: 0.65, resources: 15, color: '#06b6d4' },
+  { tag: '(untagged)', cost: 99.19, resources: 5, color: '#6b7280' },
+];
+
+const TAG_KEYS = [
+  { key: 'Environment', count: 98, total: 178, compliance: 55, required: true, description: 'Lifecycle stage: poc, dev, staging, prod' },
+  { key: 'project', count: 156, total: 178, compliance: 88, required: true, description: 'Workload or project name' },
+  { key: 'createdBy', count: 85, total: 178, compliance: 48, required: false, description: 'Resource creator identity' },
+  { key: 'Owner', count: 45, total: 178, compliance: 25, required: true, description: 'Team or person responsible' },
+  { key: 'CostCenter', count: 0, total: 178, compliance: 0, required: true, description: 'Finance cost center code' },
+  { key: 'ms-resource-usage', count: 42, total: 178, compliance: 24, required: false, description: 'Auto-tag: Azure resource usage category' },
+  { key: 'aks-managed-cluster-name', count: 32, total: 178, compliance: 18, required: false, description: 'Auto-tag: AKS cluster association' },
+];
+
+const UNTAGGED_RGS = [
+  { name: 'MC_rg-privateaks', cost: 42.10, resources: 14, reason: 'AKS managed — no custom tags applied' },
+  { name: 'McapsGovernance', cost: 7.01, resources: 2, reason: 'System-created governance RG' },
+  { name: 'cloud-shell-storage-eastus', cost: 7.14, resources: 4, reason: 'Auto-created by Cloud Shell' },
+  { name: 'DefaultResourceGroup-EUS', cost: 0.00, resources: 6, reason: 'Azure Defender auto-created' },
+  { name: 'DefaultResourceGroup-CCA', cost: 0.00, resources: 5, reason: 'Azure Defender auto-created' },
+  { name: 'NetworkWatcherRG', cost: 0.00, resources: 4, reason: 'Auto-created by Network Watcher' },
+  { name: 'DemoVM_group-asr', cost: 0.04, resources: 2, reason: 'Demo leftover — candidate for deletion' },
+];
+
+const TAG_RECOMMENDATIONS = [
+  { severity: 'high' as const, title: 'Enforce required tags via Azure Policy', description: 'Create a policy initiative requiring Environment, project, Owner, and CostCenter tags on all resource groups. Use "Require a tag on resource groups" built-in policy.', savings: 'Prevents untracked spend', cmd: 'az policy assignment create --name "require-env-tag" --policy "96670d01-0a4d-4649-9c89-2d3abc0a5025" --params "{tagName:{value:Environment}}"' },
+  { severity: 'high' as const, title: 'Tag all 7 untagged resource groups', description: 'Apply Environment + project + Owner + CostCenter tags to the 7 untagged RGs. This captures $56.29/mo in unattributed spend.', savings: '$56.29/mo now trackable', cmd: 'az group update -n MC_rg-privateaks --tags Environment=demo project=helloworld-aks Owner=krishna CostCenter=CC001' },
+  { severity: 'medium' as const, title: 'Add CostCenter tag to all resources', description: 'CostCenter has 0% compliance. Finance cannot attribute costs to departments without it. Add to all resource groups and inherit to child resources.', savings: 'Enables chargeback', cmd: 'az tag create --resource-id /subscriptions/e62428e7-.../resourceGroups/rg-diskmon-poc-eastus2 --tags CostCenter=CC-Engineering' },
+  { severity: 'medium' as const, title: 'Improve Owner tag coverage (25% to 100%)', description: 'Only 45 of 178 resources have an Owner tag. Without it, orphaned resources cannot be attributed to a team for cleanup responsibility.', savings: 'Reduces orphaned resources', cmd: 'az tag create --resource-id <resource-id> --tags Owner=krishna@contoso.com' },
+  { severity: 'low' as const, title: 'Enable tag inheritance policy', description: 'Use "Inherit a tag from the resource group" policy so new resources automatically get parent RG tags. Reduces manual tagging.', savings: 'Automation', cmd: 'az policy assignment create --name "inherit-env-tag" --policy "cd3aa116-8754-49c9-a813-ad46512ece54"' },
+  { severity: 'low' as const, title: 'Set up cost alerts by tag', description: 'Create budget alerts filtered by Environment=poc and project=disk-monitoring to get notified when the POC exceeds $100/mo.', savings: 'Cost governance', cmd: 'az consumption budget create --amount 100 --budget-name "diskmon-budget" --category Cost --time-grain Monthly' },
+];
 
 export default function CostAnalyzerPage() {
   const [tab, setTab] = useState<Tab>('overview');
@@ -101,12 +154,12 @@ export default function CostAnalyzerPage() {
               </Link>
               <div>
                 <h1 className="text-lg font-bold text-white">Azure Subscription Cost Analyzer</h1>
-                <p className="text-[11px] text-slate-500">Subscription: e62428e7-...2c51586d9105 &bull; Last 30 days &bull; Data from Azure Cost Management API</p>
+                <p className="text-xs text-slate-400">Subscription: e62428e7-...2c51586d9105 &bull; Last 30 days &bull; Data from Azure Cost Management API</p>
               </div>
             </div>
             <div className="text-right">
               <div className="text-2xl font-bold text-amber-400">${TOTAL_COST.toFixed(2)}</div>
-              <div className="text-[10px] text-slate-500">30-day actual spend</div>
+              <div className="text-xs text-slate-400">30-day actual spend</div>
             </div>
           </div>
           <nav className="mt-3 flex gap-1">
@@ -114,6 +167,7 @@ export default function CostAnalyzerPage() {
               { key: 'overview' as Tab, label: 'Overview' },
               { key: 'resource-groups' as Tab, label: `Resource Groups (${COST_BY_RG.length})` },
               { key: 'services' as Tab, label: `Services (${COST_BY_SERVICE.length})` },
+              { key: 'tags' as Tab, label: '🏷️ Tags' },
               { key: 'recommendations' as Tab, label: `Savings (${RECOMMENDATIONS.length})` },
               { key: 'trend' as Tab, label: 'Daily Trend' },
             ]).map(({ key, label }) => (
@@ -138,7 +192,7 @@ export default function CostAnalyzerPage() {
               <div key={kpi.label} className={`rounded-xl border bg-gradient-to-br to-transparent p-4 text-center ${kpi.color}`}>
                 <div className={`text-2xl font-bold ${kpi.color.split(' ')[0]}`}>{kpi.value}</div>
                 <div className="text-xs text-slate-400 mt-1">{kpi.label}</div>
-                <div className="text-[10px] text-slate-500">{kpi.sub}</div>
+                <div className="text-xs text-slate-500">{kpi.sub}</div>
               </div>
             ))}
           </div>
@@ -198,12 +252,12 @@ export default function CostAnalyzerPage() {
                   <button onClick={() => setExpandedRg(isOpen ? null : rg.name)} className="w-full text-left px-5 py-4 bg-slate-800 hover:bg-slate-800/80 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <span className="rounded-lg bg-slate-700 px-2.5 py-1 text-[10px] font-mono text-slate-300">{rg.location}</span>
+                        <span className="rounded-lg bg-slate-700 px-2.5 py-1 text-xs font-mono text-slate-300">{rg.location}</span>
                         <h4 className="text-sm font-bold text-white">{rg.name}</h4>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-lg font-bold font-mono text-amber-400">${rg.cost.toFixed(2)}</span>
-                        <span className="text-[10px] text-slate-500">{pct.toFixed(1)}%</span>
+                        <span className="text-xs text-slate-500">{pct.toFixed(1)}%</span>
                         <svg className={`h-4 w-4 text-slate-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                       </div>
                     </div>
@@ -214,14 +268,14 @@ export default function CostAnalyzerPage() {
                   {isOpen && (
                     <div className="border-t border-slate-700 px-5 py-4 bg-slate-800/50 space-y-3">
                       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-white">{rg.resources}</div><div className="text-[10px] text-slate-500">Resources</div></div>
-                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-amber-400">${rg.cost.toFixed(2)}</div><div className="text-[10px] text-slate-500">30-day cost</div></div>
-                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-blue-400">${(rg.cost * 12).toFixed(0)}</div><div className="text-[10px] text-slate-500">Annual projection</div></div>
-                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-slate-300">${(rg.cost / 30).toFixed(2)}</div><div className="text-[10px] text-slate-500">Per day</div></div>
+                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-white">{rg.resources}</div><div className="text-xs text-slate-500">Resources</div></div>
+                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-amber-400">${rg.cost.toFixed(2)}</div><div className="text-xs text-slate-500">30-day cost</div></div>
+                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-blue-400">${(rg.cost * 12).toFixed(0)}</div><div className="text-xs text-slate-500">Annual projection</div></div>
+                        <div className="rounded-lg bg-slate-700/30 p-3 text-center"><div className="text-lg font-bold text-slate-300">${(rg.cost / 30).toFixed(2)}</div><div className="text-xs text-slate-500">Per day</div></div>
                       </div>
                       <div><span className="text-xs text-slate-500">Purpose: </span><span className="text-xs text-slate-300">{rg.purpose}</span></div>
                       <div className="flex flex-wrap gap-1.5">
-                        {rg.services.map((s) => <span key={s} className="rounded-full bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300">{s}</span>)}
+                        {rg.services.map((s) => <span key={s} className="rounded-full bg-slate-700 px-2 py-0.5 text-xs text-slate-300">{s}</span>)}
                       </div>
                     </div>
                   )}
@@ -250,10 +304,10 @@ export default function CostAnalyzerPage() {
               <div key={s.name} className="rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-sm font-medium text-white">{s.name}</h4>
-                  <span className="rounded-full px-2 py-0.5 text-[9px] font-medium" style={{ backgroundColor: s.color + '20', color: s.color }}>{s.category}</span>
+                  <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ backgroundColor: s.color + '20', color: s.color }}>{s.category}</span>
                 </div>
                 <div className="text-2xl font-bold text-amber-400">${s.cost.toFixed(2)}</div>
-                <div className="flex justify-between mt-2 text-[10px] text-slate-500">
+                <div className="flex justify-between mt-2 text-xs text-slate-500">
                   <span>{((s.cost / TOTAL_COST) * 100).toFixed(1)}% of total</span>
                   <span>${(s.cost * 12).toFixed(0)}/yr projected</span>
                 </div>
@@ -284,13 +338,13 @@ export default function CostAnalyzerPage() {
               <div key={i} className={`rounded-xl border-l-4 border bg-slate-800 p-5 ${r.priority === 'High' ? 'border-l-red-500 border-slate-700' : r.priority === 'Medium' ? 'border-l-amber-500 border-slate-700' : 'border-l-blue-500 border-slate-700'}`}>
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${r.priority === 'High' ? 'bg-red-500/20 text-red-400' : r.priority === 'Medium' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}`}>{r.priority}</span>
+                    <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${r.priority === 'High' ? 'bg-red-500/20 text-red-400' : r.priority === 'Medium' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}`}>{r.priority}</span>
                     <h4 className="text-sm font-bold text-white">{r.title}</h4>
                   </div>
                   <span className="text-lg font-bold text-emerald-400 flex-shrink-0">{r.savings}</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed mb-3">{r.description}</p>
-                <code className="block rounded-lg bg-slate-900 px-3 py-2 text-[10px] font-mono text-emerald-400 overflow-x-auto">{r.action}</code>
+                <code className="block rounded-lg bg-slate-900 px-3 py-2 text-xs font-mono text-emerald-400 overflow-x-auto">{r.action}</code>
               </div>
             ))}
           </div>
@@ -320,11 +374,219 @@ export default function CostAnalyzerPage() {
                 { label: 'Budget Check', cmd: 'az consumption budget list --subscription e62428e7-08dd-4bc2-82e2-2c51586d9105 -o table' },
               ].map((c) => (
                 <div key={c.label} className="rounded-lg bg-slate-800 border border-slate-700 p-3">
-                  <div className="text-[10px] text-slate-500 mb-1">{c.label}</div>
+                  <div className="text-xs text-slate-400 mb-1">{c.label}</div>
                   <div className="flex items-center gap-2">
-                    <code className="flex-1 text-[10px] font-mono text-emerald-400 overflow-x-auto">{c.cmd}</code>
-                    <button onClick={() => navigator.clipboard.writeText(c.cmd)} className="rounded bg-slate-700 px-2 py-1 text-[9px] text-slate-400 hover:text-white flex-shrink-0">Copy</button>
+                    <code className="flex-1 text-xs font-mono text-emerald-400 overflow-x-auto">{c.cmd}</code>
+                    <button onClick={() => navigator.clipboard.writeText(c.cmd)} className="rounded bg-slate-700 px-2.5 py-1.5 text-xs text-slate-300 hover:text-white flex-shrink-0">Copy</button>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>)}
+
+        {/* ============= TAGS TAB ============= */}
+        {tab === 'tags' && (<>
+          {/* Tag Coverage Banner */}
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5" role="note">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h3 className="text-lg font-bold text-amber-200">🏷️ Tag Governance Dashboard</h3>
+                <p className="text-sm text-amber-100/80 mt-1">Tags enable cost attribution, accountability, automation, and compliance. Only <strong>{TAG_COVERAGE.pctTagged}%</strong> of your resources are properly tagged.</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-12 w-12 rounded-full border-4 border-amber-400 flex items-center justify-center">
+                  <span className="text-lg font-bold text-amber-300">{TAG_COVERAGE.pctTagged}%</span>
+                </div>
+                <span className="text-xs text-amber-200/60">Tagged</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Stat Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+            {[
+              { label: 'Total Resources', value: TAG_COVERAGE.total, icon: '📦', color: '#0078d4' },
+              { label: 'Tagged', value: TAG_COVERAGE.tagged, icon: '✅', color: '#57a300' },
+              { label: 'Untagged', value: TAG_COVERAGE.untagged, icon: '⚠️', color: '#e81123' },
+              { label: 'Tag Keys Used', value: TAG_KEYS.length, icon: '🔑', color: '#8764b8' },
+            ].map(s => (
+              <div key={s.label} className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-lg" aria-hidden="true">{s.icon}</span>
+                  <span className="text-sm text-slate-400">{s.label}</span>
+                </div>
+                <div className="text-3xl font-bold" style={{ color: s.color }}>{s.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Cost by Environment Tag + Cost by Project Tag */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+              <h3 className="text-base font-bold text-white mb-1">Cost by Environment Tag</h3>
+              <p className="text-sm text-slate-400 mb-4">How costs distribute across lifecycle environments</p>
+              <ResponsiveContainer width="100%" height={240}>
+                <BarChart data={COST_BY_ENV_TAG} layout="vertical" margin={{ left: 80, right: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" />
+                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} />
+                  <YAxis type="category" dataKey="tag" tick={{ fill: '#d2d0ce', fontSize: 13 }} width={75} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <Bar dataKey="cost" radius={[0, 4, 4, 0]}>
+                    {COST_BY_ENV_TAG.map((e, i) => <Cell key={i} fill={e.color} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+              <p className="text-xs text-slate-400 mt-2">⚠️ <strong>${COST_BY_ENV_TAG.find(e => e.tag === '(untagged)')?.cost.toFixed(2)}</strong> ({((COST_BY_ENV_TAG.find(e => e.tag === '(untagged)')?.cost || 0) / TOTAL_COST * 100).toFixed(0)}%) of spend has no Environment tag — cannot be attributed to any lifecycle stage.</p>
+            </div>
+
+            <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+              <h3 className="text-base font-bold text-white mb-1">Cost by Project Tag</h3>
+              <p className="text-sm text-slate-400 mb-4">Spend attributed to each project/workload</p>
+              <ResponsiveContainer width="100%" height={240}>
+                <BarChart data={COST_BY_PROJECT_TAG} layout="vertical" margin={{ left: 110, right: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" />
+                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} />
+                  <YAxis type="category" dataKey="tag" tick={{ fill: '#d2d0ce', fontSize: 12 }} width={105} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <Bar dataKey="cost" radius={[0, 4, 4, 0]}>
+                    {COST_BY_PROJECT_TAG.map((e, i) => <Cell key={i} fill={e.color} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+              <p className="text-xs text-slate-400 mt-2">💡 <strong>disk-monitoring</strong> is the largest project by cost at ${COST_BY_PROJECT_TAG[0].cost}/mo with {COST_BY_PROJECT_TAG[0].resources} resources.</p>
+            </div>
+          </div>
+
+          {/* Tag Key Compliance Table */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden mt-6">
+            <div className="p-5 border-b border-slate-700">
+              <h3 className="text-base font-bold text-white">Tag Key Compliance</h3>
+              <p className="text-sm text-slate-400 mt-1">Which tag keys are applied and how often. Required tags should be 100%.</p>
+            </div>
+            <table className="w-full text-sm" role="table">
+              <thead>
+                <tr className="border-b border-slate-700 text-slate-300 text-sm">
+                  <th className="px-5 py-3 text-left font-semibold" scope="col">Tag Key</th>
+                  <th className="px-5 py-3 text-left font-semibold" scope="col">Description</th>
+                  <th className="px-5 py-3 text-center font-semibold" scope="col">Required</th>
+                  <th className="px-5 py-3 text-right font-semibold" scope="col">Resources Tagged</th>
+                  <th className="px-5 py-3 text-right font-semibold" scope="col">Compliance</th>
+                  <th className="px-5 py-3 text-center font-semibold" scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {TAG_KEYS.map(t => {
+                  const status = t.compliance >= 80 ? 'Good' : t.compliance >= 40 ? 'Needs Work' : 'Critical';
+                  const statusColor = t.compliance >= 80 ? '#57a300' : t.compliance >= 40 ? '#f59e0b' : '#e81123';
+                  return (
+                    <tr key={t.key} className="border-b border-slate-700/50 hover:bg-slate-700/20 transition-colors">
+                      <td className="px-5 py-3">
+                        <span className="font-mono font-semibold text-white">{t.key}</span>
+                      </td>
+                      <td className="px-5 py-3 text-slate-400 text-sm">{t.description}</td>
+                      <td className="px-5 py-3 text-center">
+                        {t.required ? <span className="text-xs font-semibold text-red-400">Required</span> : <span className="text-xs text-slate-500">Optional</span>}
+                      </td>
+                      <td className="px-5 py-3 text-right text-slate-200">{t.count} / {t.total}</td>
+                      <td className="px-5 py-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <div className="w-20 h-2.5 rounded-full bg-slate-700 overflow-hidden">
+                            <div className="h-full rounded-full" style={{ width: `${t.compliance}%`, backgroundColor: statusColor }} />
+                          </div>
+                          <span className="font-semibold text-white w-10 text-right">{t.compliance}%</span>
+                        </div>
+                      </td>
+                      <td className="px-5 py-3 text-center">
+                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: statusColor + '20', color: statusColor }}>
+                          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: statusColor }} aria-hidden="true" />
+                          {status}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Untagged Resource Groups */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden mt-6">
+            <div className="p-5 border-b border-slate-700">
+              <h3 className="text-base font-bold text-white">Untagged Resource Groups</h3>
+              <p className="text-sm text-slate-400 mt-1">These resource groups lack Environment, project, or Owner tags. Combined untracked spend: <strong className="text-amber-300">${UNTAGGED_RGS.reduce((s, r) => s + r.cost, 0).toFixed(2)}/mo</strong></p>
+            </div>
+            <div className="divide-y divide-slate-700/50">
+              {UNTAGGED_RGS.map(rg => (
+                <div key={rg.name} className="flex items-center justify-between px-5 py-3.5 hover:bg-slate-700/20 transition-colors">
+                  <div>
+                    <span className="font-mono font-medium text-sm text-blue-400">{rg.name}</span>
+                    <span className="ml-3 text-sm text-slate-400">{rg.reason}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm text-slate-300">{rg.resources} res</span>
+                    <span className="text-base font-mono font-bold text-white">${rg.cost.toFixed(2)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tag Governance Recommendations */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden mt-6">
+            <div className="p-5 border-b border-slate-700">
+              <h3 className="text-base font-bold text-white">Tag Governance Recommendations</h3>
+              <p className="text-sm text-slate-400 mt-1">Actions to improve tag compliance and cost attribution</p>
+            </div>
+            <div className="divide-y divide-slate-700/50">
+              {TAG_RECOMMENDATIONS.map((rec, i) => {
+                const sevColor = rec.severity === 'high' ? '#e81123' : rec.severity === 'medium' ? '#f59e0b' : '#0078d4';
+                return (
+                  <div key={i} className="px-5 py-4">
+                    <div className="flex items-start gap-3">
+                      <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold mt-0.5 flex-shrink-0" style={{ backgroundColor: sevColor + '20', color: sevColor }}>
+                        {rec.severity.toUpperCase()}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-bold text-white">{rec.title}</h4>
+                        <p className="text-sm text-slate-300 mt-1 leading-relaxed">{rec.description}</p>
+                        <div className="flex items-center gap-4 mt-2">
+                          <span className="text-xs font-semibold text-emerald-400">Impact: {rec.savings}</span>
+                        </div>
+                        {rec.cmd && (
+                          <div className="mt-2 rounded-lg bg-slate-900 border border-slate-700/50 p-3">
+                            <div className="flex items-center gap-2">
+                              <code className="flex-1 text-xs font-mono text-emerald-400 overflow-x-auto whitespace-nowrap">{rec.cmd}</code>
+                              <button onClick={() => navigator.clipboard.writeText(rec.cmd)} className="rounded bg-slate-700 px-2.5 py-1.5 text-xs text-slate-300 hover:text-white flex-shrink-0">Copy</button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Tag Strategy Best Practices */}
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 mt-6">
+            <h3 className="text-base font-bold text-emerald-300 mb-3">📋 Recommended Tag Strategy</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                { key: 'Environment', values: 'poc, dev, staging, prod', purpose: 'Lifecycle management, cost filtering, auto-shutdown policies' },
+                { key: 'project', values: 'disk-monitoring, helloworld-aks, ...', purpose: 'Workload cost attribution, team ownership' },
+                { key: 'Owner', values: 'krishna@contoso.com', purpose: 'Accountability, orphan cleanup, incident contact' },
+                { key: 'CostCenter', values: 'CC-Engineering, CC-Research', purpose: 'Finance chargeback, departmental budgets' },
+                { key: 'CreatedDate', values: '2026-03-01', purpose: 'Age tracking, cleanup scheduling for POC/demo resources' },
+                { key: 'ExpiryDate', values: '2026-06-01', purpose: 'Auto-delete candidates, budget forecasting' },
+              ].map(t => (
+                <div key={t.key} className="rounded-lg bg-slate-800 border border-slate-700/50 p-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-mono font-bold text-white text-sm">{t.key}</span>
+                  </div>
+                  <div className="text-xs text-slate-400 mb-1">Values: <span className="text-slate-300">{t.values}</span></div>
+                  <div className="text-sm text-slate-300">{t.purpose}</div>
                 </div>
               ))}
             </div>
