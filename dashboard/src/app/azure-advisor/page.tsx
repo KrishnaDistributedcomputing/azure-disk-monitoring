@@ -69,10 +69,10 @@ const ADVISOR_RECS: AdvisorRec[] = [
 
 const TOTAL_RECS = ADVISOR_RECS.reduce((s, r) => s + r.count, 0);
 const CATEGORIES = [
-  { name: 'Security', icon: '🛡️', color: '#e81123', count: ADVISOR_RECS.filter(r => r.category === 'Security').reduce((s, r) => s + r.count, 0), description: 'Identify security vulnerabilities and potential threats' },
-  { name: 'HighAvailability', label: 'Reliability', icon: '🔄', color: '#0078d4', count: ADVISOR_RECS.filter(r => r.category === 'HighAvailability').reduce((s, r) => s + r.count, 0), description: 'Improve reliability and business continuity' },
-  { name: 'Cost', icon: '💰', color: '#57a300', count: ADVISOR_RECS.filter(r => r.category === 'Cost').reduce((s, r) => s + r.count, 0), description: 'Optimize and reduce Azure spending' },
-  { name: 'OperationalExcellence', label: 'Operations', icon: '⚙️', color: '#8764b8', count: ADVISOR_RECS.filter(r => r.category === 'OperationalExcellence').reduce((s, r) => s + r.count, 0), description: 'Improve operational processes and workflows' },
+  { name: 'Security', icon: '/icons/nsg.svg', color: '#e81123', count: ADVISOR_RECS.filter(r => r.category === 'Security').reduce((s, r) => s + r.count, 0), description: 'Identify security vulnerabilities and potential threats' },
+  { name: 'HighAvailability', label: 'Reliability', icon: '/icons/load-balancer.svg', color: '#0078d4', count: ADVISOR_RECS.filter(r => r.category === 'HighAvailability').reduce((s, r) => s + r.count, 0), description: 'Improve reliability and business continuity' },
+  { name: 'Cost', icon: '/icons/storage.svg', color: '#57a300', count: ADVISOR_RECS.filter(r => r.category === 'Cost').reduce((s, r) => s + r.count, 0), description: 'Optimize and reduce Azure spending' },
+  { name: 'OperationalExcellence', label: 'Operations', icon: '/icons/vm-extensions.svg', color: '#8764b8', count: ADVISOR_RECS.filter(r => r.category === 'OperationalExcellence').reduce((s, r) => s + r.count, 0), description: 'Improve operational processes and workflows' },
 ];
 
 const IMPACT_COLORS: Record<string, string> = { High: '#e81123', Medium: '#f59e0b', Low: '#0078d4' };

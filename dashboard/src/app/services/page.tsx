@@ -40,7 +40,7 @@ interface AzureService {
 const SERVICES: AzureService[] = [
   {
     id: 'log-analytics', provider: 'microsoft.operationalinsights', type: 'workspaces',
-    displayName: 'Log Analytics Workspaces', icon: '📊', count: 16, mtdCost: 0.55, category: 'Monitoring', color: '#10b981',
+    displayName: 'Log Analytics Workspaces', icon: '/icons/log-analytics.svg', count: 16, mtdCost: 0.55, category: 'Monitoring', color: '#10b981',
     description: 'Central log collection and KQL query engine. 16 workspaces across monitoring, AKS, AI, and default resource groups.',
     resources: [
       { name: 'law-diskmon-poc-eastus2', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', status: 'Active' },
@@ -58,7 +58,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'nsg', provider: 'microsoft.network', type: 'networksecuritygroups',
-    displayName: 'Network Security Groups', icon: '🛡️', count: 15, mtdCost: 0, category: 'Networking', color: '#3b82f6',
+    displayName: 'Network Security Groups', icon: '/icons/nsg.svg', count: 15, mtdCost: 0, category: 'Networking', color: '#3b82f6',
     description: 'Firewall rules for subnets and NICs. 15 NSGs across AKS node pools, VNets, and VM subnets.',
     resources: [
       { name: 'snet-diskmon-vms-poc-nsg', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2' },
@@ -69,7 +69,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'acr', provider: 'microsoft.containerregistry', type: 'registries',
-    displayName: 'Container Registries', icon: '📦', count: 15, mtdCost: 22.40, category: 'Containers', color: '#8b5cf6',
+    displayName: 'Container Registries', icon: '/icons/container-registry.svg', count: 15, mtdCost: 22.40, category: 'Containers', color: '#8b5cf6',
     description: '15 registries — mostly Basic SKU. High count due to per-project/per-region deployments. Consolidation opportunity.',
     resources: [
       { name: 'azvmetlacr', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Basic' },
@@ -84,7 +84,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'container-apps', provider: 'microsoft.app', type: 'containerapps',
-    displayName: 'Container Apps', icon: '🐳', count: 15, mtdCost: 0.65, category: 'Containers', color: '#06b6d4',
+    displayName: 'Container Apps', icon: '/icons/container-app.svg', count: 15, mtdCost: 0.65, category: 'Containers', color: '#06b6d4',
     description: 'Serverless container instances. 15 apps across ARP dev (orchestrator + 5 regional pings), KV AI, and App Spaces.',
     resources: [
       { name: 'arp-dev-orch', rg: 'rg-arp-dev-core', location: 'eastus2', status: 'Running' },
@@ -96,7 +96,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'disks', provider: 'microsoft.compute', type: 'disks',
-    displayName: 'Managed Disks', icon: '💿', count: 13, mtdCost: 8.20, category: 'Compute', color: '#f59e0b',
+    displayName: 'Managed Disks', icon: '/icons/disks.svg', count: 13, mtdCost: 8.20, category: 'Compute', color: '#f59e0b',
     description: '13 disks: 8 data + 5 OS across 5 VM types (Premium SSD, Premium SSD v2, Standard SSD, Standard HDD, Ultra).',
     resources: [
       { name: 'disk-ultra-bench', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'UltraSSD_LRS', status: 'Attached' },
@@ -110,7 +110,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'vm-ext', provider: 'microsoft.compute', type: 'extensions',
-    displayName: 'VM Extensions', icon: '🔌', count: 10, mtdCost: 0, category: 'Compute', color: '#6366f1',
+    displayName: 'VM Extensions', icon: '/icons/vm-extensions.svg', count: 10, mtdCost: 0, category: 'Compute', color: '#6366f1',
     description: 'Azure Monitor Agent (AMA) x4, DependencyAgent x3, DiskSpd benchmark x1, and guest config extensions.',
     resources: [
       { name: 'AzureMonitorLinuxAgent (x3)', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', status: 'Provisioned' },
@@ -122,7 +122,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'pip', provider: 'microsoft.network', type: 'publicipaddresses',
-    displayName: 'Public IP Addresses', icon: '🌐', count: 9, mtdCost: 1.20, category: 'Networking', color: '#0ea5e9',
+    displayName: 'Public IP Addresses', icon: '/icons/public-ip.svg', count: 9, mtdCost: 1.20, category: 'Networking', color: '#0ea5e9',
     description: '9 public IPs — mostly from AKS load balancers (2 per cluster) and VM NICs.',
     resources: [
       { name: 'kubernetes-* (x8)', rg: 'MC_rg-helloworld-*', location: 'multi-region', sku: 'Standard' },
@@ -132,7 +132,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'managed-env', provider: 'microsoft.app', type: 'managedenvironments',
-    displayName: 'Container App Environments', icon: '🏗️', count: 9, mtdCost: 10.38, category: 'Containers', color: '#14b8a6',
+    displayName: 'Container App Environments', icon: '/icons/container-env.svg', count: 9, mtdCost: 10.38, category: 'Containers', color: '#14b8a6',
     description: '9 managed environments — each has a load balancer. Major cost driver for Container Apps workloads.',
     resources: [
       { name: 'arp-dev-env', rg: 'rg-arp-dev-core', location: 'eastus2' },
@@ -144,7 +144,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'vms', provider: 'microsoft.compute', type: 'virtualmachines',
-    displayName: 'Virtual Machines', icon: '🖥️', count: 5, mtdCost: 19.52, category: 'Compute', color: '#ef4444',
+    displayName: 'Virtual Machines', icon: '/icons/vm.svg', count: 5, mtdCost: 19.52, category: 'Compute', color: '#ef4444',
     description: '5 VMs for disk monitoring POC: D4s_v5 ×2 (Linux), D8s_v5 (Linux), E4s_v5 (Linux), L8s_v3 (NVMe).',
     resources: [
       { name: 'vm-diskmon-linux-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_D4s_v5', status: 'Deallocated' },
@@ -157,7 +157,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'lb', provider: 'microsoft.network', type: 'loadbalancers',
-    displayName: 'Load Balancers', icon: '⚖️', count: 5, mtdCost: 18.06, category: 'Networking', color: '#a855f7',
+    displayName: 'Load Balancers', icon: '/icons/load-balancer.svg', count: 5, mtdCost: 18.06, category: 'Networking', color: '#a855f7',
     description: '5 load balancers — 4 from AKS clusters (Kubernetes service), 1 from Container App managed environment.',
     resources: [
       { name: 'kubernetes (x4)', rg: 'MC_rg-helloworld-*', location: 'multi-region', sku: 'Standard' },
@@ -167,7 +167,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'storage', provider: 'microsoft.storage', type: 'storageaccounts',
-    displayName: 'Storage Accounts', icon: '🗄️', count: 5, mtdCost: 12.90, category: 'Storage', color: '#f97316',
+    displayName: 'Storage Accounts', icon: '/icons/storage.svg', count: 5, mtdCost: 12.90, category: 'Storage', color: '#f97316',
     description: '5 storage accounts — Cloud Shell, MCAPS Governance, AI project data, and event grid topics.',
     resources: [
       { name: 'cs1100320032*', rg: 'cloud-shell-storage-eastus', location: 'eastus', sku: 'Standard_LRS' },
@@ -178,7 +178,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'swa', provider: 'microsoft.web', type: 'staticsites',
-    displayName: 'Static Web Apps', icon: '🌍', count: 5, mtdCost: 9.00, category: 'Web', color: '#22c55e',
+    displayName: 'Static Web Apps', icon: '/icons/static-apps.svg', count: 5, mtdCost: 9.00, category: 'Web', color: '#22c55e',
     description: '5 SWAs: disk monitoring dashboard (Standard), ARP dev, CSI education, AZVM SKU lookup, quiz demo.',
     resources: [
       { name: 'swa-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard', status: 'Active' },
@@ -190,7 +190,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'aks', provider: 'microsoft.containerservice', type: 'managedclusters',
-    displayName: 'AKS Clusters', icon: '☸️', count: 4, mtdCost: 0, category: 'Containers', color: '#7c3aed',
+    displayName: 'AKS Clusters', icon: '/icons/kubernetes.svg', count: 4, mtdCost: 0, category: 'Containers', color: '#7c3aed',
     description: '4 AKS clusters across 4 regions (Canada, Australia, US, SE Asia) for helloworld demo app.',
     resources: [
       { name: 'helloaks-aks', rg: 'rg-helloworld-canadacentral', location: 'canadacentral', sku: 'Free' },
@@ -202,7 +202,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'vmss', provider: 'microsoft.compute', type: 'virtualmachinescalesets',
-    displayName: 'VM Scale Sets', icon: '📐', count: 4, mtdCost: 2.80, category: 'Compute', color: '#ec4899',
+    displayName: 'VM Scale Sets', icon: '/icons/vmss.svg', count: 4, mtdCost: 2.80, category: 'Compute', color: '#ec4899',
     description: '4 VMSS instances — AKS node pools (aks-system) one per cluster.',
     resources: [
       { name: 'aks-system-* (x4)', rg: 'MC_rg-helloworld-*', location: 'multi-region', sku: 'Standard_DS2_v2' },
@@ -211,7 +211,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'ai-accounts', provider: 'microsoft.cognitiveservices', type: 'accounts',
-    displayName: 'AI/Cognitive Services', icon: '🧠', count: 5, mtdCost: 0.00, category: 'AI/ML', color: '#a78bfa',
+    displayName: 'AI/Cognitive Services', icon: '/icons/cognitive.svg', count: 5, mtdCost: 0.00, category: 'AI/ML', color: '#a78bfa',
     description: '5 accounts: Azure OpenAI (disk monitoring), AI Foundry (KV AI), and 3 standalone Cognitive accounts.',
     resources: [
       { name: 'oai-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', kind: 'OpenAI', status: 'Active' },
@@ -223,7 +223,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'postgres', provider: 'microsoft.dbforpostgresql', type: 'flexibleservers',
-    displayName: 'PostgreSQL Flexible', icon: '🐘', count: 3, mtdCost: 5.21, category: 'Databases', color: '#0891b2',
+    displayName: 'PostgreSQL Flexible', icon: '/icons/postgresql.svg', count: 3, mtdCost: 5.21, category: 'Databases', color: '#0891b2',
     description: '3 PostgreSQL Flexible servers: 2 for AZVM compute (SKU lookup + ETL), 1 for restaurant directory.',
     resources: [
       { name: 'azurevmsku-pg', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Standard_B1ms' },
@@ -234,7 +234,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'cosmos', provider: 'microsoft.documentdb', type: 'databaseaccounts',
-    displayName: 'Cosmos DB', icon: '🌌', count: 2, mtdCost: 5.37, category: 'Databases', color: '#2dd4bf',
+    displayName: 'Cosmos DB', icon: '/icons/cosmos-db.svg', count: 2, mtdCost: 5.37, category: 'Databases', color: '#2dd4bf',
     description: '2 Cosmos DB accounts: ARP dev (serverless, minimal use) and Global Sensor Storm demo.',
     resources: [
       { name: 'arp-dev-cosmos', rg: 'rg-arp-dev-core', location: 'eastus2', kind: 'GlobalDocumentDB' },
@@ -244,7 +244,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'grafana', provider: 'microsoft.dashboard', type: 'grafana',
-    displayName: 'Managed Grafana', icon: '📈', count: 1, mtdCost: 0, category: 'Monitoring', color: '#f97316',
+    displayName: 'Managed Grafana', icon: '/icons/grafana.svg', count: 1, mtdCost: 0, category: 'Monitoring', color: '#f97316',
     description: 'Azure Managed Grafana for disk performance dashboards. Connected to Log Analytics workspace.',
     resources: [
       { name: 'grafana-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard', status: 'Active' },
@@ -253,7 +253,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'front-door', provider: 'microsoft.cdn', type: 'profiles',
-    displayName: 'Front Door / CDN', icon: '🚀', count: 1, mtdCost: 0.42, category: 'Networking', color: '#64748b',
+    displayName: 'Front Door / CDN', icon: '/icons/front-door.svg', count: 1, mtdCost: 0.42, category: 'Networking', color: '#64748b',
     description: 'Azure Front Door profile for the disk monitoring SWA. Provides CDN caching and custom domain.',
     resources: [
       { name: 'afd-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'Global', sku: 'Standard_AzureFrontDoor', status: 'Active' },
@@ -262,7 +262,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'dcr', provider: 'microsoft.insights', type: 'datacollectionrules',
-    displayName: 'Data Collection Rules', icon: '📋', count: 1, mtdCost: 0, category: 'Monitoring', color: '#84cc16',
+    displayName: 'Data Collection Rules', icon: '/icons/data-collection.svg', count: 1, mtdCost: 0, category: 'Monitoring', color: '#84cc16',
     description: 'DCR with 29 performance counters for AMA-based disk metrics collection at 60-second intervals.',
     resources: [
       { name: 'dcr-diskmon-perf-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', status: 'Active' },
@@ -271,7 +271,7 @@ const SERVICES: AzureService[] = [
   },
   {
     id: 'keyvault', provider: 'microsoft.keyvault', type: 'vaults',
-    displayName: 'Key Vault', icon: '🔑', count: 1, mtdCost: 0.03, category: 'Security', color: '#eab308',
+    displayName: 'Key Vault', icon: '/icons/key-vault.svg', count: 1, mtdCost: 0.03, category: 'Security', color: '#eab308',
     description: 'Key Vault for KV AI project secrets and certificates.',
     resources: [
       { name: 'kv-kv-d3ocert7badhy', rg: 'rg-kv-ai-4e8c9', location: 'swedencentral', sku: 'Standard', status: 'Active' },
