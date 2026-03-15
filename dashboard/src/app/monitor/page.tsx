@@ -194,24 +194,6 @@ export default function MonitorPage() {
         {/* ============================================================ */}
         {level === 'fleet' && (
           <>
-            {/* Fleet KPI Strip */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-              {[
-                { label: 'VM Status', value: summary.runningVMs > 0 ? `${summary.runningVMs}/${summary.totalVMs} Running` : `${summary.totalVMs} Deallocated`, color: summary.runningVMs > 0 ? 'text-emerald-400' : 'text-amber-400' },
-                { label: 'Total Disks', value: summary.totalDisks, color: 'text-purple-400' },
-                { label: 'Healthy', value: summary.healthyVMs, color: 'text-emerald-400' },
-                { label: 'Warning', value: summary.warningVMs, color: 'text-amber-400' },
-                { label: 'Critical', value: summary.criticalVMs, color: 'text-red-400' },
-                { label: 'Avg Latency', value: `${summary.avgLatencyMs}ms`, color: 'text-cyan-400' },
-                { label: 'Storage', value: `${summary.totalUsedTb}/${summary.totalProvisionedTb} TB`, color: 'text-slate-300' },
-                { label: 'Monthly Cost', value: `$${summary.totalMonthlyCost.toLocaleString()}`, color: summary.runningVMs > 0 ? 'text-amber-400' : 'text-emerald-400' },
-              ].map((kpi) => (
-                <div key={kpi.label} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-3 text-center">
-                  <div className={`text-xl font-bold ${kpi.color}`}>{kpi.value}</div>
-                  <div className="text-xs text-slate-400 mt-0.5">{kpi.label}</div>
-                </div>
-              ))}
-            </div>
 
             {/* ============= SUBSCRIPTION SERVICES INVENTORY ============= */}
             <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden">
