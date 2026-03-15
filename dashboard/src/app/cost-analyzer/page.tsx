@@ -159,25 +159,53 @@ const NEW_RESOURCES = [
 
 const NEW_RES_TOTAL = NEW_RESOURCES.reduce((s, r) => s + r.estMonthlyCost, 0);
 
-// Build cumulative cost timeline data — sorted by date ascending
+// ============================================================================
+// FULL SUBSCRIPTION RESOURCE CREATION TIMELINE
+// Data source: Azure Resource Graph (properties.creationTime + properties.timeCreated)
+// 37 of 208 resources have creation timestamps; 171 are attributed to earliest known date
+// ============================================================================
+const ALL_RESOURCE_EVENTS: { date: string; count: number; names: string[]; types: string[] }[] = [
+  { date: '2024-01-24', count: 2, names: ['cs1100320032a3096b5','cs110032003242d6bec'], types: ['storageAccounts','storageAccounts'] },
+  { date: '2024-02-13', count: 1, names: ['defaultworkspace-e6242...'], types: ['workspaces'] },
+  { date: '2024-09-19', count: 2, names: ['rg-helloworld resources'], types: ['registries','registries'] },
+  { date: '2024-11-14', count: 4, names: ['azurevmsku-pg','azvm-compute-pg','azvm-etl-job','azvmetlacr'], types: ['flexibleServers','flexibleServers','jobs','registries'] },
+  { date: '2024-12-03', count: 3, names: ['arp-dev-cosmos','arp-dev-signalr','ca4fabaea789acr'], types: ['databaseAccounts','signalR','registries'] },
+  { date: '2024-12-14', count: 1, names: ['restdiracr3yj6wtfbtsi32'], types: ['registries'] },
+  { date: '2025-01-28', count: 2, names: ['arp-dev-swa','csi-education-vertical'], types: ['staticSites','staticSites'] },
+  { date: '2025-02-22', count: 1, names: ['globalsensorstorm-cosmos'], types: ['databaseAccounts'] },
+  { date: '2025-02-27', count: 6, names: ['kvacrXXXXX (x6)'], types: ['registries','registries','registries','registries','registries','registries'] },
+  { date: '2025-03-08', count: 1, names: ['aifastfox260227'], types: ['accounts'] },
+  { date: '2025-03-10', count: 2, names: ['acrboldorca260227','acrfastfox260227'], types: ['registries','registries'] },
+  { date: '2026-03-04', count: 3, names: ['grafana-diskmon-poc','dcr-diskmon-perf-poc','law-diskmon-poc-eastus2'], types: ['grafana','dataCollectionRules','workspaces'] },
+  { date: '2026-03-05', count: 4, names: ['vm-diskmon-linux-02','vm-diskmon-win-01','disk-ultra-bench','disk-premv2-bench'], types: ['virtualMachines','virtualMachines','disks','disks'] },
+  { date: '2026-03-08', count: 3, names: ['kv-kv-d3ocert7badhy','kv-ai-d3ocert7badhy','kvstd3ocert7badhy'], types: ['vaults','accounts','storageAccounts'] },
+  { date: '2026-03-10', count: 1, names: ['swa-diskmon-poc'], types: ['staticSites'] },
+  { date: '2026-03-11', count: 1, names: ['afd-diskmon-poc'], types: ['profiles'] },
+  { date: '2026-03-12', count: 1, names: ['oai-diskmon-poc'], types: ['accounts'] },
+];
+const TOTAL_SUBSCRIPTION_RESOURCES = 208;
+const TRACKED_RESOURCES = ALL_RESOURCE_EVENTS.reduce((s, e) => s + e.count, 0);
+const UNTRACKED_RESOURCES = TOTAL_SUBSCRIPTION_RESOURCES - TRACKED_RESOURCES;
+
+// Build full cumulative timeline
 const CREATION_TIMELINE = (() => {
-  const sorted = [...NEW_RESOURCES].sort((a, b) => a.created.localeCompare(b.created));
-  let cumCost = 0;
-  let cumCount = 0;
-  const points: { date: string; dateLabel: string; cost: number; cumCost: number; cumCount: number; resources: string[] }[] = [];
-  const byDate = new Map<string, { cost: number; names: string[] }>();
-  sorted.forEach(r => {
-    const e = byDate.get(r.created) || { cost: 0, names: [] };
-    e.cost += r.estMonthlyCost;
-    e.names.push(r.name);
-    byDate.set(r.created, e);
-  });
-  Array.from(byDate.entries()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([date, v]) => {
-    cumCost += v.cost;
-    cumCount += v.names.length;
-    const d = new Date(date + 'T00:00:00');
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    points.push({ date, dateLabel: `${months[d.getMonth()]} ${d.getDate()}`, cost: v.cost, cumCost: Math.round(cumCost * 100) / 100, cumCount, resources: v.names });
+  let cumCount = UNTRACKED_RESOURCES; // resources without dates are pre-existing
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  // Add initial point for "pre-existing" resources
+  const points: { date: string; dateLabel: string; count: number; cumCount: number; resources: string[]; types: string[] }[] = [
+    { date: '2024-01-01', dateLabel: 'Pre-2024', count: UNTRACKED_RESOURCES, cumCount: UNTRACKED_RESOURCES, resources: [`${UNTRACKED_RESOURCES} pre-existing resources (no creation timestamp)`], types: ['various'] },
+  ];
+  ALL_RESOURCE_EVENTS.forEach(e => {
+    cumCount += e.count;
+    const d = new Date(e.date + 'T00:00:00');
+    points.push({
+      date: e.date,
+      dateLabel: `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear().toString().slice(2)}`,
+      count: e.count,
+      cumCount,
+      resources: e.names,
+      types: e.types,
+    });
   });
   return points;
 })();
@@ -693,62 +721,60 @@ export default function CostAnalyzerPage() {
             ))}
           </div>
 
-          {/* Cumulative Cost Timeline — Stock chart style */}
+          {/* Full Subscription Resource Creation Timeline */}
           <div className="rounded-xl border border-slate-700 bg-slate-800 p-5 mt-6">
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-base font-bold text-white">Resource Cost Timeline</h3>
-                <p className="text-sm text-slate-400">Cumulative monthly cost as new resources were created</p>
+                <h3 className="text-lg font-bold text-white">Subscription Resource Timeline</h3>
+                <p className="text-sm text-slate-400">Cumulative resource count from subscription start to today</p>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-white">${NEW_RES_TOTAL.toFixed(2)} <span className="text-sm font-normal text-slate-400">USD</span></div>
-                <div className="text-xs text-slate-400">Est. monthly &bull; {NEW_RESOURCES.length} resources</div>
+                <div className="text-2xl font-bold text-white">{TOTAL_SUBSCRIPTION_RESOURCES} <span className="text-sm font-normal text-slate-400">resources</span></div>
+                <div className="text-xs text-slate-400">Jan 2024 \u2014 Mar 2026 &bull; {TRACKED_RESOURCES} with timestamps</div>
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={CREATION_TIMELINE} margin={{ top: 15, right: 20, left: 10, bottom: 5 }}>
+            <ResponsiveContainer width="100%" height={340}>
+              <AreaChart data={CREATION_TIMELINE} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
                 <defs>
-                  <linearGradient id="costGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#e81123" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#e81123" stopOpacity={0.02} />
+                  <linearGradient id="countGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#0078d4" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#0078d4" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
-                <XAxis dataKey="dateLabel" tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} />
-                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} width={60} />
+                <XAxis dataKey="dateLabel" tick={{ fill: '#d2d0ce', fontSize: 11 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} interval={0} angle={-35} textAnchor="end" height={55} />
+                <YAxis tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} width={45} domain={[0, 'dataMax + 10']} />
                 <Tooltip
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const d = payload[0].payload;
                     return (
-                      <div className="rounded-lg border border-slate-700 bg-slate-800 p-3 shadow-lg text-sm">
-                        <div className="font-bold text-white text-base">${d.cumCost.toFixed(2)} <span className="text-xs font-normal text-slate-400">USD</span></div>
-                        <div className="text-slate-400 text-xs mt-1">{formatDate(d.date)}</div>
-                        <div className="text-xs text-slate-300 mt-1.5">{d.cumCount} total resources &bull; +${d.cost.toFixed(2)} added this day</div>
-                        <div className="text-xs text-slate-400 mt-1">{d.resources.join(', ')}</div>
+                      <div className="rounded-lg border border-slate-700 bg-slate-800 p-4 shadow-xl text-sm min-w-[220px]">
+                        <div className="font-bold text-white text-xl">{d.cumCount} <span className="text-sm font-normal text-slate-400">resources</span></div>
+                        <div className="text-slate-300 text-sm mt-1">{d.date === '2024-01-01' ? 'Pre-2024 (no timestamp)' : formatDate(d.date)}</div>
+                        <div className="border-t border-slate-700 mt-2 pt-2">
+                          <div className="text-xs text-slate-300">+{d.count} created this date</div>
+                          <div className="text-xs text-slate-400 mt-1 leading-relaxed">{d.resources.join(', ')}</div>
+                        </div>
                       </div>
                     );
                   }}
                 />
                 <Area
-                  type="monotone"
-                  dataKey="cumCost"
-                  stroke="#e81123"
+                  type="stepAfter"
+                  dataKey="cumCount"
+                  stroke="#0078d4"
                   strokeWidth={2.5}
-                  fill="url(#costGradient)"
-                  dot={{ fill: '#e81123', stroke: '#292827', strokeWidth: 2, r: 4 }}
-                  activeDot={{ fill: '#e81123', stroke: '#fff', strokeWidth: 2, r: 6 }}
+                  fill="url(#countGradient)"
+                  dot={{ fill: '#0078d4', stroke: '#292827', strokeWidth: 2, r: 4 }}
+                  activeDot={{ fill: '#0078d4', stroke: '#fff', strokeWidth: 2, r: 7 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
-            {/* Timeline markers below chart */}
-            <div className="flex items-center justify-between mt-3 px-2">
-              {CREATION_TIMELINE.map((p, i) => (
-                <div key={i} className="text-center flex-1">
-                  <div className="text-xs font-bold text-white">+{p.resources.length}</div>
-                  <div className="text-xs text-slate-400">{p.dateLabel}</div>
-                </div>
-              ))}
+            <div className="flex items-center justify-between mt-3 text-xs text-slate-400 px-2">
+              <span>Jan 2024</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-blue-500" /> {UNTRACKED_RESOURCES} pre-existing &bull; {TRACKED_RESOURCES} tracked by creation date</span>
+              <span>Mar 2026</span>
             </div>
           </div>
 

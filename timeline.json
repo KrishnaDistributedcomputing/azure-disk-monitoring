@@ -1,0 +1,229 @@
+﻿{
+  "count": 37,
+  "data": [
+    {
+      "created": "2024-01-24T18:45:07.4257616Z",
+      "name": "cs2100320031f40ac50",
+      "rg": "cloud-shell-storage-eastus",
+      "rtype": "storageaccounts"
+    },
+    {
+      "created": "2026-01-31T00:12:05.4863429Z",
+      "name": "mcaps82e22c51586d9105",
+      "rg": "mcapsgovernance",
+      "rtype": "storageaccounts"
+    },
+    {
+      "created": "2026-02-25T04:03:17.5394267Z",
+      "name": "cs2100320059fb17711",
+      "rg": "cloud-shell-storage-eastus",
+      "rtype": "storageaccounts"
+    },
+    {
+      "created": "2026-02-28T17:37:17.1880206Z",
+      "name": "kvstd3ocert7badhy",
+      "rg": "rg-kv-ai-4e8c9",
+      "rtype": "storageaccounts"
+    },
+    {
+      "created": "2026-02-28T17:37:40.3384645Z",
+      "name": "kv-hub-d3ocert7badhy",
+      "rg": "rg-kv-ai-4e8c9",
+      "rtype": "workspaces"
+    },
+    {
+      "created": "2026-02-28T17:38:20.5468634Z",
+      "name": "kv-proj-d3ocert7badhy",
+      "rg": "rg-kv-ai-4e8c9",
+      "rtype": "workspaces"
+    },
+    {
+      "created": "2026-03-03T22:09:06.7126344Z",
+      "name": "quizdemobz2si9y0",
+      "rg": "quiz-demo-rg-ca",
+      "rtype": "storageaccounts"
+    },
+    {
+      "created": "2026-03-10T14:10:32.482Z",
+      "name": "aks-system-25332908-vmss",
+      "rg": "mc_rg-helloworld-canadacentral_helloaks-aks_canadacentral",
+      "rtype": "virtualmachinescalesets"
+    },
+    {
+      "created": "2026-03-10T15:29:47.937Z",
+      "name": "aks-system-14014227-vmss",
+      "rg": "mc_rg-helloworld-australiaeast_helloau-aks_australiaeast",
+      "rtype": "virtualmachinescalesets"
+    },
+    {
+      "created": "2026-03-11T04:26:18.851Z",
+      "name": "aks-system-25884707-vmss",
+      "rg": "mc_rg-helloworld-eastus2_hellous-aks_eastus2",
+      "rtype": "virtualmachinescalesets"
+    },
+    {
+      "created": "2026-03-11T11:49:48.812Z",
+      "name": "aks-system-64489558-vmss",
+      "rg": "mc_rg-helloworld-southeastasia_helloas-aks_southeastasia",
+      "rtype": "virtualmachinescalesets"
+    },
+    {
+      "created": "2026-03-12T22:07:25.765Z",
+      "name": "disk-diskmon-lsv3-01-premssd-256",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:25.859Z",
+      "name": "disk-diskmon-dsv5-02-premssd-512",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:25.859Z",
+      "name": "disk-diskmon-dsv5-02-stdhdd-512",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:25.874Z",
+      "name": "disk-diskmon-dsv5-01-stdssd-256",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:25.905Z",
+      "name": "disk-diskmon-dsv5-01-premssd-256",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:25.952Z",
+      "name": "disk-diskmon-dsv5-03-premssd-256",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:28.265Z",
+      "name": "disk-diskmon-lsv3-01-ultra-256",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:28.265Z",
+      "name": "disk-diskmon-esv5-01-premssdv2-256",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:07:59.098Z",
+      "name": "vm-diskmon-dsv5-02",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "virtualmachines"
+    },
+    {
+      "created": "2026-03-12T22:07:59.645Z",
+      "name": "vm-diskmon-dsv5-01",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "virtualmachines"
+    },
+    {
+      "created": "2026-03-12T22:08:00.801Z",
+      "name": "vm-diskmon-esv5-01",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "virtualmachines"
+    },
+    {
+      "created": "2026-03-12T22:08:01.453Z",
+      "name": "osdisk-vm-diskmon-dsv5-02",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:08:01.469Z",
+      "name": "osdisk-vm-diskmon-dsv5-01",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:08:02.035Z",
+      "name": "vm-diskmon-dsv5-03",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "virtualmachines"
+    },
+    {
+      "created": "2026-03-12T22:08:02Z",
+      "name": "osdisk-vm-diskmon-esv5-01",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:08:04.422Z",
+      "name": "osdisk-vm-diskmon-dsv5-03",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "2026-03-12T22:08:05.192Z",
+      "name": "vm-diskmon-lsv3-01",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "virtualmachines"
+    },
+    {
+      "created": "2026-03-12T22:08:06.203Z",
+      "name": "osdisk-vm-diskmon-lsv3-01",
+      "rg": "rg-diskmon-poc-eastus2",
+      "rtype": "disks"
+    },
+    {
+      "created": "Fri, 19 Jan 2024 23:43:16 GMT",
+      "name": "SecurityCenterFree(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+      "rg": "defaultresourcegroup-cca",
+      "rtype": "solutions"
+    },
+    {
+      "created": "Fri, 19 Jan 2024 23:43:18 GMT",
+      "name": "Security(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+      "rg": "defaultresourcegroup-cca",
+      "rtype": "solutions"
+    },
+    {
+      "created": "Fri, 19 Jan 2024 23:43:20 GMT",
+      "name": "SQLVulnerabilityAssessment(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+      "rg": "defaultresourcegroup-cca",
+      "rtype": "solutions"
+    },
+    {
+      "created": "Fri, 19 Jan 2024 23:43:20 GMT",
+      "name": "SQLAdvancedThreatProtection(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-CCA)",
+      "rg": "defaultresourcegroup-cca",
+      "rtype": "solutions"
+    },
+    {
+      "created": "Wed, 15 May 2024 16:49:36 GMT",
+      "name": "SecurityCenterFree(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+      "rg": "defaultresourcegroup-eus",
+      "rtype": "solutions"
+    },
+    {
+      "created": "Wed, 15 May 2024 16:49:39 GMT",
+      "name": "Security(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+      "rg": "defaultresourcegroup-eus",
+      "rtype": "solutions"
+    },
+    {
+      "created": "Wed, 15 May 2024 16:49:40 GMT",
+      "name": "SQLVulnerabilityAssessment(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+      "rg": "defaultresourcegroup-eus",
+      "rtype": "solutions"
+    },
+    {
+      "created": "Wed, 15 May 2024 16:49:40 GMT",
+      "name": "SQLAdvancedThreatProtection(DefaultWorkspace-e62428e7-08dd-4bc2-82e2-2c51586d9105-EUS)",
+      "rg": "defaultresourcegroup-eus",
+      "rtype": "solutions"
+    }
+  ],
+  "skip_token": null,
+  "total_records": 37
+}

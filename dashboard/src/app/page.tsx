@@ -5,6 +5,15 @@ import Link from 'next/link';
 
 const PAGES = [
   {
+    title: 'Billing Dashboard',
+    path: '/billing',
+    icon: '💵',
+    color: '#e81123',
+    category: 'Finance',
+    description: 'Azure subscription billing with 6-month history, monthly/daily trends, service cost breakdown, invoice tracking, and cost anomaly detection with root cause analysis.',
+    features: ['6-month billing history', 'Monthly trend + MoM change', 'Daily spend area chart', 'Cost by Azure service', 'Invoice tracking', 'Cost anomaly detection', 'March forecast'],
+  },
+  {
     title: 'Workload Map',
     path: '/workloads',
     icon: '🗂️',
@@ -97,7 +106,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '11', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '12', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
