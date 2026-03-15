@@ -93,11 +93,11 @@ function jitter(base: number, pct: number = 0.2): number {
 }
 
 const VM_FLEET: Omit<VMHealthStatus, 'disks' | 'healthScore' | 'healthStatus' | 'totalIops' | 'maxIops' | 'iopsConsumedPct' | 'totalThroughputMBs' | 'maxThroughputMBs' | 'bwConsumedPct' | 'avgLatencyMs' | 'maxLatencyMs' | 'avgQueueDepth' | 'totalDiskSizeGb' | 'totalUsedGb' | 'capacityPct' | 'monthlyCost'>[] = [
-  { vmName: 'vm-diskmon-dsv5-01', vmSku: 'Standard_D4s_v5', vmFamily: 'D-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Running', diskCount: 3, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'general-purpose-baseline' } },
-  { vmName: 'vm-diskmon-dsv5-02', vmSku: 'Standard_D8s_v5', vmFamily: 'D-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Running', diskCount: 3, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'general-purpose-scaleup' } },
-  { vmName: 'vm-diskmon-esv5-01', vmSku: 'Standard_E4s_v5', vmFamily: 'E-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Running', diskCount: 2, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'memory-optimized-comparison' } },
-  { vmName: 'vm-diskmon-lsv3-01', vmSku: 'Standard_L8s_v3', vmFamily: 'L-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Running', diskCount: 3, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'storage-optimized-comparison' } },
-  { vmName: 'vm-diskmon-dsv5-03', vmSku: 'Standard_D4s_v5', vmFamily: 'D-series', osType: 'Windows', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Running', diskCount: 2, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'windows-diskspd-comparison' } },
+  { vmName: 'vm-diskmon-dsv5-01', vmSku: 'Standard_D4s_v5', vmFamily: 'D-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Deallocated', diskCount: 3, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'general-purpose-baseline' } },
+  { vmName: 'vm-diskmon-dsv5-02', vmSku: 'Standard_D8s_v5', vmFamily: 'D-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Deallocated', diskCount: 3, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'general-purpose-scaleup' } },
+  { vmName: 'vm-diskmon-esv5-01', vmSku: 'Standard_E4s_v5', vmFamily: 'E-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Deallocated', diskCount: 2, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'memory-optimized-comparison' } },
+  { vmName: 'vm-diskmon-lsv3-01', vmSku: 'Standard_L8s_v3', vmFamily: 'L-series', osType: 'Linux', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Deallocated', diskCount: 3, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'storage-optimized-comparison' } },
+  { vmName: 'vm-diskmon-dsv5-03', vmSku: 'Standard_D4s_v5', vmFamily: 'D-series', osType: 'Windows', region: 'eastus2', resourceGroup: 'rg-diskmon-poc-eastus2', powerState: 'Deallocated', diskCount: 2, tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'windows-diskspd-comparison' } },
 ];
 
 const DISK_FLEET: Omit<DiskDetail, 'currentIops' | 'currentThroughputMBs' | 'iopsConsumedPct' | 'bwConsumedPct' | 'readLatencyMs' | 'writeLatencyMs' | 'avgLatencyMs' | 'queueDepth' | 'usedPct' | 'usedGb' | 'freeGb' | 'healthScore' | 'healthStatus' | 'burstCreditsRemaining'>[] = [
@@ -198,7 +198,7 @@ export function generateVMFleet(inBenchmark: boolean = false): VMHealthStatus[] 
     const totalSize = disks.reduce((s, d) => s + d.diskSizeGb, 0);
     const totalUsed = disks.reduce((s, d) => s + d.usedGb, 0);
     const diskCost = disks.reduce((s, d) => s + d.monthlyCost, 0);
-    const vmCost = (VM_HOURLY_COST[vm.vmSku] || 0.192) * 730;
+    const vmCost = vm.powerState === 'Running' ? (VM_HOURLY_COST[vm.vmSku] || 0.192) * 730 : 0;
 
     let healthScore = 100;
     const iopsConsPct = Math.round((totalIops / maxIops) * 100);

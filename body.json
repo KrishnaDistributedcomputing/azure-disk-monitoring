@@ -1,1 +1,1 @@
-{"timeframe":"MonthToDate","dataset":{"aggregation":{"totalCost":{"function":"Sum","name":"Cost"}},"grouping":[{"name":"ServiceName","type":"Dimension"}],"granularity":"None"},"type":"ActualCost"}
+{"timeframe":"MonthToDate","dataset":{"aggregation":{"totalCost":{"function":"Sum","name":"Cost"}},"grouping":[{"name":"ResourceGroupName","type":"Dimension"}],"granularity":"None"},"type":"ActualCost"}
