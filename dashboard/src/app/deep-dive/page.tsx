@@ -283,8 +283,8 @@ export default function DeepDivePage() {
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={[{ name: 'Linux', counters: LINUX_COUNTERS.length, fill: '#f59e0b' }, { name: 'Windows', counters: WINDOWS_COUNTERS.length, fill: '#3b82f6' }]}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                  <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                  <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 12 }} />
+                  <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
                   <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px' }} />
                   <Bar dataKey="counters" name="Perf Counters" radius={[4, 4, 0, 0]}>{[<Cell key={0} fill="#f59e0b" />, <Cell key={1} fill="#3b82f6" />]}</Bar>
                 </BarChart>

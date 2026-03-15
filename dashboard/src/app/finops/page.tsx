@@ -311,7 +311,7 @@ export default function FinOpsPage() {
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={COST_CATEGORIES.map((c) => ({ name: c.name, current: c.monthlyCost, optimized: c.optimizedCost }))} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
-                <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
                 <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#e2e8f0', fontSize: 11 }} width={130} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} formatter={(v: number) => `$${v}/mo`} />
                 <Legend wrapperStyle={{ fontSize: '11px' }} />
@@ -417,8 +417,8 @@ export default function FinOpsPage() {
             <ResponsiveContainer width="100%" height={320}>
               <BarChart data={SCENARIOS}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 9 }} interval={0} />
-                <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 9 }} interval={0} />
+                <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} formatter={(v: number) => `$${v}`} />
                 <Legend wrapperStyle={{ fontSize: '11px' }} />
                 <Bar dataKey="vm" name="VM Compute" stackId="a" fill="#3b82f6" />
@@ -470,8 +470,8 @@ export default function FinOpsPage() {
             <ResponsiveContainer width="100%" height={280}>
               <AreaChart data={TREND}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="month" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`} />
+                <XAxis dataKey="month" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+                <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} formatter={(v: number) => `$${v.toLocaleString()}`} />
                 <Legend wrapperStyle={{ fontSize: '11px' }} />
                 <Area type="monotone" dataKey="current" name="Current PAYG" stroke="#ef4444" fill="#ef4444" fillOpacity={0.1} strokeWidth={2} />

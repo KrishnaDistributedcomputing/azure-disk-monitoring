@@ -24,8 +24,8 @@ export default function VmFamilyComparison({ data }: VmComparisonProps) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="vmSku" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} angle={-15} />
-            <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+            <XAxis dataKey="vmSku" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} angle={-15} />
+            <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
             <Tooltip
               contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }}
             />
@@ -42,9 +42,9 @@ export default function VmFamilyComparison({ data }: VmComparisonProps) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="vmSku" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} angle={-15} />
-            <YAxis yAxisId="left" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <YAxis yAxisId="right" orientation="right" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+            <XAxis dataKey="vmSku" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} angle={-15} />
+            <YAxis yAxisId="left" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+            <YAxis yAxisId="right" orientation="right" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
             <Tooltip
               contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }}
             />

@@ -409,8 +409,8 @@ export default function HelpPage() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={COST_COMPARISON_256GB} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
-                <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} width={120} />
+                <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
+                <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} width={120} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px' }} formatter={(v: number) => `$${v.toFixed(2)}/mo`} />
                 <Bar dataKey="monthly" name="Monthly Cost" radius={[0, 4, 4, 0]}>
                   {COST_COMPARISON_256GB.map((entry, i) => (
@@ -428,8 +428,8 @@ export default function HelpPage() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={COST_PER_IOPS} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
-                <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} width={120} />
+                <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
+                <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} width={120} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px' }} formatter={(v: number) => `$${v.toFixed(2)} per 1K IOPS`} />
                 <Bar dataKey="costPer1000Iops" name="$/1000 IOPS" radius={[0, 4, 4, 0]}>
                   {COST_PER_IOPS.map((entry, i) => (
@@ -448,8 +448,8 @@ export default function HelpPage() {
           <ResponsiveContainer width="100%" height={350}>
             <ScatterChart>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis type="number" dataKey="monthly" name="Monthly Cost" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
-              <YAxis type="number" dataKey="iops" name="IOPS" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+              <XAxis type="number" dataKey="monthly" name="Monthly Cost" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
+              <YAxis type="number" dataKey="iops" name="IOPS" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
               <ZAxis type="number" dataKey="throughput" range={[100, 800]} name="Throughput (MB/s)" />
               <Tooltip
                 contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }}
@@ -693,8 +693,8 @@ export default function HelpPage() {
           <ResponsiveContainer width="100%" height={350}>
             <LineChart data={SCALING_DATA}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="size" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+              <XAxis dataKey="size" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+              <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
               <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} />
               <Legend wrapperStyle={{ fontSize: '11px' }} />
               <Line type="monotone" dataKey="ultra" name="Ultra Disk" stroke="#8b5cf6" strokeWidth={2} dot={{ r: 4 }} />
@@ -719,9 +719,9 @@ export default function HelpPage() {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={VM_DISK_CAPS}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="vm" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <YAxis yAxisId="left" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-              <YAxis yAxisId="right" orientation="right" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+              <XAxis dataKey="vm" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+              <YAxis yAxisId="left" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+              <YAxis yAxisId="right" orientation="right" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
               <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} />
               <Legend wrapperStyle={{ fontSize: '11px' }} />
               <Bar yAxisId="left" dataKey="maxIops" name="Max Uncached IOPS" fill="#3b82f6" radius={[4, 4, 0, 0]} />

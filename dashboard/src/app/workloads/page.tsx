@@ -550,8 +550,8 @@ export default function WorkloadMapPage() {
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={costByCat} layout="vertical" margin={{ left: 90, right: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#cbd5e1', fontSize: 13 }} />
-                    <YAxis type="category" dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 13 }} width={85} />
+                    <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} />
+                    <YAxis type="category" dataKey="name" tick={{ fill: '#dce4ed', fontSize: 13 }} width={85} />
                     <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 14 }} />
                     <Bar dataKey="cost" radius={[0, 4, 4, 0]}>
                       {costByCat.map((c, i) => <Cell key={i} fill={c.color} />)}
@@ -567,8 +567,8 @@ export default function WorkloadMapPage() {
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={regionData} margin={{ left: 20, right: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} angle={-25} textAnchor="end" height={70} />
-                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#cbd5e1', fontSize: 13 }} />
+                  <XAxis dataKey="name" tick={{ fill: '#dce4ed', fontSize: 12 }} angle={-25} textAnchor="end" height={70} />
+                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} />
                   <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 14 }} />
                   <Bar dataKey="cost" fill="#3b82f6" radius={[4, 4, 0, 0]}>
                     {regionData.map((_, i) => <Cell key={i} fill={['#3b82f6', '#8b5cf6', '#06b6d4', '#22c55e', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'][i % 8]} />)}

@@ -238,8 +238,8 @@ export default function MonitorPage() {
                 <ResponsiveContainer width="100%" height={180}>
                   <BarChart data={fleet.map((v) => ({ name: v.vmName.replace('vm-diskmon-', ''), iops: v.totalIops, max: v.maxIops }))} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={65} />
+                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} width={65} />
                     <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} />
                     <Bar dataKey="iops" name="Current IOPS" fill="#3b82f6" radius={[0, 4, 4, 0]} />
                   </BarChart>
@@ -267,8 +267,8 @@ export default function MonitorPage() {
                 <ResponsiveContainer width="100%" height={180}>
                   <BarChart data={fleet.map((v) => ({ name: v.vmName.replace('vm-diskmon-', ''), latency: v.avgLatencyMs }))} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={65} />
+                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} width={65} />
                     <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} formatter={(v: number) => `${v} ms`} />
                     <Bar dataKey="latency" name="Avg Latency (ms)" radius={[0, 4, 4, 0]}>
                       {fleet.map((v, i) => <Cell key={i} fill={v.avgLatencyMs > 5 ? '#ef4444' : v.avgLatencyMs > 2 ? '#f59e0b' : '#22c55e'} />)}
@@ -283,8 +283,8 @@ export default function MonitorPage() {
                 <ResponsiveContainer width="100%" height={180}>
                   <BarChart data={fleet.map((v) => ({ name: v.vmName.replace('vm-diskmon-', ''), throughput: v.totalThroughputMBs, cap: v.maxThroughputMBs }))} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={65} />
+                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} width={65} />
                     <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} />
                     <Bar dataKey="throughput" name="Current MB/s" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
                   </BarChart>
@@ -297,8 +297,8 @@ export default function MonitorPage() {
                 <ResponsiveContainer width="100%" height={180}>
                   <BarChart data={fleet.map((v) => ({ name: v.vmName.replace('vm-diskmon-', ''), cost: Math.round(v.monthlyCost), diskCost: Math.round(v.disks.reduce((s, d) => s + d.monthlyCost, 0)) }))} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
-                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={65} />
+                    <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                    <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} width={65} />
                     <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} formatter={(v: number) => `$${v}`} />
                     <Bar dataKey="cost" name="Total (VM+Disks)" fill="#f59e0b" radius={[0, 4, 4, 0]} />
                   </BarChart>
@@ -617,9 +617,9 @@ export default function MonitorPage() {
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={activeVM.disks.map((d) => ({ name: d.diskName.replace(/^(osdisk-|disk-)/, ''), iops: d.currentIops, throughput: d.currentThroughputMBs, latency: d.avgLatencyMs, type: d.diskType }))}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                  <YAxis yAxisId="left" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                  <YAxis yAxisId="right" orientation="right" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                  <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
+                  <YAxis yAxisId="left" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
+                  <YAxis yAxisId="right" orientation="right" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
                   <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} />
                   <Legend wrapperStyle={{ fontSize: '11px' }} />
                   <Bar yAxisId="left" dataKey="iops" name="IOPS" fill="#3b82f6" radius={[4, 4, 0, 0]} />
@@ -685,8 +685,8 @@ export default function MonitorPage() {
                   <ResponsiveContainer width="100%" height={220}>
                     <AreaChart data={diskTS}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
-                      <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
+                      <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
                       <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} labelFormatter={(l) => new Date(l).toLocaleTimeString()} />
                       <Area type="monotone" dataKey="iops" name="IOPS" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.15} strokeWidth={2} />
                     </AreaChart>
@@ -698,8 +698,8 @@ export default function MonitorPage() {
                   <ResponsiveContainer width="100%" height={220}>
                     <AreaChart data={diskTS}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
-                      <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
+                      <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
                       <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} labelFormatter={(l) => new Date(l).toLocaleTimeString()} />
                       <Area type="monotone" dataKey="throughputMBs" name="Throughput (MB/s)" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.15} strokeWidth={2} />
                     </AreaChart>
@@ -712,8 +712,8 @@ export default function MonitorPage() {
                   <ResponsiveContainer width="100%" height={220}>
                     <AreaChart data={diskTS}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
-                      <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
+                      <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
                       <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} labelFormatter={(l) => new Date(l).toLocaleTimeString()} />
                       <Area type="monotone" dataKey="latencyMs" name="Latency (ms)" stroke="#ef4444" fill="#ef4444" fillOpacity={0.1} strokeWidth={2} />
                     </AreaChart>
@@ -726,8 +726,8 @@ export default function MonitorPage() {
                   <ResponsiveContainer width="100%" height={220}>
                     <AreaChart data={diskTS}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
-                      <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                      <XAxis dataKey="timestamp" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 9 }} tickFormatter={(t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} minTickGap={40} />
+                      <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
                       <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} labelFormatter={(l) => new Date(l).toLocaleTimeString()} />
                       <Area type="monotone" dataKey="queueDepth" name="Queue Depth" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.1} strokeWidth={2} />
                     </AreaChart>
@@ -745,8 +745,8 @@ export default function MonitorPage() {
                   { metric: 'Throughput (MB/s)', provisioned: activeDisk.provisionedThroughput, current: activeDisk.currentThroughputMBs },
                 ]}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="metric" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                  <XAxis dataKey="metric" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+                  <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
                   <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} />
                   <Legend wrapperStyle={{ fontSize: '11px' }} />
                   <Bar dataKey="provisioned" name="Provisioned (Max)" fill="#334155" radius={[4, 4, 0, 0]} />

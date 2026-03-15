@@ -449,8 +449,8 @@ export default function TechDetailsPage() {
                     { source: 'AMA (Guest)', count: ALL_METRICS.filter((m) => m.source === 'AMA (Guest)').length },
                   ]}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis dataKey="source" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                    <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                    <XAxis dataKey="source" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+                    <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
                     <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px' }} />
                     <Bar dataKey="count" name="Metrics" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -532,8 +532,8 @@ export default function TechDetailsPage() {
                   <ResponsiveContainer width="100%" height={280}>
                     <BarChart data={PRICE_CHART_256}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="tier" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                      <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                      <XAxis dataKey="tier" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
+                      <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
                       <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px' }} formatter={(v: number, n: string) => n === 'Monthly Cost' ? `$${v}/mo` : v.toLocaleString()} />
                       <Legend wrapperStyle={{ fontSize: '11px' }} />
                       <Bar dataKey="cost" name="Monthly Cost" radius={[4, 4, 0, 0]}>
@@ -571,8 +571,8 @@ export default function TechDetailsPage() {
                   <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={VM_PRICE_CHART}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="sku" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                      <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                      <XAxis dataKey="sku" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
+                      <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
                       <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px' }} formatter={(v: number, n: string) => n.includes('IOPS') ? v.toLocaleString() : `$${v}`} />
                       <Legend wrapperStyle={{ fontSize: '11px' }} />
                       <Bar dataKey="monthly" name="Monthly Cost (USD)" fill="#3b82f6" radius={[4, 4, 0, 0]} />

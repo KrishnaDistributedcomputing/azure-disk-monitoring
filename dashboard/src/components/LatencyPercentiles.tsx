@@ -33,12 +33,12 @@ export default function LatencyPercentiles({ data }: LatencyPercentilesProps) {
           <XAxis
             dataKey="name"
             stroke="#64748b"
-            tick={{ fill: '#94a3b8', fontSize: 9 }}
+            tick={{ fill: '#b0bfcf', fontSize: 9 }}
             angle={-20}
             textAnchor="end"
             height={60}
           />
-          <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+          <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
           <Tooltip
             contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }}
             formatter={(value: number) => `${value} ms`}

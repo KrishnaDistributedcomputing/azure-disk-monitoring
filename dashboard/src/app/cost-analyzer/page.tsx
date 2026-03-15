@@ -298,8 +298,8 @@ export default function CostAnalyzerPage() {
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={COST_BY_RG.slice(0, 8)} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
-                  <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
-                  <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 9 }} width={180} tickFormatter={(v: string) => v.length > 30 ? v.slice(0, 28) + '...' : v} />
+                  <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                  <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 9 }} width={180} tickFormatter={(v: string) => v.length > 30 ? v.slice(0, 28) + '...' : v} />
                   <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} formatter={(v: number) => `$${v.toFixed(2)}`} />
                   <Bar dataKey="cost" name="30-Day Cost" fill="#3b82f6" radius={[0, 4, 4, 0]} />
                 </BarChart>
@@ -312,8 +312,8 @@ export default function CostAnalyzerPage() {
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={COST_BY_CATEGORY}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} angle={-20} textAnchor="end" height={60} />
-                  <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                  <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} angle={-20} textAnchor="end" height={60} />
+                  <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
                   <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px' }} formatter={(v: number) => `$${v.toFixed(2)}`} />
                   <Bar dataKey="cost" name="30-Day Cost" radius={[4, 4, 0, 0]}>{COST_BY_CATEGORY.map((c, i) => <Cell key={i} fill={c.color} />)}</Bar>
                 </BarChart>
@@ -386,7 +386,7 @@ export default function CostAnalyzerPage() {
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={COST_BY_SERVICE} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
-                <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
                 <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fill: '#e2e8f0', fontSize: 10 }} width={200} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} formatter={(v: number) => `$${v.toFixed(2)}`} />
                 <Bar dataKey="cost" name="30-Day Cost" radius={[0, 4, 4, 0]}>{COST_BY_SERVICE.map((s, i) => <Cell key={i} fill={s.color} />)}</Bar>
@@ -451,8 +451,8 @@ export default function CostAnalyzerPage() {
             <ResponsiveContainer width="100%" height={350}>
               <AreaChart data={DAILY_TREND}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} interval={4} />
-                <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
+                <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} interval={4} />
+                <YAxis stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} tickFormatter={(v) => `$${v}`} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '12px' }} formatter={(v: number) => `$${v.toFixed(2)}`} />
                 <Area type="monotone" dataKey="cost" name="Daily Cost" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.15} strokeWidth={2} />
               </AreaChart>
@@ -522,10 +522,10 @@ export default function CostAnalyzerPage() {
               <p className="text-sm text-slate-400 mb-4">How costs distribute across lifecycle environments</p>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={COST_BY_ENV_TAG} layout="vertical" margin={{ left: 80, right: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" />
-                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} />
-                  <YAxis type="category" dataKey="tag" tick={{ fill: '#d2d0ce', fontSize: 13 }} width={75} />
-                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" />
+                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} />
+                  <YAxis type="category" dataKey="tag" tick={{ fill: '#dce4ed', fontSize: 13 }} width={75} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                   <Bar dataKey="cost" radius={[0, 4, 4, 0]}>
                     {COST_BY_ENV_TAG.map((e, i) => <Cell key={i} fill={e.color} />)}
                   </Bar>
@@ -539,10 +539,10 @@ export default function CostAnalyzerPage() {
               <p className="text-sm text-slate-400 mb-4">Spend attributed to each project/workload</p>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={COST_BY_PROJECT_TAG} layout="vertical" margin={{ left: 110, right: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" />
-                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} />
-                  <YAxis type="category" dataKey="tag" tick={{ fill: '#d2d0ce', fontSize: 12 }} width={105} />
-                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" />
+                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} />
+                  <YAxis type="category" dataKey="tag" tick={{ fill: '#dce4ed', fontSize: 12 }} width={105} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                   <Bar dataKey="cost" radius={[0, 4, 4, 0]}>
                     {COST_BY_PROJECT_TAG.map((e, i) => <Cell key={i} fill={e.color} />)}
                   </Bar>
@@ -741,9 +741,9 @@ export default function CostAnalyzerPage() {
                     <stop offset="95%" stopColor="#0078d4" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
-                <XAxis dataKey="dateLabel" tick={{ fill: '#d2d0ce', fontSize: 11 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} interval={0} angle={-35} textAnchor="end" height={55} />
-                <YAxis tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} width={45} domain={[0, 'dataMax + 10']} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" vertical={false} />
+                <XAxis dataKey="dateLabel" tick={{ fill: '#dce4ed', fontSize: 11 }} axisLine={{ stroke: '#1e3250' }} tickLine={false} interval={0} angle={-35} textAnchor="end" height={55} />
+                <YAxis tick={{ fill: '#dce4ed', fontSize: 13 }} axisLine={false} tickLine={false} width={45} domain={[0, 'dataMax + 10']} />
                 <Tooltip
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
@@ -785,10 +785,10 @@ export default function CostAnalyzerPage() {
               <p className="text-sm text-slate-400 mb-4">Estimated monthly cost per type of newly created resource</p>
               <ResponsiveContainer width="100%" height={260}>
                 <BarChart data={NEW_BY_TYPE} layout="vertical" margin={{ left: 110, right: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" />
-                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} />
-                  <YAxis type="category" dataKey="type" tick={{ fill: '#d2d0ce', fontSize: 12 }} width={105} />
-                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}/mo`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" />
+                  <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} />
+                  <YAxis type="category" dataKey="type" tick={{ fill: '#dce4ed', fontSize: 12 }} width={105} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}/mo`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                   <Bar dataKey="cost" fill="#0078d4" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>

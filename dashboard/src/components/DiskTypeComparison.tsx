@@ -25,12 +25,12 @@ export default function DiskTypeComparison({ data }: DiskTypeComparisonProps) {
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={data} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+            <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
             <YAxis
               type="category"
               dataKey="diskType"
               stroke="#64748b"
-              tick={{ fill: '#94a3b8', fontSize: 11 }}
+              tick={{ fill: '#b0bfcf', fontSize: 11 }}
               width={110}
             />
             <Tooltip
@@ -51,12 +51,12 @@ export default function DiskTypeComparison({ data }: DiskTypeComparisonProps) {
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={data} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+            <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
             <YAxis
               type="category"
               dataKey="diskType"
               stroke="#64748b"
-              tick={{ fill: '#94a3b8', fontSize: 11 }}
+              tick={{ fill: '#b0bfcf', fontSize: 11 }}
               width={110}
             />
             <Tooltip
@@ -77,12 +77,12 @@ export default function DiskTypeComparison({ data }: DiskTypeComparisonProps) {
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={data} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+            <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 11 }} />
             <YAxis
               type="category"
               dataKey="diskType"
               stroke="#64748b"
-              tick={{ fill: '#94a3b8', fontSize: 11 }}
+              tick={{ fill: '#b0bfcf', fontSize: 11 }}
               width={110}
             />
             <Tooltip

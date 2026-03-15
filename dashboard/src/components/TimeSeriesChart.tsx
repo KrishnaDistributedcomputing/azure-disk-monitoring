@@ -168,8 +168,8 @@ export default function TimeSeriesChart({ data, title, yAxisLabel, selectedSerie
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={summaryStats} layout="vertical" margin={{ top: 0, right: 20, left: 10, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
-                <XAxis type="number" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                <YAxis type="category" dataKey="shortName" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} width={100} />
+                <XAxis type="number" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} />
+                <YAxis type="category" dataKey="shortName" stroke="#64748b" tick={{ fill: '#b0bfcf', fontSize: 10 }} width={100} />
                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569', borderRadius: '8px', fontSize: '11px' }} formatter={(v: number) => [`${v} ${yAxisLabel}`, 'Avg']} />
                 <Bar dataKey="avg" name={`Avg ${yAxisLabel}`} radius={[0, 4, 4, 0]}>
                   {summaryStats.map((s, i) => <Cell key={i} fill={s.color} />)}

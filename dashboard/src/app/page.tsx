@@ -5,6 +5,15 @@ import Link from 'next/link';
 
 const PAGES = [
   {
+    title: 'Azure Advisor',
+    path: '/azure-advisor',
+    icon: '🎯',
+    color: '#00bcf2',
+    category: 'Finance',
+    description: 'Azure Advisor recommendations across 4 Well-Architected Framework pillars: Security (211), Reliability (101), Cost (38), and Operations (9). Filterable by category and impact.',
+    features: ['359 recommendations', '4 WAF pillars', 'Category & impact filters', 'Expandable detail cards', 'Savings estimates', 'Portal deep links'],
+  },
+  {
     title: 'Billing Dashboard',
     path: '/billing',
     icon: '💵',
@@ -136,8 +145,8 @@ export default function LandingPage() {
     <div className="min-h-screen bg-slate-900">
       {/* Hero */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0078d4]/10 via-[#0078d4]/4 to-[#0078d4]/8" />
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(0,120,212,0.06) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(0,120,212,0.04) 0%, transparent 50%)' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2563eb]/10 via-[#4a9eff]/5 to-[#2563eb]/8" />
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(37,99,235,0.08) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(74,158,255,0.05) 0%, transparent 50%)' }} />
         <div className="relative mx-auto max-w-[1400px] px-6 pt-16 pb-12">
           <div className="text-center">
             <div className="inline-flex items-center justify-center rounded-2xl bg-blue-600/20 border border-blue-500/30 p-4 mb-6">
@@ -145,7 +154,7 @@ export default function LandingPage() {
             </div>
             <h1 className="text-4xl font-extrabold text-white sm:text-5xl">
               Azure Disk Performance
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4fa3e0] via-[#0078d4] to-[#4fa3e0]">Monitoring Platform</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#4a9eff] to-[#93c5fd]">Monitoring Platform</span>
             </h1>
             <p className="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">Single pane of glass to monitor disk performance across Azure VMs — with drill-down, cost simulation, live pricing, and comprehensive documentation.</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">

@@ -1,178 +1,183 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================================================
-   AZURE PORTAL THEME — Fluent Design System
-   Font: Segoe UI (Azure Portal's native font)
-   Dark: Azure Portal dark theme palette
-   Light: Azure Portal light theme palette
-   Contrast: WCAG AA compliant (4.5:1 minimum for text)
+   CORPORATE FINANCE DASHBOARD THEME
+   Palette: Rich Navy Blue (professional, projector-friendly, executive-grade)
+   Font: Inter + Segoe UI (modern, highly legible at all sizes)
+   Typography: 15px base, 1.6 line-height (spacious, scannable)
+   Contrast: WCAG AAA target (7:1 for body text)
+   Cards: Frosted glass effect with subtle borders and soft shadows
    ============================================================================ */
 
-/* Dark mode (default) — Azure Portal Dark */
-:root,
-[data-theme="dark"] {
-  --bg-primary: #1b1a19;
-  --bg-card: #292827;
-  --bg-card-hover: #323130;
-  --text-primary: #f3f2f1;
-  --text-secondary: #d2d0ce;
-  --text-tertiary: #a19f9d;
-  --accent-blue: #0078d4;
-  --accent-blue-hover: #106ebe;
-  --accent-green: #57a300;
-  --accent-red: #e81123;
-  --accent-amber: #fce100;
-  --accent-purple: #8764b8;
-  --border: #3b3a39;
-  --border-subtle: #323130;
-  --surface-elevated: #323130;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root, [data-theme="dark"] {
+  --bg-primary: #0a1628;
+  --bg-card: #131f35;
+  --bg-card-hover: #182640;
+  --text-primary: #f0f4f8;
+  --text-secondary: #c1cdd9;
+  --text-tertiary: #8899aa;
+  --accent-blue: #4a9eff;
+  --accent-green: #34d399;
+  --accent-red: #f87171;
+  --accent-amber: #fbbf24;
+  --accent-purple: #a78bfa;
+  --border: #1e3250;
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+  --shadow-card-hover: 0 8px 40px rgba(0,0,0,0.45);
 }
 
-/* Light mode — Azure Portal Light */
 [data-theme="light"] {
-  --bg-primary: #f3f2f1;
+  --bg-primary: #f4f6f9;
   --bg-card: #ffffff;
-  --bg-card-hover: #faf9f8;
-  --text-primary: #323130;
-  --text-secondary: #605e5c;
-  --text-tertiary: #a19f9d;
-  --accent-blue: #0078d4;
-  --accent-blue-hover: #106ebe;
-  --accent-green: #107c10;
-  --accent-red: #a4262c;
-  --accent-amber: #c19c00;
-  --accent-purple: #5c2d91;
-  --border: #edebe9;
-  --border-subtle: #e1dfdd;
-  --surface-elevated: #ffffff;
+  --bg-card-hover: #f8f9fb;
+  --text-primary: #1a2332;
+  --text-secondary: #4a5568;
+  --text-tertiary: #8896a6;
+  --accent-blue: #2563eb;
+  --accent-green: #059669;
+  --accent-red: #dc2626;
+  --accent-amber: #d97706;
+  --accent-purple: #7c3aed;
+  --border: #e2e8f0;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* ============================================================================
-   Dark mode: Map Tailwind Slate classes → Azure Portal Dark palette
-   All pages use bg-slate-*, text-slate-*, border-slate-* — these overrides
-   remap them to Azure's Fluent Design colors without touching page files.
-   ============================================================================ */
-/* Backgrounds */
-.bg-slate-900       { background-color: #1b1a19 !important; }
-.bg-slate-800       { background-color: #292827 !important; }
-.bg-slate-800\/50   { background-color: rgba(41,40,39,0.6) !important; }
-.bg-slate-800\/80   { background-color: rgba(41,40,39,0.85) !important; }
-.bg-slate-800\/30   { background-color: rgba(41,40,39,0.35) !important; }
-.bg-slate-700       { background-color: #3b3a39 !important; }
-.bg-slate-700\/50   { background-color: rgba(59,58,57,0.5) !important; }
-.bg-slate-700\/40   { background-color: rgba(59,58,57,0.4) !important; }
-.bg-slate-700\/30   { background-color: rgba(59,58,57,0.3) !important; }
-.bg-slate-700\/20   { background-color: rgba(59,58,57,0.2) !important; }
-.bg-slate-900\/95   { background-color: rgba(27,26,25,0.97) !important; }
-.bg-slate-900\/50   { background-color: rgba(27,26,25,0.55) !important; }
+/* === DARK: Remap Tailwind slate classes to Navy === */
+.bg-slate-900       { background-color: #0a1628 !important; }
+.bg-slate-800       { background-color: #131f35 !important; }
+.bg-slate-800\/50   { background-color: rgba(19,31,53,0.65) !important; }
+.bg-slate-800\/80   { background-color: rgba(19,31,53,0.88) !important; }
+.bg-slate-800\/30   { background-color: rgba(19,31,53,0.38) !important; }
+.bg-slate-700       { background-color: #1e3250 !important; }
+.bg-slate-700\/50   { background-color: rgba(30,50,80,0.5) !important; }
+.bg-slate-700\/40   { background-color: rgba(30,50,80,0.4) !important; }
+.bg-slate-700\/30   { background-color: rgba(30,50,80,0.3) !important; }
+.bg-slate-700\/20   { background-color: rgba(30,50,80,0.2) !important; }
+.bg-slate-900\/95   { background-color: rgba(10,22,40,0.97) !important; }
+.bg-slate-900\/50   { background-color: rgba(10,22,40,0.6) !important; }
 
-/* Text — boosted for readability on dark backgrounds */
 .text-white   { color: #ffffff !important; }
-.text-slate-200 { color: #f3f2f1 !important; }
-.text-slate-300 { color: #e1dfdd !important; }
-.text-slate-400 { color: #c8c6c4 !important; }
-.text-slate-500 { color: #a19f9d !important; }
-.text-slate-600 { color: #a19f9d !important; }
+.text-slate-200 { color: #f0f4f8 !important; }
+.text-slate-300 { color: #dce4ed !important; }
+.text-slate-400 { color: #b0bfcf !important; }
+.text-slate-500 { color: #8899aa !important; }
+.text-slate-600 { color: #8899aa !important; }
 
-/* Borders */
-.border-slate-700    { border-color: #3b3a39 !important; }
-.border-slate-700\/50 { border-color: rgba(59,58,57,0.5) !important; }
-.border-slate-600    { border-color: #484644 !important; }
-.border-slate-800    { border-color: #292827 !important; }
+.border-slate-700    { border-color: #1e3250 !important; }
+.border-slate-700\/50 { border-color: rgba(30,50,80,0.5) !important; }
+.border-slate-700\/30 { border-color: rgba(30,50,80,0.3) !important; }
+.border-slate-600    { border-color: #2a4060 !important; }
+.border-slate-800    { border-color: #131f35 !important; }
 
-/* Hover states */
-.hover\:bg-slate-700\/20:hover { background-color: rgba(59,58,57,0.25) !important; }
-.hover\:bg-slate-800:hover     { background-color: #323130 !important; }
-.hover\:bg-slate-800\/80:hover { background-color: rgba(50,49,48,0.85) !important; }
-.hover\:border-slate-500:hover { border-color: #605e5c !important; }
-.hover\:border-slate-600:hover { border-color: #484644 !important; }
-.hover\:text-white:hover       { color: #f3f2f1 !important; }
+.hover\:bg-slate-700\/20:hover { background-color: rgba(30,50,80,0.28) !important; }
+.hover\:bg-slate-800:hover     { background-color: #182640 !important; }
+.hover\:bg-slate-800\/80:hover { background-color: rgba(24,38,64,0.88) !important; }
+.hover\:border-slate-500:hover { border-color: #3a5575 !important; }
+.hover\:border-slate-600:hover { border-color: #2a4060 !important; }
+.hover\:text-white:hover       { color: #ffffff !important; }
 
-/* Azure Blue accent overrides */
-.bg-blue-600     { background-color: #0078d4 !important; }
-.bg-blue-600\/20 { background-color: rgba(0,120,212,0.2) !important; }
-.hover\:bg-blue-700:hover { background-color: #106ebe !important; }
-.text-blue-400   { color: #4fa3e0 !important; }
-.text-blue-300   { color: #6cb8f0 !important; }
-.border-blue-500\/30 { border-color: rgba(0,120,212,0.3) !important; }
-.border-blue-500\/50 { border-color: rgba(0,120,212,0.5) !important; }
-.hover\:border-blue-500\/50:hover { border-color: rgba(0,120,212,0.5) !important; }
-.shadow-blue-600\/25 { --tw-shadow-color: rgba(0,120,212,0.25); }
-.shadow-blue-900\/10 { --tw-shadow-color: rgba(0,40,90,0.1); }
+.bg-blue-600     { background-color: #2563eb !important; }
+.bg-blue-600\/20 { background-color: rgba(37,99,235,0.18) !important; }
+.hover\:bg-blue-700:hover { background-color: #1d4ed8 !important; }
+.text-blue-400   { color: #60a5fa !important; }
+.text-blue-300   { color: #93c5fd !important; }
+.border-blue-500\/30 { border-color: rgba(59,130,246,0.3) !important; }
+.border-blue-500\/50 { border-color: rgba(59,130,246,0.5) !important; }
+.hover\:border-blue-500\/50:hover { border-color: rgba(59,130,246,0.55) !important; }
+.shadow-blue-600\/25 { --tw-shadow-color: rgba(37,99,235,0.2); }
+.shadow-blue-900\/10 { --tw-shadow-color: rgba(30,58,138,0.15); }
 
-/* ============================================================================
-   Light mode: Map Tailwind Slate classes → Azure Portal Light palette
-   ============================================================================ */
-[data-theme="light"] body { background-color: #f3f2f1; color: #323130; }
-[data-theme="light"] .bg-slate-900 { background-color: #f3f2f1 !important; }
+/* === LIGHT MODE === */
+[data-theme="light"] body { background-color: #f4f6f9; color: #1a2332; }
+[data-theme="light"] .bg-slate-900 { background-color: #f4f6f9 !important; }
 [data-theme="light"] .bg-slate-800 { background-color: #ffffff !important; }
-[data-theme="light"] .bg-slate-800\/50 { background-color: rgba(255,255,255,0.8) !important; }
-[data-theme="light"] .bg-slate-800\/80 { background-color: rgba(255,255,255,0.92) !important; }
-[data-theme="light"] .bg-slate-800\/30 { background-color: rgba(255,255,255,0.5) !important; }
-[data-theme="light"] .bg-slate-700 { background-color: #edebe9 !important; }
-[data-theme="light"] .bg-slate-700\/50 { background-color: rgba(237,235,233,0.5) !important; }
-[data-theme="light"] .bg-slate-700\/40 { background-color: rgba(237,235,233,0.4) !important; }
-[data-theme="light"] .bg-slate-700\/30 { background-color: rgba(237,235,233,0.3) !important; }
-[data-theme="light"] .bg-slate-700\/20 { background-color: rgba(237,235,233,0.2) !important; }
-[data-theme="light"] .bg-slate-900\/95 { background-color: rgba(243,242,241,0.97) !important; }
-[data-theme="light"] .bg-slate-900\/50 { background-color: rgba(243,242,241,0.55) !important; }
-[data-theme="light"] .border-slate-700 { border-color: #edebe9 !important; }
-[data-theme="light"] .border-slate-700\/50 { border-color: rgba(237,235,233,0.5) !important; }
-[data-theme="light"] .border-slate-600 { border-color: #c8c6c4 !important; }
-[data-theme="light"] .border-slate-800 { border-color: #e1dfdd !important; }
-[data-theme="light"] .text-white { color: #201f1e !important; }
-[data-theme="light"] .text-slate-200 { color: #292827 !important; }
-[data-theme="light"] .text-slate-300 { color: #323130 !important; }
-[data-theme="light"] .text-slate-400 { color: #484644 !important; }
-[data-theme="light"] .text-slate-500 { color: #605e5c !important; }
-[data-theme="light"] .text-slate-600 { color: #605e5c !important; }
-[data-theme="light"] .text-blue-400 { color: #0078d4 !important; }
-[data-theme="light"] .text-blue-300 { color: #0078d4 !important; }
-[data-theme="light"] .bg-blue-600 { background-color: #0078d4 !important; }
-[data-theme="light"] .bg-blue-600\/20 { background-color: rgba(0,120,212,0.12) !important; }
-[data-theme="light"] .hover\:bg-slate-700\/20:hover { background-color: rgba(237,235,233,0.4) !important; }
-[data-theme="light"] .hover\:bg-slate-800:hover { background-color: #faf9f8 !important; }
-[data-theme="light"] .hover\:text-white:hover { color: #323130 !important; }
+[data-theme="light"] .bg-slate-800\/50 { background-color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .bg-slate-800\/80 { background-color: rgba(255,255,255,0.94) !important; }
+[data-theme="light"] .bg-slate-800\/30 { background-color: rgba(255,255,255,0.55) !important; }
+[data-theme="light"] .bg-slate-700 { background-color: #e2e8f0 !important; }
+[data-theme="light"] .bg-slate-700\/50 { background-color: rgba(226,232,240,0.5) !important; }
+[data-theme="light"] .bg-slate-700\/40 { background-color: rgba(226,232,240,0.4) !important; }
+[data-theme="light"] .bg-slate-700\/30 { background-color: rgba(226,232,240,0.3) !important; }
+[data-theme="light"] .bg-slate-700\/20 { background-color: rgba(226,232,240,0.2) !important; }
+[data-theme="light"] .bg-slate-900\/95 { background-color: rgba(244,246,249,0.97) !important; }
+[data-theme="light"] .bg-slate-900\/50 { background-color: rgba(244,246,249,0.6) !important; }
+[data-theme="light"] .border-slate-700 { border-color: #e2e8f0 !important; }
+[data-theme="light"] .border-slate-700\/50 { border-color: rgba(226,232,240,0.5) !important; }
+[data-theme="light"] .border-slate-600 { border-color: #cbd5e1 !important; }
+[data-theme="light"] .border-slate-800 { border-color: #edf2f7 !important; }
+[data-theme="light"] .text-white { color: #1a2332 !important; }
+[data-theme="light"] .text-slate-200 { color: #1e293b !important; }
+[data-theme="light"] .text-slate-300 { color: #334155 !important; }
+[data-theme="light"] .text-slate-400 { color: #4a5568 !important; }
+[data-theme="light"] .text-slate-500 { color: #64748b !important; }
+[data-theme="light"] .text-slate-600 { color: #64748b !important; }
+[data-theme="light"] .text-blue-400 { color: #2563eb !important; }
+[data-theme="light"] .text-blue-300 { color: #2563eb !important; }
+[data-theme="light"] .bg-blue-600 { background-color: #2563eb !important; }
+[data-theme="light"] .bg-blue-600\/20 { background-color: rgba(37,99,235,0.1) !important; }
+[data-theme="light"] .hover\:bg-slate-700\/20:hover { background-color: rgba(226,232,240,0.45) !important; }
+[data-theme="light"] .hover\:bg-slate-800:hover { background-color: #f8f9fb !important; }
+[data-theme="light"] .hover\:text-white:hover { color: #1a2332 !important; }
 
-/* ============================================================================
-   Global body & typography — Segoe UI (Azure Portal's font)
-   ============================================================================ */
+/* === BODY TYPOGRAPHY === */
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
-  line-height: 1.43;
-  letter-spacing: normal;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
+h1, h2, h3, h4 { letter-spacing: -0.025em; }
 
-/* Accessible focus rings — Azure Portal uses 2px solid accent (WCAG 2.4.7) */
 *:focus-visible {
   outline: 2px solid var(--accent-blue);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-/* Scrollbar — Azure Portal style */
-::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
-/* Card utility classes */
+/* === CARD CLASSES === */
 .card {
-  @apply rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-sm;
+  @apply rounded-xl border border-slate-700 bg-slate-800 p-6;
+  box-shadow: var(--shadow-card);
 }
-
 .stat-card {
-  @apply rounded-lg border border-slate-700 bg-slate-800 p-5 shadow-sm transition-all hover:border-blue-500/50;
+  @apply rounded-xl border border-slate-700 bg-slate-800 p-5;
+  box-shadow: var(--shadow-card);
+  transition: all 0.2s ease;
+}
+.stat-card:hover {
+  border-color: var(--accent-blue);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-1px);
+}
+.table-container {
+  @apply overflow-x-auto rounded-xl border border-slate-700 bg-slate-800;
+  box-shadow: var(--shadow-card);
 }
 
-.table-container {
-  @apply overflow-x-auto rounded-lg border border-slate-700 bg-slate-800 shadow-sm;
+/* Global card shadow */
+[class*="rounded-xl"][class*="border"][class*="bg-slate-800"] {
+  box-shadow: var(--shadow-card);
+}
+
+/* Page fade-in */
+main, [role="main"] { animation: fadeIn 0.3s ease-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }

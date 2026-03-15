@@ -184,10 +184,10 @@ export default function BillingPage() {
               <p className="text-sm text-slate-400 mb-4">6-month history — actual invoiced amounts</p>
               <ResponsiveContainer width="100%" height={260}>
                 <BarChart data={MONTHLY_COSTS} margin={{ left: 10, right: 10 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
-                  <XAxis dataKey="month" tick={{ fill: '#d2d0ce', fontSize: 12 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} />
-                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" vertical={false} />
+                  <XAxis dataKey="month" tick={{ fill: '#dce4ed', fontSize: 12 }} axisLine={{ stroke: '#1e3250' }} tickLine={false} />
+                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} axisLine={false} tickLine={false} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                   <Bar dataKey="cost" radius={[4, 4, 0, 0]}>
                     {MONTHLY_COSTS.map((m, i) => (
                       <Cell key={i} fill={m.partial ? '#f59e0b' : '#0078d4'} />
@@ -209,10 +209,10 @@ export default function BillingPage() {
                       <stop offset="95%" stopColor="#e81123" stopOpacity={0.02} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
-                  <XAxis dataKey="date" tick={{ fill: '#d2d0ce', fontSize: 11 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} />
-                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" vertical={false} />
+                  <XAxis dataKey="date" tick={{ fill: '#dce4ed', fontSize: 11 }} axisLine={{ stroke: '#1e3250' }} tickLine={false} />
+                  <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} axisLine={false} tickLine={false} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                   <Area type="monotone" dataKey="cost" stroke="#e81123" strokeWidth={2.5} fill="url(#dailyGrad)" dot={{ fill: '#e81123', stroke: '#292827', strokeWidth: 2, r: 3 }} activeDot={{ fill: '#e81123', stroke: '#fff', strokeWidth: 2, r: 6 }} />
                 </AreaChart>
               </ResponsiveContainer>
@@ -228,7 +228,7 @@ export default function BillingPage() {
                   <Pie data={COST_BY_METER.slice(0, 7)} dataKey="cost" nameKey="service" cx="50%" cy="50%" outerRadius={90} innerRadius={50}>
                     {COST_BY_METER.slice(0, 7).map((m, i) => <Cell key={i} fill={m.color} />)}
                   </Pie>
-                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                  <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="lg:col-span-2 space-y-2">
@@ -255,9 +255,9 @@ export default function BillingPage() {
             <p className="text-sm text-slate-400 mb-4">Actual invoiced amounts per billing cycle. March 2026 is partial (14 days).</p>
             <ResponsiveContainer width="100%" height={380}>
               <BarChart data={MONTHLY_COSTS} margin={{ left: 10, right: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
-                <XAxis dataKey="month" tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} />
-                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" vertical={false} />
+                <XAxis dataKey="month" tick={{ fill: '#dce4ed', fontSize: 13 }} axisLine={{ stroke: '#1e3250' }} tickLine={false} />
+                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} axisLine={false} tickLine={false} />
                 <Tooltip
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
@@ -346,9 +346,9 @@ export default function BillingPage() {
                     <stop offset="95%" stopColor="#e81123" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
-                <XAxis dataKey="date" tick={{ fill: '#d2d0ce', fontSize: 12 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} />
-                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" vertical={false} />
+                <XAxis dataKey="date" tick={{ fill: '#dce4ed', fontSize: 12 }} axisLine={{ stroke: '#1e3250' }} tickLine={false} />
+                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} axisLine={false} tickLine={false} />
                 <Tooltip
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
@@ -421,10 +421,10 @@ export default function BillingPage() {
             <p className="text-sm text-slate-400 mb-4">6-month aggregate (Oct 2025 – Mar 2026) by meter category</p>
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={COST_BY_METER} layout="vertical" margin={{ left: 130, right: 30 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" />
-                <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} />
-                <YAxis type="category" dataKey="service" tick={{ fill: '#d2d0ce', fontSize: 12 }} width={125} />
-                <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" />
+                <XAxis type="number" tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} />
+                <YAxis type="category" dataKey="service" tick={{ fill: '#dce4ed', fontSize: 12 }} width={125} />
+                <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                 <Bar dataKey="cost" radius={[0, 4, 4, 0]}>
                   {COST_BY_METER.map((m, i) => <Cell key={i} fill={m.color} />)}
                 </Bar>
@@ -560,10 +560,10 @@ export default function BillingPage() {
             <h3 className="text-base font-bold text-white mb-4">Daily Spend with Anomaly Markers</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={DAILY_MARCH} margin={{ left: 10, right: 10 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b3a39" vertical={false} />
-                <XAxis dataKey="date" tick={{ fill: '#d2d0ce', fontSize: 12 }} axisLine={{ stroke: '#3b3a39' }} tickLine={false} />
-                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#d2d0ce', fontSize: 13 }} axisLine={false} tickLine={false} />
-                <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#292827', border: '1px solid #3b3a39', borderRadius: 4, fontSize: 13 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e3250" vertical={false} />
+                <XAxis dataKey="date" tick={{ fill: '#dce4ed', fontSize: 12 }} axisLine={{ stroke: '#1e3250' }} tickLine={false} />
+                <YAxis tickFormatter={v => `$${v}`} tick={{ fill: '#dce4ed', fontSize: 13 }} axisLine={false} tickLine={false} />
+                <Tooltip formatter={(v: number) => `$${v.toFixed(2)}`} contentStyle={{ backgroundColor: '#131f35', border: '1px solid #1e3250', borderRadius: 4, fontSize: 13 }} />
                 <Bar dataKey="cost" radius={[4, 4, 0, 0]}>
                   {DAILY_MARCH.map((d, i) => {
                     const avg = 185.15 / 14;
