@@ -154,7 +154,7 @@ export default function AzureAdvisorPage() {
           {CATEGORIES.map(c => (
             <button key={c.name} onClick={() => { setFilter(filter === c.name as Filter ? 'all' : c.name as Filter); }} className={`rounded-xl border p-5 text-left transition-all hover:scale-[1.02] ${filter === c.name ? 'border-blue-500 bg-blue-500/10' : 'border-slate-700 bg-slate-800 hover:border-slate-600'}`}>
               <div className="flex items-center gap-2.5 mb-3">
-                <span className="text-2xl" aria-hidden="true">{c.icon}</span>
+                <img src={c.icon} alt="" className="h-7 w-7 flex-shrink-0" />
                 <span className="text-sm font-semibold text-white">{c.label || c.name}</span>
               </div>
               <div className="text-3xl font-bold" style={{ color: c.color }}>{c.count}</div>
@@ -233,7 +233,7 @@ export default function AzureAdvisorPage() {
             return (
               <div key={i} className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden transition-all hover:border-slate-600">
                 <button onClick={() => setExpandedRec(isExpanded ? null : i)} className="w-full text-left px-5 py-4 flex items-center gap-4 hover:bg-slate-700/20 transition-colors" aria-expanded={isExpanded}>
-                  <span className="text-xl" aria-hidden="true">{catInfo?.icon}</span>
+                  <img src={catInfo?.icon || '/icons/cognitive.svg'} alt="" className="h-6 w-6 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="text-sm font-bold text-white">{rec.title}</h3>

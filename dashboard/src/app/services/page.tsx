@@ -417,7 +417,7 @@ export default function ServiceExplorerPage() {
             return (
               <div key={svc.id} className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden transition-all hover:border-slate-600">
                 <button onClick={() => setExpandedService(isExpanded ? null : svc.id)} className="w-full text-left px-6 py-4 flex items-center gap-4 hover:bg-slate-700/20 transition-colors" aria-expanded={isExpanded}>
-                  <span className="text-2xl" aria-hidden="true">{svc.icon}</span>
+                  <img src={svc.icon} alt="" className="h-7 w-7 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2.5 flex-wrap">
                       <h3 className="text-base font-bold text-white">{svc.displayName}</h3>

@@ -218,7 +218,7 @@ export default function LandingPage() {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl" aria-hidden="true">{page.icon}</span>
+                    <img src={page.icon} alt="" className="h-8 w-8 flex-shrink-0" />
                     <div>
                       <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{page.title}</h3>
                       <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold" style={{ backgroundColor: page.color + '20', color: page.color }}>{page.category}</span>

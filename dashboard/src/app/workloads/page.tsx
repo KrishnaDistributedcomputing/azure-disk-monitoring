@@ -357,13 +357,13 @@ type Tab = 'overview' | 'map' | 'sankey' | 'recommendations';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const AZURE_ICONS: Record<string, string> = {
-  Monitoring: '📊',
-  Containers: '☸️',
-  'Web App': '🌐',
-  'AI/ML': '🧠',
-  Database: '🌍',
-  Infrastructure: '🏗️',
-  DevOps: '🔧',
+  Monitoring: '/icons/log-analytics.svg',
+  Containers: '/icons/kubernetes.svg',
+  'Web App': '/icons/static-apps.svg',
+  'AI/ML': '/icons/cognitive.svg',
+  Database: '/icons/cosmos-db.svg',
+  Infrastructure: '/icons/storage.svg',
+  DevOps: '/icons/vm-extensions.svg',
 };
 
 export default function WorkloadMapPage() {
@@ -514,9 +514,7 @@ export default function WorkloadMapPage() {
                         }}
                       >
                         <div className="flex items-start gap-2">
-                          <span className="text-lg" style={{ filter: 'brightness(10)' }} aria-hidden="true">
-                            {AZURE_ICONS[w.category] || w.icon}
-                          </span>
+                          <img src={AZURE_ICONS[w.category] || '/icons/storage.svg'} alt="" className="h-6 w-6 flex-shrink-0 mt-0.5" style={{ filter: 'brightness(1.2)' }} />
                           <div className="min-w-0 flex-1">
                             <div className={`font-bold text-white leading-tight ${isLarge ? 'text-base' : isMedium ? 'text-sm' : 'text-xs'}`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
                               {w.name}

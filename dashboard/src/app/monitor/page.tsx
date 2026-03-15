@@ -228,31 +228,31 @@ export default function MonitorPage() {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-px bg-slate-700/30">
                 {[
-                  { icon: '📊', name: 'Log Analytics', count: 16, cost: 0.55, cat: 'Monitoring' },
-                  { icon: '🛡️', name: 'NSGs', count: 15, cost: 0, cat: 'Networking' },
-                  { icon: '📦', name: 'Container Registry', count: 15, cost: 22.40, cat: 'Containers' },
-                  { icon: '🐳', name: 'Container Apps', count: 15, cost: 0.65, cat: 'Containers' },
-                  { icon: '💿', name: 'Managed Disks', count: 13, cost: 8.20, cat: 'Compute' },
-                  { icon: '🔌', name: 'VM Extensions', count: 10, cost: 0, cat: 'Compute' },
-                  { icon: '🌐', name: 'Public IPs', count: 9, cost: 1.20, cat: 'Networking' },
-                  { icon: '🏗️', name: 'Container Envs', count: 9, cost: 10.38, cat: 'Containers' },
-                  { icon: '🖥️', name: 'Virtual Machines', count: 5, cost: 19.52, cat: 'Compute' },
-                  { icon: '⚖️', name: 'Load Balancers', count: 5, cost: 18.06, cat: 'Networking' },
-                  { icon: '🗄️', name: 'Storage Accounts', count: 5, cost: 12.90, cat: 'Storage' },
-                  { icon: '🌍', name: 'Static Web Apps', count: 5, cost: 9.00, cat: 'Web' },
-                  { icon: '☸️', name: 'AKS Clusters', count: 4, cost: 0, cat: 'Containers' },
-                  { icon: '📐', name: 'VM Scale Sets', count: 4, cost: 2.80, cat: 'Compute' },
-                  { icon: '🧠', name: 'AI / Cognitive', count: 5, cost: 0, cat: 'AI/ML' },
-                  { icon: '🐘', name: 'PostgreSQL', count: 3, cost: 5.21, cat: 'Databases' },
-                  { icon: '🌌', name: 'Cosmos DB', count: 2, cost: 5.37, cat: 'Databases' },
-                  { icon: '📈', name: 'Grafana', count: 1, cost: 0, cat: 'Monitoring' },
-                  { icon: '🚀', name: 'Front Door', count: 1, cost: 0.42, cat: 'Networking' },
-                  { icon: '📋', name: 'Data Collection', count: 1, cost: 0, cat: 'Monitoring' },
-                  { icon: '🔑', name: 'Key Vault', count: 1, cost: 0.03, cat: 'Security' },
+                  { icon: '/icons/log-analytics.svg', name: 'Log Analytics', count: 16, cost: 0.55, cat: 'Monitoring' },
+                  { icon: '/icons/nsg.svg', name: 'NSGs', count: 15, cost: 0, cat: 'Networking' },
+                  { icon: '/icons/container-registry.svg', name: 'Container Registry', count: 15, cost: 22.40, cat: 'Containers' },
+                  { icon: '/icons/container-app.svg', name: 'Container Apps', count: 15, cost: 0.65, cat: 'Containers' },
+                  { icon: '/icons/disks.svg', name: 'Managed Disks', count: 13, cost: 8.20, cat: 'Compute' },
+                  { icon: '/icons/vm-extensions.svg', name: 'VM Extensions', count: 10, cost: 0, cat: 'Compute' },
+                  { icon: '/icons/public-ip.svg', name: 'Public IPs', count: 9, cost: 1.20, cat: 'Networking' },
+                  { icon: '/icons/container-env.svg', name: 'Container Envs', count: 9, cost: 10.38, cat: 'Containers' },
+                  { icon: '/icons/vm.svg', name: 'Virtual Machines', count: 5, cost: 19.52, cat: 'Compute' },
+                  { icon: '/icons/load-balancer.svg', name: 'Load Balancers', count: 5, cost: 18.06, cat: 'Networking' },
+                  { icon: '/icons/storage.svg', name: 'Storage Accounts', count: 5, cost: 12.90, cat: 'Storage' },
+                  { icon: '/icons/static-apps.svg', name: 'Static Web Apps', count: 5, cost: 9.00, cat: 'Web' },
+                  { icon: '/icons/kubernetes.svg', name: 'AKS Clusters', count: 4, cost: 0, cat: 'Containers' },
+                  { icon: '/icons/vmss.svg', name: 'VM Scale Sets', count: 4, cost: 2.80, cat: 'Compute' },
+                  { icon: '/icons/cognitive.svg', name: 'AI / Cognitive', count: 5, cost: 0, cat: 'AI/ML' },
+                  { icon: '/icons/postgresql.svg', name: 'PostgreSQL', count: 3, cost: 5.21, cat: 'Databases' },
+                  { icon: '/icons/cosmos-db.svg', name: 'Cosmos DB', count: 2, cost: 5.37, cat: 'Databases' },
+                  { icon: '/icons/grafana.svg', name: 'Grafana', count: 1, cost: 0, cat: 'Monitoring' },
+                  { icon: '/icons/front-door.svg', name: 'Front Door', count: 1, cost: 0.42, cat: 'Networking' },
+                  { icon: '/icons/data-collection.svg', name: 'Data Collection', count: 1, cost: 0, cat: 'Monitoring' },
+                  { icon: '/icons/key-vault.svg', name: 'Key Vault', count: 1, cost: 0.03, cat: 'Security' },
                 ].map(svc => (
                   <Link href="/services" key={svc.name} className="bg-slate-800 px-3 py-3 hover:bg-slate-700/40 transition-colors cursor-pointer group block">
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-lg" aria-hidden="true">{svc.icon}</span>
+                      <img src={svc.icon} alt="" className="h-6 w-6 flex-shrink-0" aria-hidden="true" />
                       <span className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors leading-tight">{svc.name}</span>
                     </div>
                     <div className="flex items-center justify-between">
