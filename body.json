@@ -1,1 +1,1 @@
-{"timeframe":"Custom","timePeriod":{"to":"2026-03-14","from":"2026-03-01"},"dataset":{"aggregation":{"totalCost":{"function":"Sum","name":"Cost"}},"granularity":"Daily"},"type":"ActualCost"}
+{"timeframe":"MonthToDate","dataset":{"aggregation":{"totalCost":{"function":"Sum","name":"Cost"}},"grouping":[{"name":"ServiceName","type":"Dimension"}],"granularity":"None"},"type":"ActualCost"}

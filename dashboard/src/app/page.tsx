@@ -5,6 +5,15 @@ import Link from 'next/link';
 
 const PAGES = [
   {
+    title: 'Service Explorer',
+    path: '/services',
+    icon: '🔍',
+    color: '#2563eb',
+    category: 'Monitoring',
+    description: 'Deep dive into every Azure service in the subscription. 21 service types, 209 resources with clickable drill-down showing instances, SKUs, locations, status, and Azure Portal links.',
+    features: ['21 service types', '209 resources', 'Clickable drill-down', 'Per-resource details', 'Category & cost sorting', 'Azure Portal deep links', 'Cost by category pie chart'],
+  },
+  {
     title: 'Azure Advisor',
     path: '/azure-advisor',
     icon: '🎯',
@@ -115,7 +124,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '12', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '14', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
