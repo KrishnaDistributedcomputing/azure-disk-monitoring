@@ -838,6 +838,102 @@ export default function HelpPage() {
           ))}
         </div>
 
+        {/* ============= ABOUT THIS PLATFORM ============= */}
+        <div className="rounded-xl border border-slate-700 bg-slate-800 p-6 mt-8">
+          <h2 className="text-xl font-bold text-white mb-4">About This Platform</h2>
+          <p className="text-sm text-slate-300 leading-relaxed mb-4">
+            This is a comprehensive Azure resource monitoring, cost management, and governance platform built as a POC for subscription <code className="text-xs font-mono text-blue-400">e62428e7-...2c51586d9105</code>. It provides a single pane of glass across 14 interactive pages covering disk performance, billing, cost optimization, and operational intelligence.
+          </p>
+
+          <h3 className="text-base font-bold text-white mt-6 mb-3">All 14 Pages</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {[
+              { path: '/', name: 'Home', desc: 'Landing page with search, category navigation, and 14 page cards' },
+              { path: '/monitor', name: 'All Resources', desc: '21 subscription services inventory, VM fleet monitoring, disk drill-down' },
+              { path: '/metrics', name: 'Metrics Dashboard', desc: '7-tab metrics: IOPS, throughput, latency, queue depth, capacity, comparison' },
+              { path: '/services', name: 'Service Explorer', desc: 'Deep dive into 21 Azure service types with 209 clickable resources' },
+              { path: '/workloads', name: 'Workload Map', desc: '10 logical workloads with cost flow, resource groups, and recommendations' },
+              { path: '/cost-analyzer', name: 'Cost Analyzer', desc: 'Subscription cost by RG/service, tag governance, new resources tracker' },
+              { path: '/billing', name: 'Billing Dashboard', desc: '6-month billing history, daily spend, invoices, cost anomaly detection' },
+              { path: '/azure-advisor', name: 'Azure Advisor', desc: '359 recommendations across Security, Reliability, Cost, Operations' },
+              { path: '/finops', name: 'FinOps', desc: 'All 23 resources with PAYG vs RI analysis, executive-friendly language' },
+              { path: '/advisor', name: 'AI Disk Advisor', desc: 'Conversational AI for disk cost/performance Q&A with KQL generation' },
+              { path: '/technical', name: 'Technical Details', desc: 'Architecture diagrams, 24 metrics catalog, live pricing, benchmarks' },
+              { path: '/deep-dive', name: 'Deep Dive', desc: '17 KQL queries, 29 perf counters, 42 platform metrics by category' },
+              { path: '/design', name: 'Design Document', desc: '8-section design doc with Mermaid diagrams for architecture decisions' },
+              { path: '/help', name: 'Help & Simulator', desc: 'Disk cost simulator, comparison tables, decision guide, best practices' },
+            ].map(p => (
+              <Link key={p.path} href={p.path} className="flex items-start gap-3 rounded-lg border border-slate-700/50 bg-slate-900/30 px-4 py-3 hover:bg-slate-700/20 transition-colors group">
+                <code className="text-xs font-mono text-blue-400 flex-shrink-0 mt-0.5 group-hover:text-blue-300">{p.path}</code>
+                <div>
+                  <div className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">{p.name}</div>
+                  <div className="text-xs text-slate-400">{p.desc}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <h3 className="text-base font-bold text-white mt-6 mb-3">Technology Stack</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { label: 'Frontend', value: 'Next.js 14 + Tailwind CSS + Recharts' },
+              { label: 'Hosting', value: 'Azure Static Web Apps (Standard)' },
+              { label: 'Infrastructure', value: 'Bicep IaC (7 modules, subscription-scoped)' },
+              { label: 'Monitoring', value: 'AMA + DCR + Log Analytics' },
+              { label: 'Visualization', value: 'Azure Managed Grafana' },
+              { label: 'AI', value: 'Azure OpenAI GPT-4o-mini' },
+              { label: 'Icons', value: 'Official Azure SVG icon set' },
+              { label: 'Theme', value: 'Corporate Navy (Inter font, 15px)' },
+            ].map(t => (
+              <div key={t.label} className="rounded-lg bg-slate-900/50 border border-slate-700/50 px-3 py-2">
+                <div className="text-xs text-slate-400">{t.label}</div>
+                <div className="text-sm font-medium text-white">{t.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="text-base font-bold text-white mt-6 mb-3">Key Data Sources</h3>
+          <div className="space-y-2">
+            {[
+              { source: 'Azure Cost Management API', data: '6-month billing, daily spend, cost by service/RG/tag' },
+              { source: 'Azure Resource Graph', data: '209 resources, 21 service types, creation timeline' },
+              { source: 'Azure Advisor API', data: '359 recommendations across 4 WAF pillars' },
+              { source: 'Azure Monitor / AMA', data: '29 perf counters, 42 platform metrics, DCR-based collection' },
+              { source: 'ARM / Compute API', data: 'VM power states, disk SKUs, sizes, attachment status' },
+            ].map(d => (
+              <div key={d.source} className="flex items-center gap-3 text-sm">
+                <span className="text-emerald-400 font-semibold flex-shrink-0 w-52">{d.source}</span>
+                <span className="text-slate-300">{d.data}</span>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="text-base font-bold text-white mt-6 mb-3">Azure Resources (POC)</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { label: 'Virtual Machines', value: '5 (all deallocated)' },
+              { label: 'Managed Disks', value: '13 (5 types)' },
+              { label: 'Total Subscription', value: '209 resources' },
+              { label: 'Service Types', value: '21' },
+              { label: 'Resource Groups', value: '28' },
+              { label: 'Regions', value: '7 (East US 2 primary)' },
+              { label: 'Advisor Findings', value: '359' },
+              { label: 'MTD Cost', value: '~$185 (Mar 2026)' },
+            ].map(s => (
+              <div key={s.label} className="rounded-lg bg-slate-900/50 border border-slate-700/50 px-3 py-2">
+                <div className="text-xs text-slate-400">{s.label}</div>
+                <div className="text-sm font-bold text-white">{s.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="text-base font-bold text-white mt-6 mb-3">GitHub Repository</h3>
+          <a href="https://github.com/KrishnaDistributedcomputing/azure-disk-monitoring" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            KrishnaDistributedcomputing/azure-disk-monitoring
+          </a>
+        </div>
+
         {/* Back to Dashboard */}
         <div className="pt-8 pb-4 text-center">
           <Link
