@@ -104,6 +104,15 @@ const PAGES = [
     features: ['8 design sections', 'Key design decisions', 'Mermaid diagrams per section', 'Bicep module structure', 'Tagging strategy', 'Security POC vs production', 'Operational commands'],
   },
   {
+    title: 'KQL Lab',
+    path: '/kql-lab',
+    icon: '🔬',
+    color: '#10b981',
+    category: 'Documentation',
+    description: 'Live KQL queries against Log Analytics with real result sets. 10 queries across 5 pipeline steps: setup verification, IOPS, latency, throughput, burst credits, and Power BI export.',
+    features: ['10 KQL queries with results', '137K AzureMetrics rows', '45 disk metrics', 'Copy-paste KQL code', 'Power BI M query export', 'Pipeline step tracker'],
+  },
+  {
     title: 'Power BI Spec',
     path: '/powerbi-spec',
     icon: '📊',
@@ -133,7 +142,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '15', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '16', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
