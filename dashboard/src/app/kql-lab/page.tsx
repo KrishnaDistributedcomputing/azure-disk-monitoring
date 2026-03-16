@@ -65,7 +65,63 @@ const QUERIES: KQLQuery[] = [
     notes: '45 unique disk metrics collected. Includes OS Disk, Data Disk, and Temp Disk categories with IOPS, throughput, latency, queue depth, and burst credit metrics.',
   },
 
-  // === STEP 2: DISK PERFORMANCE QUERIES ===
+  // === STEP 2: GUEST OS DISK USAGE (Perf table — requires AMA) ===
+  {
+    id: 'free-space', step: 2, title: '% Free Space by Disk (Guest OS)', category: 'Capacity',
+    description: 'Query guest OS disk free space percentage using the Perf table. This is the core Power BI query for disk capacity monitoring. Requires Azure Monitor Agent (AMA) with Data Collection Rule (DCR) sending Logical Disk counters to the workspace.',
+    kql: `Perf
+| where ObjectName == "Logical Disk"
+| where CounterName == "% Free Space"
+| summarize avg(CounterValue) by Computer, InstanceName, bin(TimeGenerated, 1h)`,
+    resultHeaders: ['Computer', 'InstanceName', 'TimeGenerated', 'avg_CounterValue'],
+    resultRows: [
+      ['vm-diskmon-dsv5-01', '/dev/sda1', '2026-03-16T15:00Z', '78.4'],
+      ['vm-diskmon-dsv5-01', '/dev/sdb1', '2026-03-16T15:00Z', '92.1'],
+      ['vm-diskmon-dsv5-01', '/dev/sdc1', '2026-03-16T15:00Z', '85.6'],
+      ['vm-diskmon-dsv5-01', '/dev/sda1', '2026-03-16T14:00Z', '78.5'],
+      ['vm-diskmon-dsv5-01', '/dev/sdb1', '2026-03-16T14:00Z', '92.1'],
+      ['vm-diskmon-dsv5-01', '/dev/sdc1', '2026-03-16T14:00Z', '85.7'],
+      ['vm-diskmon-dsv5-02', '/dev/sda1', '2026-03-16T15:00Z', '71.2'],
+      ['vm-diskmon-dsv5-02', '/dev/sdb1', '2026-03-16T15:00Z', '88.9'],
+      ['vm-diskmon-dsv5-03', 'C:', '2026-03-16T15:00Z', '62.3'],
+      ['vm-diskmon-dsv5-03', 'D:', '2026-03-16T15:00Z', '94.7'],
+    ],
+    rowCount: 10, executionTime: '1.4s', powerBiExport: true,
+    notes: 'This query requires VMs to be RUNNING with AMA installed and DCR configured for "Logical Disk" → "% Free Space" counter. Linux reports /dev/sdX mount points, Windows reports drive letters (C:, D:). Values >80% are healthy, 20-50% is warning, <20% is critical.',
+  },
+  {
+    id: 'free-space-summary', step: 2, title: 'Disk Free Space Summary by VM', category: 'Capacity',
+    description: 'Aggregate the latest free space reading per VM and disk instance — ideal for Power BI card visuals and conditional formatting.',
+    kql: `Perf
+| where ObjectName == "Logical Disk"
+| where CounterName == "% Free Space"
+| where InstanceName !in ("_Total", "/")
+| summarize
+    AvgFreeSpacePct = round(avg(CounterValue), 1),
+    MinFreeSpacePct = round(min(CounterValue), 1),
+    LastReading = max(TimeGenerated)
+    by Computer, InstanceName
+| extend Status = case(
+    AvgFreeSpacePct < 20, "Critical",
+    AvgFreeSpacePct < 50, "Warning",
+    "Healthy"
+)
+| order by AvgFreeSpacePct asc`,
+    resultHeaders: ['Computer', 'InstanceName', 'AvgFreeSpacePct', 'MinFreeSpacePct', 'LastReading', 'Status'],
+    resultRows: [
+      ['vm-diskmon-dsv5-03', 'C:', '62.3', '61.8', '2026-03-16T15:00Z', 'Warning'],
+      ['vm-diskmon-dsv5-02', '/dev/sda1', '71.2', '70.9', '2026-03-16T15:00Z', 'Healthy'],
+      ['vm-diskmon-dsv5-01', '/dev/sda1', '78.4', '78.0', '2026-03-16T15:00Z', 'Healthy'],
+      ['vm-diskmon-dsv5-01', '/dev/sdc1', '85.6', '85.3', '2026-03-16T15:00Z', 'Healthy'],
+      ['vm-diskmon-dsv5-02', '/dev/sdb1', '88.9', '88.5', '2026-03-16T15:00Z', 'Healthy'],
+      ['vm-diskmon-dsv5-01', '/dev/sdb1', '92.1', '91.8', '2026-03-16T15:00Z', 'Healthy'],
+      ['vm-diskmon-dsv5-03', 'D:', '94.7', '94.5', '2026-03-16T15:00Z', 'Healthy'],
+    ],
+    rowCount: 7, executionTime: '1.1s', powerBiExport: true,
+    notes: 'Adds a Status column (Healthy/Warning/Critical) based on free space thresholds. In Power BI, use conditional formatting to color rows red (<20%), amber (20-50%), green (>50%). The C: drive on the Windows VM is the lowest at 62.3%.',
+  },
+
+  // === DISK PERFORMANCE QUERIES (Platform Metrics) (Platform Metrics) ===
   {
     id: 'disk-iops', step: 2, title: 'Disk Read IOPS by VM (Hourly)', category: 'Performance',
     description: 'Extract disk read I/O operations per second aggregated by VM and hour. This is the primary query for the Power BI IOPS trend chart.',
@@ -268,11 +324,11 @@ const QUERIES: KQLQuery[] = [
 ];
 
 const STEPS = [
-  { step: 1, title: 'Route Metrics to Log Analytics', description: 'Enable diagnostic settings on VMs and disks to send AzureMetrics to the workspace.', status: 'Complete', icon: '✅' },
-  { step: 2, title: 'Extract Disk Performance Data (KQL)', description: 'Query IOPS, latency, throughput, queue depth, and IOPS consumed % from AzureMetrics.', status: 'Complete', icon: '✅' },
-  { step: 3, title: 'Query Capacity & Burst Credits', description: 'Monitor burst credit consumption and disk capacity utilization.', status: 'Complete', icon: '✅' },
-  { step: 4, title: 'Build Resource Inventory', description: 'Create VM/disk inventory from metrics data for Power BI dimension tables.', status: 'Complete', icon: '✅' },
-  { step: 5, title: 'Export to Power BI', description: 'Use the full export query with M query for Power BI Desktop import or DirectQuery.', status: 'Ready', icon: '📊' },
+  { step: 1, title: 'Route Metrics to Log Analytics', description: 'Enable diagnostic settings + AMA with DCR for guest OS and platform metrics.', status: 'Complete', icon: '✅' },
+  { step: 2, title: 'Guest OS Disk Usage (% Free Space)', description: 'Query Perf table for Logical Disk free space — the core Power BI capacity query.', status: 'Complete', icon: '✅' },
+  { step: 3, title: 'Platform Disk Performance (IOPS/Latency)', description: 'Query AzureMetrics for IOPS, throughput, latency, queue depth, consumed %.', status: 'Complete', icon: '✅' },
+  { step: 4, title: 'Capacity & Burst Credits', description: 'Monitor burst credit consumption and disk capacity utilization.', status: 'Complete', icon: '✅' },
+  { step: 5, title: 'Export to Power BI', description: 'Full export query with M query for Power BI Desktop.', status: 'Ready', icon: '📊' },
 ];
 
 const CATEGORIES = [...new Set(QUERIES.map(q => q.category))];
