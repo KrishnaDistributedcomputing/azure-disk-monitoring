@@ -67,35 +67,58 @@ export default function DesignDocPage() {
             <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-3">1. Solution Overview</h2>
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-6 space-y-4">
               <h3 className="text-lg font-semibold text-white">1.1 Purpose</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">This document describes the detailed design of the Azure Disk Performance Monitoring Proof of Concept. The solution provides a <strong className="text-white">single pane of glass</strong> to monitor disk performance and utilization across Azure Virtual Machines, with drill-down capability from fleet level to individual disk metrics.</p>
+              <p className="text-sm text-slate-300 leading-relaxed">This document describes the detailed design of the Azure Disk Performance Monitoring Proof of Concept. The solution has evolved from a disk monitoring POC into a <strong className="text-white">comprehensive Azure subscription management platform</strong> with 14 interactive pages covering resource monitoring, cost management, billing analytics, Azure Advisor integration, and operational intelligence — all deployed as a static web app.</p>
               <h3 className="text-lg font-semibold text-white">1.2 Scope</h3>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4"><h4 className="text-xs font-bold text-emerald-400 uppercase">In Scope</h4><ul className="mt-2 space-y-1 text-xs text-slate-300"><li>• 5 VMs across 3 families (D, E, L-series)</li><li>• 5 disk types (Premium SSD, PremV2, Standard SSD, HDD, Ultra)</li><li>• 29 guest-level + 42 platform-level disk metrics</li><li>• 15+ KQL queries for analysis</li><li>• 4-page web dashboard + Grafana</li><li>• FIO/DiskSpd benchmark suite (7 profiles)</li></ul></div>
-                <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4"><h4 className="text-xs font-bold text-red-400 uppercase">Out of Scope</h4><ul className="mt-2 space-y-1 text-xs text-slate-300"><li>• Production security hardening</li><li>• Azure Policy / RBAC / Private Link</li><li>• Automated alerting and incident response</li><li>• Application-layer monitoring</li><li>• Multi-region deployment</li></ul></div>
+                <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4"><h4 className="text-xs font-bold text-emerald-400 uppercase">In Scope</h4><ul className="mt-2 space-y-1 text-xs text-slate-300"><li>• 5 VMs across 3 families (D, E, L-series) — currently deallocated</li><li>• 5 disk types (Premium SSD, PremV2, Standard SSD, HDD, Ultra)</li><li>• 209 total resources across 21 Azure service types</li><li>• 14-page Next.js dashboard with corporate navy theme</li><li>• Real-time billing (6-month history, daily spend, cost anomaly detection)</li><li>• Azure Advisor: 359 recommendations across 4 WAF pillars</li><li>• Tag-based cost management with governance compliance</li><li>• Service Explorer with clickable drill-down into all 21 service types</li><li>• Workload mapping: 10 logical workloads across 28 resource groups</li><li>• FinOps analysis with PAYG vs RI comparisons</li><li>• AI Disk Advisor with conversational Q&amp;A</li><li>• Official Azure SVG icons throughout</li><li>• 29 guest-level + 42 platform-level disk metrics</li><li>• 17 KQL queries, FIO/DiskSpd benchmark suite</li></ul></div>
+                <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4"><h4 className="text-xs font-bold text-red-400 uppercase">Out of Scope</h4><ul className="mt-2 space-y-1 text-xs text-slate-300"><li>• Production security hardening</li><li>• Azure Policy / RBAC / Private Link</li><li>• Automated alerting and incident response</li><li>• Application-layer monitoring</li><li>• Multi-region deployment</li><li>• Live Azure OpenAI integration (uses local knowledge base)</li></ul></div>
               </div>
               <h3 className="text-lg font-semibold text-white">1.3 High-Level Architecture</h3>
               <Mermaid id="overview-arch" chart={`graph LR
-  VM["5 Azure VMs<br/>D4s, D8s, E4s, L8s"] --> AMA["Azure Monitor Agent<br/>29 counters @ 60s"]
+  subgraph Subscription["Azure Subscription (209 resources)"]
+    VM["5 VMs<br/>D4s, D8s, E4s, L8s<br/>(Deallocated)"]
+    DISK["13 Managed Disks<br/>5 types"]
+    AKS["4 AKS Clusters"]
+    CAPP["15 Container Apps"]
+    ACR["15 Container Registries"]
+    DB["3 PostgreSQL + 2 Cosmos"]
+    SVC["21 Service Types Total"]
+  end
+  VM --> AMA["AMA + DCR<br/>29 counters"]
   VM --> DS["Diagnostic Settings<br/>42 platform metrics"]
-  AMA --> DCR["Data Collection Rule"]
-  DCR --> LAW["Log Analytics<br/>Workspace"]
+  AMA --> LAW["Log Analytics"]
   DS --> LAW
-  LAW --> DASH["Next.js Dashboard<br/>Static Web App"]
-  LAW --> GRAF["Azure Managed<br/>Grafana"]
-  LAW --> KQL["KQL Query<br/>Library"]
-  BENCH["FIO / DiskSpd<br/>7 profiles"] --> VM
-  style VM fill:#1e293b,stroke:#3b82f6
-  style LAW fill:#1e293b,stroke:#f59e0b
-  style DASH fill:#1e293b,stroke:#22c55e
-  style GRAF fill:#1e293b,stroke:#22c55e`} />
+  subgraph Platform["14-Page Dashboard"]
+    DASH["Next.js 14<br/>Azure SWA"]
+    MON["Monitor / Services"]
+    COST["Billing / Cost Analyzer"]
+    ADV["Azure Advisor (359)"]
+    FIN["FinOps / Workload Map"]
+    AI["AI Disk Advisor"]
+  end
+  LAW --> DASH
+  Subscription --> DASH
+  CostAPI["Cost Management API"] --> COST
+  AdvAPI["Advisor API"] --> ADV
+  GraphAPI["Resource Graph"] --> MON
+  style VM fill:#131f35,stroke:#ef4444
+  style LAW fill:#131f35,stroke:#f59e0b
+  style DASH fill:#131f35,stroke:#22c55e
+  style Platform fill:#0a1628,stroke:#2563eb`} />
               <h3 className="text-lg font-semibold text-white">1.4 Key Design Decisions</h3>
               <div className="space-y-2">{[
                 { decision: 'Azure Monitor Agent (AMA) over legacy MMA', rationale: 'AMA is the current-generation agent. MMA is deprecated. AMA supports DCR-based configuration.' },
                 { decision: 'Single DCR for all VMs', rationale: 'Simplifies management. All VMs need the same disk counters. Add VM-specific DCRs later if needed.' },
-                { decision: 'Diagnostic Settings for platform metrics', rationale: 'Platform metrics (consumed %, burst credits) are not available via AMA. Must use Diagnostic Settings to get them into Log Analytics.' },
-                { decision: 'Next.js static export over server-side rendering', rationale: 'Azure Static Web Apps is free/cheap. No server-side code needed. Mock data for demos, live KQL for production.' },
-                { decision: 'Premium SSD v2 and Ultra Disk in availability zones', rationale: 'These disk types require zonal deployment. VMs pinned to zone 1 in eastus2.' },
-                { decision: 'Separate data disks (not in Bicep VM resource)', rationale: 'Disks created as separate resources for independent lifecycle. Attached via az vm disk attach post-deployment.' },
+                { decision: 'Diagnostic Settings for platform metrics', rationale: 'Platform metrics (consumed %, burst credits) are not available via AMA. Must use Diagnostic Settings.' },
+                { decision: 'Next.js static export (14 pages)', rationale: 'Azure Static Web Apps Standard tier. No server runtime needed. All data pre-fetched from Azure APIs during development.' },
+                { decision: 'Corporate Navy theme with Inter font', rationale: 'Finance/business user focused. 15px base font, WCAG AAA contrast, card shadows, page transitions for executive presentation quality.' },
+                { decision: 'Official Azure SVG icons', rationale: 'Professional appearance. 22 Azure service icons replacing emoji placeholders across all pages.' },
+                { decision: 'CSS-only theme switching (no page edits)', rationale: 'globals.css remaps all Tailwind slate-* classes to the navy palette. All 14 pages inherit the theme automatically.' },
+                { decision: 'Azure Cost Management API for billing data', rationale: '6-month history, daily granularity, cost by service/RG/tag. Real data vs estimates.' },
+                { decision: 'Azure Resource Graph for service inventory', rationale: '209 resources indexed with type, location, SKU, creation date. Sub-second query performance.' },
+                { decision: 'Azure Advisor API for recommendations', rationale: '359 recommendations across 4 WAF pillars. Integrated into dedicated page with category/impact filters.' },
+                { decision: 'Tag-based cost governance', rationale: 'Tag compliance tracking (55%), untagged RG identification, Azure Policy recommendations for enforcement.' },
+                { decision: 'VMs deallocated by default', rationale: 'POC VMs cost $0 compute when deallocated. Only disk storage costs apply (~$77/mo vs ~$1,507/mo running).' },
               ].map((d, i) => (
                 <div key={i} className="rounded-lg border border-slate-700 bg-slate-800/50 p-4">
                   <div className="text-sm font-semibold text-white">{d.decision}</div>
@@ -219,31 +242,51 @@ export default function DesignDocPage() {
           {section === 'viz' && (<>
             <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-3">5. Visualization Design</h2>
             <div className="rounded-xl border border-slate-700 bg-slate-800 p-6 space-y-4">
-              <h3 className="text-lg font-semibold text-white">5.1 Dashboard Architecture</h3>
+              <h3 className="text-lg font-semibold text-white">5.1 Dashboard Architecture (14 Pages)</h3>
               <Mermaid id="dash-arch" chart={`graph TB
-  subgraph PAGES["Next.js Pages"]
-    HOME["/ Dashboard<br/>7 metric tabs"]
-    MON["/ Monitor<br/>Fleet→VM→Disk drill-down"]
-    TECH["/ Technical<br/>Architecture + Mermaid"]
-    HELP["/ Help<br/>Cost simulator + guides"]
-    DEEP["/ Deep-Dive<br/>KQL + counters + metrics"]
-    DESIGN["/ Design<br/>This document"]
+  subgraph MONITOR["Monitoring"]
+    HOME["/ Home<br/>Landing + Search"]
+    MON["/ Monitor<br/>All Resources"]
+    METRICS["/ Metrics<br/>7 metric tabs"]
+    SVC["/ Services<br/>21 service types"]
   end
-  SWA["Azure Static Web Apps<br/>Global CDN • HTTPS"] --> PAGES
-  PAGES --> RECHARTS["Recharts<br/>Area • Bar • Pie • Radar • Scatter • Line"]
-  PAGES --> TW["Tailwind CSS<br/>Dark theme (slate-900)"]
-  PAGES --> MERMAID["Mermaid.js<br/>Architecture diagrams"]
-  style PAGES fill:#111827,stroke:#22c55e
-  style SWA fill:#1e293b,stroke:#3b82f6`} />
+  subgraph FINANCE["Finance & Cost"]
+    COST["/ Cost Analyzer<br/>Tags + New Resources"]
+    BILL["/ Billing<br/>6-month history"]
+    FINOPS["/ FinOps<br/>PAYG vs RI"]
+    WORK["/ Workloads<br/>10 workload map"]
+  end
+  subgraph GOVERNANCE["Governance & AI"]
+    ADV["/ Azure Advisor<br/>359 recommendations"]
+    AIADV["/ AI Advisor<br/>Conversational Q&A"]
+  end
+  subgraph DOCS["Documentation"]
+    TECH["/ Technical<br/>Architecture"]
+    DEEP["/ Deep Dive<br/>KQL + Metrics"]
+    DESIGN["/ Design<br/>This document"]
+    HELP["/ Help<br/>Simulator + About"]
+  end
+  SWA["Azure Static Web Apps<br/>Standard • Global CDN"] --> MONITOR
+  SWA --> FINANCE
+  SWA --> GOVERNANCE
+  SWA --> DOCS
+  CostAPI["Cost Management API"] --> FINANCE
+  AdvAPI["Advisor API"] --> GOVERNANCE
+  GraphAPI["Resource Graph"] --> MONITOR
+  style MONITOR fill:#0a1628,stroke:#3b82f6
+  style FINANCE fill:#0a1628,stroke:#22c55e
+  style GOVERNANCE fill:#0a1628,stroke:#a855f7
+  style DOCS fill:#0a1628,stroke:#f59e0b
+  style SWA fill:#131f35,stroke:#2563eb`} />
               <h3 className="text-lg font-semibold text-white">5.2 Drill-Down Pattern (Monitor Page)</h3>
               <Mermaid id="drill-down" chart={`graph LR
   L1["Level 1: Fleet Overview<br/>All VMs • KPI strip • Health donut<br/>Filter by family/health • Sort"] -->|Click VM| L2["Level 2: VM Detail<br/>VM header • Gauges • All disks<br/>IOPS/throughput/latency per disk"]
   L2 -->|Click Disk| L3["Level 3: Disk Detail<br/>8 metric cards • 4 time series<br/>Provisioned vs actual • Cost"]
   L3 -->|Breadcrumb| L2
   L2 -->|Breadcrumb| L1
-  style L1 fill:#1e293b,stroke:#3b82f6
-  style L2 fill:#1e293b,stroke:#8b5cf6
-  style L3 fill:#1e293b,stroke:#22c55e`} />
+  style L1 fill:#131f35,stroke:#3b82f6
+  style L2 fill:#131f35,stroke:#8b5cf6
+  style L3 fill:#131f35,stroke:#22c55e`} />
               <h3 className="text-lg font-semibold text-white">5.3 Chart Types Used</h3>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{[
                 { chart: 'Area Chart', usage: 'IOPS, throughput, latency, queue depth over time' },

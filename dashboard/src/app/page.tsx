@@ -104,6 +104,15 @@ const PAGES = [
     features: ['8 design sections', 'Key design decisions', 'Mermaid diagrams per section', 'Bicep module structure', 'Tagging strategy', 'Security POC vs production', 'Operational commands'],
   },
   {
+    title: 'Power BI Spec',
+    path: '/powerbi-spec',
+    icon: '📊',
+    color: '#f59e0b',
+    category: 'Documentation',
+    description: 'Power BI integration spec for disk monitoring: 3 architecture options, 4 datasets, 4 reports (18 pages), 5-week implementation plan, KQL export queries, and cost estimates.',
+    features: ['3 architecture options', '4 Power BI datasets', '4 reports (18 pages)', '5-week implementation plan', 'KQL export queries', 'Cost comparison table', 'DAX measures'],
+  },
+  {
     title: 'Help & Reference',
     path: '/help',
     icon: '💡',
@@ -124,7 +133,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '14', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '15', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
