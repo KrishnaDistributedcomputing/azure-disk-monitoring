@@ -104,6 +104,15 @@ const PAGES = [
     features: ['8 design sections', 'Key design decisions', 'Mermaid diagrams per section', 'Bicep module structure', 'Tagging strategy', 'Security POC vs production', 'Operational commands'],
   },
   {
+    title: 'KQL Dashboard',
+    path: '/kql-dashboard',
+    icon: '📊',
+    color: '#22c55e',
+    category: 'Monitoring',
+    description: 'Visual dashboard powered by real KQL query results from 137K AzureMetrics rows. IOPS line chart, data points per VM, metric distribution, VM telemetry table.',
+    features: ['IOPS time series chart', 'VM data points bar chart', 'Metric distribution', 'Category pie chart', 'VM telemetry table', 'VM filter controls'],
+  },
+  {
     title: 'KQL Lab',
     path: '/kql-lab',
     icon: '🔬',
@@ -142,7 +151,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '16', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '17', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
