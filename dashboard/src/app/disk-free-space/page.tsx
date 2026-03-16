@@ -78,7 +78,6 @@ const VM_COLORS: Record<string, string> = { 'dsv5-01': '#f59e0b', 'dsv5-02': '#3
 
 export default function FreeSpacePage() {
   const [selectedVM, setSelectedVM] = useState<string>('all');
-  const [showQuery, setShowQuery] = useState(false);
 
   const filteredData = selectedVM === 'all' ? RESULT_DATA : RESULT_DATA.filter(r => r.computer.includes(selectedVM));
 
@@ -103,24 +102,21 @@ export default function FreeSpacePage() {
               <div className="text-right"><div className="text-sm text-slate-400">VMs</div><div className="text-xl font-bold text-white">{VM_SUMMARY.length}</div></div>
               <div className="h-8 w-px bg-slate-700" />
               <div className="text-right"><div className="text-sm text-slate-400">Lowest</div><div className="text-xl font-bold text-amber-400">{Math.min(...RESULT_DATA.map(r => r.avg))}%</div></div>
-              <button onClick={() => setShowQuery(!showQuery)} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-300 hover:text-white transition-colors">{showQuery ? 'Hide' : 'Show'} KQL</button>
             </div>
           </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-[1400px] px-6 py-6 space-y-6">
-        {/* KQL Query (toggleable) */}
-        {showQuery && (
-          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-bold text-emerald-300">KQL Query</h3>
-              <button onClick={() => navigator.clipboard.writeText(QUERY)} className="rounded bg-slate-700 px-3 py-1.5 text-xs text-slate-300 hover:text-white">Copy</button>
-            </div>
-            <pre className="text-sm font-mono text-emerald-400 whitespace-pre leading-relaxed bg-slate-900 rounded-lg p-4 border border-slate-700/50 overflow-x-auto">{QUERY}</pre>
-            <p className="text-xs text-slate-400 mt-3">Workspace: <code className="text-blue-400">law-diskmon-poc-eastus2</code> · ID: <code className="text-blue-400">945fb25a-235a-4457-ad3d-ada310dd8b28</code> · Requires VMs running with AMA + DCR</p>
+        {/* KQL Query — always visible */}
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-bold text-emerald-300">KQL Query</h3>
+            <button onClick={() => navigator.clipboard.writeText(QUERY)} className="rounded bg-slate-700 px-3 py-1.5 text-xs text-slate-300 hover:text-white">Copy</button>
           </div>
-        )}
+          <pre className="text-sm font-mono text-emerald-400 whitespace-pre leading-relaxed bg-slate-900 rounded-lg p-4 border border-slate-700/50 overflow-x-auto">{QUERY}</pre>
+          <p className="text-xs text-slate-400 mt-3">Workspace: <code className="text-blue-400">law-diskmon-poc-eastus2</code> · ID: <code className="text-blue-400">945fb25a-235a-4457-ad3d-ada310dd8b28</code> · Requires VMs running with AMA + DCR</p>
+        </div>
 
         {/* VM Filter */}
         <div className="flex items-center gap-3">
