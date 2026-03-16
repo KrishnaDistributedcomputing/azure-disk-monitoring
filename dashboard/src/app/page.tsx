@@ -104,6 +104,15 @@ const PAGES = [
     features: ['8 design sections', 'Key design decisions', 'Mermaid diagrams per section', 'Bicep module structure', 'Tagging strategy', 'Security POC vs production', 'Operational commands'],
   },
   {
+    title: 'Disk Free Space %',
+    path: '/disk-free-space',
+    icon: '💾',
+    color: '#34d399',
+    category: 'Monitoring',
+    description: 'Dedicated report for the % Free Space KQL query with area charts, per-VM bars, sparkline trends, 13 disk instances across 5 VMs, and alert thresholds.',
+    features: ['% Free Space KQL query', 'Area chart by VM', 'VM summary bar chart', 'Sparkline trends per disk', 'Alert thresholds', 'Power BI export ready'],
+  },
+  {
     title: 'KQL Dashboard',
     path: '/kql-dashboard',
     icon: '📊',
@@ -151,7 +160,7 @@ const PAGES = [
 ];
 
 const STATS = [
-  { label: 'Dashboard Pages', value: '17', icon: '📱', href: '#pages', desc: 'See all pages below' },
+  { label: 'Dashboard Pages', value: '18', icon: '📱', href: '#pages', desc: 'See all pages below' },
   { label: 'VMs Monitored', value: '5', icon: '🖥️', href: '/monitor', desc: 'D4s, D8s, E4s, L8s, D4s-Win → Single Pane Monitor' },
   { label: 'Disk Types', value: '5', icon: '💾', href: '/help#disk-types', desc: 'Premium SSD, PremV2, Std SSD, HDD, Ultra → Help page' },
   { label: 'KQL Queries', value: '17', icon: '🔎', href: '/deep-dive', desc: 'Inventory, IOPS, latency, comparison → Deep Dive' },
