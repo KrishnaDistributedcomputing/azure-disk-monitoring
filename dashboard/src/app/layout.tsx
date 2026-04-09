@@ -3,7 +3,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
-  title: 'Azure Disk Monitoring — Single Pane of Glass',
+  title: 'Single Pane of Glass Dashboards',
   description: 'Disk performance monitoring POC for Azure Virtual Machines',
 };
 

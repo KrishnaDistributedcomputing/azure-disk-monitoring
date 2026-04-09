@@ -28,6 +28,9 @@ param adminPassword string
 @description('Deployment timestamp for unique naming')
 param deploymentTimestamp string = utcNow('yyyyMMddHHmm')
 
+@description('Enable deletion lock to prevent accidental resource group deletion')
+param enableDeletionLock bool = true
+
 // ======================== Variables ========================
 
 var commonTags = {
@@ -103,6 +106,17 @@ module grafana 'modules/grafana.bicep' = {
     tags: commonTags
     grafanaName: 'grafana-${project}-${environment}'
     workspaceId: logAnalytics.outputs.workspaceId
+  }
+}
+
+// ======================== Resource Lock ========================
+
+module resourceLock 'modules/resource-lock.bicep' = {
+  name: 'deploy-resource-lock'
+  scope: rg
+  params: {
+    enableLock: enableDeletionLock
+    tags: commonTags
   }
 }
 
@@ -354,3 +368,4 @@ output logAnalyticsWorkspaceName string = logAnalytics.outputs.workspaceName
 output grafanaEndpoint string = grafana.outputs.grafanaEndpoint
 output dcrId string = dcr.outputs.dcrId
 output vnetName string = network.outputs.vnetName
+output deletionLockEnabled bool = resourceLock.outputs.lockEnabled

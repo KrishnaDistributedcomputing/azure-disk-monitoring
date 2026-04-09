@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const PAGES = [
@@ -149,6 +150,33 @@ const PAGES = [
     features: ['Cost simulator (5 disk types)', 'Premium SSD tier picker', 'PremV2/Ultra sliders', 'Disk capability bars', 'IOPS scaling chart', 'VM disk cap table', 'Decision guide', '8 optimization tips'],
   },
   {
+    title: 'Cognitive Services Monitor',
+    path: '/cognitive-services',
+    icon: '🧠',
+    color: '#10b981',
+    category: 'Monitoring',
+    description: 'Monitoring dashboard for all Azure AI / Cognitive Services. 12 accounts (OpenAI, Speech, Vision, Language, Translator), model deployments, API call volumes, latency percentiles, quota utilization, and cost optimization recommendations.',
+    features: ['12 service accounts', '7 model deployments', 'API call volume (24h)', 'Latency percentiles', 'Quota utilization bars', 'HTTP status breakdown', 'Cost by region & type', '5 cost optimizations'],
+  },
+  {
+    title: 'AI Foundry Dashboard',
+    path: '/ai-foundry',
+    icon: '🔮',
+    color: '#a78bfa',
+    category: 'Monitoring',
+    description: 'Focused dashboard for Azure AI Foundry projects and OpenAI model deployments. Token throughput (prompt vs completion), TTFT latency, throttling analysis, content safety breakdown, and per-project cost attribution.',
+    features: ['5 AI Foundry projects', '12 model deployments', 'Token throughput (14d)', 'TTFT P50/P99 latency', 'Throttled request analysis', 'Content safety by category', 'Jailbreak detection', '4 safety recommendations'],
+  },
+  {
+    title: 'AI Models Catalog',
+    path: '/ai-models',
+    icon: '🤖',
+    color: '#3b82f6',
+    category: 'Monitoring',
+    description: 'Unified view of every model deployed through AI Foundry. 12 deployments across 5 families with per-deployment drill-down: TTFT/TBT percentiles, token throughput, capacity utilization, throttling, errors, content safety, and cost analysis.',
+    features: ['12 model deployments', 'Per-model drill-down', 'TTFT P50/P90/P95/P99', 'TBT streaming latency', 'Capacity utilization bars', '14-day token trend', 'Error breakdown (4xx/5xx)', 'Cost optimization tips'],
+  },
+  {
     title: 'AI Disk Advisor',
     path: '/advisor',
     icon: '✨',
@@ -156,6 +184,15 @@ const PAGES = [
     category: 'Tools',
     description: 'AI-powered chat interface that answers questions about disk costs, performance optimization, and generates KQL queries. Uses Azure OpenAI GPT-4o-mini ($0.15/1M tokens) or runs locally with built-in knowledge.',
     features: ['Natural language Q&A', 'Cost analysis answers', 'Performance diagnostics', 'KQL query generation', 'Disk type recommendations', 'Azure OpenAI ready (GPT-4o-mini)', 'Zero-cost local mode', 'Suggested questions'],
+  },
+  {
+    title: 'Project Cleanup',
+    path: '/teardown',
+    icon: '🧹',
+    color: '#ef4444',
+    category: 'Tools',
+    description: 'Safe, ordered teardown of all Azure resources deployed by this POC. Removes resource locks, deallocates VMs to stop billing, cleans up DCR associations, role assignments, diagnostic settings, and deletes the resource group.',
+    features: ['8-step ordered cleanup', 'Resource lock removal', 'VM deallocation (stops billing)', 'DCR association cleanup', 'Grafana RBAC cleanup', 'Diagnostic settings removal', 'Resource group deletion', 'Cost optimization'],
   },
 ];
 
@@ -171,8 +208,16 @@ const STATS = [
 ];
 
 export default function LandingPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    router.refresh();
+    setTimeout(() => setIsRefreshing(false), 1000);
+  }, [router]);
 
   const categories = [...new Set(PAGES.map((p) => p.category))];
 
@@ -198,13 +243,17 @@ export default function LandingPage() {
               <svg className="h-10 w-10 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" /></svg>
             </div>
             <h1 className="text-4xl font-extrabold text-white sm:text-5xl">
-              Azure Disk Performance
+              Azure Cost analyzer
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#4a9eff] to-[#93c5fd]">Monitoring Platform</span>
             </h1>
             <p className="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">Single pane of glass to monitor disk performance across Azure VMs — with drill-down, cost simulation, live pricing, and comprehensive documentation.</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/monitor" className="rounded-xl bg-blue-600 px-7 py-3.5 text-base font-semibold text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25">Open Monitor</Link>
               <Link href="/metrics" className="rounded-xl border border-slate-600 bg-slate-800 px-7 py-3.5 text-base font-semibold text-slate-200 hover:text-white hover:border-slate-500 transition-colors">View Metrics</Link>
+              <button onClick={handleRefresh} disabled={isRefreshing} className="rounded-xl border border-slate-600 bg-slate-800 px-7 py-3.5 text-base font-semibold text-slate-200 hover:text-white hover:border-slate-500 transition-colors flex items-center gap-2 disabled:opacity-50">
+                <svg className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" /></svg>
+                {isRefreshing ? 'Refreshing…' : 'Refresh'}
+              </button>
               <a href="https://github.com/KrishnaDistributedcomputing/azure-disk-monitoring" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-600 bg-slate-800 px-7 py-3.5 text-base font-semibold text-slate-200 hover:text-white hover:border-slate-500 transition-colors flex items-center gap-2">
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
                 GitHub

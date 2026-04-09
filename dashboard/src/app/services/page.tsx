@@ -20,6 +20,7 @@ interface ServiceResource {
   sku?: string;
   kind?: string;
   status?: string;
+  tags?: Record<string, string>;
 }
 
 interface AzureService {
@@ -43,11 +44,11 @@ const SERVICES: AzureService[] = [
     displayName: 'Log Analytics Workspaces', icon: '/icons/log-analytics.svg', count: 16, mtdCost: 0.55, category: 'Monitoring', color: '#10b981',
     description: 'Central log collection and KQL query engine. 16 workspaces across monitoring, AKS, AI, and default resource groups.',
     resources: [
-      { name: 'law-diskmon-poc-eastus2', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', status: 'Active' },
-      { name: 'hello-ca-logs', rg: 'rg-helloworld-canadacentral', location: 'canadacentral' },
-      { name: 'hello-au-logs', rg: 'rg-helloworld-australiaeast', location: 'australiaeast' },
-      { name: 'hello-us-logs', rg: 'rg-helloworld-eastus2', location: 'eastus2' },
-      { name: 'hello-as-logs', rg: 'rg-helloworld-southeastasia', location: 'southeastasia' },
+      { name: 'law-diskmon-poc-eastus2', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', status: 'Active', tags: { project: 'diskmon', environment: 'poc' } },
+      { name: 'hello-ca-logs', rg: 'rg-helloworld-canadacentral', location: 'canadacentral', tags: { project: 'helloworld', environment: 'demo' } },
+      { name: 'hello-au-logs', rg: 'rg-helloworld-australiaeast', location: 'australiaeast', tags: { project: 'helloworld', environment: 'demo' } },
+      { name: 'hello-us-logs', rg: 'rg-helloworld-eastus2', location: 'eastus2', tags: { project: 'helloworld', environment: 'demo' } },
+      { name: 'hello-as-logs', rg: 'rg-helloworld-southeastasia', location: 'southeastasia', tags: { project: 'helloworld', environment: 'demo' } },
       { name: 'arp-dev-logs', rg: 'rg-arp-dev-core', location: 'eastus2' },
       { name: 'kv-logs-xxx (x6)', rg: 'rg-kv-ai-*', location: 'swedencentral' },
       { name: 'DefaultWorkspace-EUS', rg: 'DefaultResourceGroup-EUS', location: 'eastus' },
@@ -61,7 +62,7 @@ const SERVICES: AzureService[] = [
     displayName: 'Network Security Groups', icon: '/icons/nsg.svg', count: 15, mtdCost: 0, category: 'Networking', color: '#3b82f6',
     description: 'Firewall rules for subnets and NICs. 15 NSGs across AKS node pools, VNets, and VM subnets.',
     resources: [
-      { name: 'snet-diskmon-vms-poc-nsg', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2' },
+      { name: 'snet-diskmon-vms-poc-nsg', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', tags: { project: 'diskmon', environment: 'poc' } },
       { name: 'aks-agentpool-*-nsg (x8)', rg: 'MC_rg-helloworld-*', location: 'multi-region' },
       { name: 'subnet-nsg (x4)', rg: 'various', location: 'multi-region' },
     ],
@@ -72,7 +73,7 @@ const SERVICES: AzureService[] = [
     displayName: 'Container Registries', icon: '/icons/container-registry.svg', count: 15, mtdCost: 22.40, category: 'Containers', color: '#8b5cf6',
     description: '15 registries — mostly Basic SKU. High count due to per-project/per-region deployments. Consolidation opportunity.',
     resources: [
-      { name: 'azvmetlacr', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Basic' },
+      { name: 'azvmetlacr', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Basic', tags: { project: 'azvm-compute', environment: 'dev' } },
       { name: 'restdiracr3yj6wtfbtsi32', rg: 'restdir-rg', location: 'canadacentral', sku: 'Basic' },
       { name: 'ca4fabaea789acr', rg: 'rg-arp-dev-core', location: 'eastus2', sku: 'Basic' },
       { name: 'kvacrXXXXX (x6)', rg: 'rg-kv-ai-*', location: 'swedencentral', sku: 'Basic' },
@@ -87,7 +88,7 @@ const SERVICES: AzureService[] = [
     displayName: 'Container Apps', icon: '/icons/container-app.svg', count: 15, mtdCost: 0.65, category: 'Containers', color: '#06b6d4',
     description: 'Serverless container instances. 15 apps across ARP dev (orchestrator + 5 regional pings), KV AI, and App Spaces.',
     resources: [
-      { name: 'arp-dev-orch', rg: 'rg-arp-dev-core', location: 'eastus2', status: 'Running' },
+      { name: 'arp-dev-orch', rg: 'rg-arp-dev-core', location: 'eastus2', status: 'Running', tags: { project: 'arp', environment: 'dev' } },
       { name: 'arp-dev-ping-* (x5)', rg: 'rg-arp-dev-core', location: 'eastus2', status: 'Running' },
       { name: 'container-app-sh4tpwkxz5f5m', rg: 'appspacesragapp9b9f8efe', location: 'westus2', status: 'Running' },
       { name: 'kv-ai-app (x6)', rg: 'rg-kv-ai-*', location: 'swedencentral' },
@@ -99,10 +100,10 @@ const SERVICES: AzureService[] = [
     displayName: 'Managed Disks', icon: '/icons/disks.svg', count: 13, mtdCost: 8.20, category: 'Compute', color: '#f59e0b',
     description: '13 disks: 8 data + 5 OS across 5 VM types (Premium SSD, Premium SSD v2, Standard SSD, Standard HDD, Ultra).',
     resources: [
-      { name: 'disk-ultra-bench', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'UltraSSD_LRS', status: 'Attached' },
-      { name: 'disk-premv2-bench', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'PremiumV2_LRS', status: 'Attached' },
-      { name: 'disk-prem-iops', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Premium_LRS', status: 'Attached' },
-      { name: 'disk-std-ssd-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'StandardSSD_LRS', status: 'Attached' },
+      { name: 'disk-ultra-bench', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'UltraSSD_LRS', status: 'Attached', tags: { project: 'diskmon', environment: 'poc', purpose: 'benchmark' } },
+      { name: 'disk-premv2-bench', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'PremiumV2_LRS', status: 'Attached', tags: { project: 'diskmon', environment: 'poc', purpose: 'benchmark' } },
+      { name: 'disk-prem-iops', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Premium_LRS', status: 'Attached', tags: { project: 'diskmon', environment: 'poc' } },
+      { name: 'disk-std-ssd-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'StandardSSD_LRS', status: 'Attached', tags: { project: 'diskmon', environment: 'poc' } },
       { name: 'disk-std-hdd-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_LRS', status: 'Attached' },
       { name: 'OS disks (x5)', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Premium_LRS', status: 'Attached' },
     ],
@@ -147,11 +148,11 @@ const SERVICES: AzureService[] = [
     displayName: 'Virtual Machines', icon: '/icons/vm.svg', count: 5, mtdCost: 19.52, category: 'Compute', color: '#ef4444',
     description: '5 VMs for disk monitoring POC: D4s_v5 ×2 (Linux), D8s_v5 (Linux), E4s_v5 (Linux), L8s_v3 (NVMe).',
     resources: [
-      { name: 'vm-diskmon-linux-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_D4s_v5', status: 'Deallocated' },
-      { name: 'vm-diskmon-linux-02', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_D4s_v5', status: 'Deallocated' },
-      { name: 'vm-diskmon-linux-03', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_D8s_v5', status: 'Deallocated' },
-      { name: 'vm-diskmon-linux-04', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_E4s_v5', status: 'Deallocated' },
-      { name: 'vm-diskmon-win-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_L8s_v3', status: 'Deallocated' },
+      { name: 'vm-diskmon-linux-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_D4s_v5', status: 'Deallocated', tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'general-purpose-baseline' } },
+      { name: 'vm-diskmon-linux-02', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_D4s_v5', status: 'Deallocated', tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'general-purpose-scaleup' } },
+      { name: 'vm-diskmon-linux-03', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_D8s_v5', status: 'Deallocated', tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'memory-optimized-comparison' } },
+      { name: 'vm-diskmon-linux-04', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_E4s_v5', status: 'Deallocated', tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'storage-optimized-comparison' } },
+      { name: 'vm-diskmon-win-01', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard_L8s_v3', status: 'Deallocated', tags: { project: 'diskmon', environment: 'poc', 'vm-purpose': 'windows-diskspd-comparison' } },
     ],
     portalUrl: 'https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines',
   },
@@ -181,8 +182,8 @@ const SERVICES: AzureService[] = [
     displayName: 'Static Web Apps', icon: '/icons/static-apps.svg', count: 5, mtdCost: 9.00, category: 'Web', color: '#22c55e',
     description: '5 SWAs: disk monitoring dashboard (Standard), ARP dev, CSI education, AZVM SKU lookup, quiz demo.',
     resources: [
-      { name: 'swa-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard', status: 'Active' },
-      { name: 'arp-dev-swa', rg: 'rg-arp-dev-core', location: 'eastus2', sku: 'Free' },
+      { name: 'swa-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard', status: 'Active', tags: { project: 'diskmon', environment: 'poc' } },
+      { name: 'arp-dev-swa', rg: 'rg-arp-dev-core', location: 'eastus2', sku: 'Free', tags: { project: 'arp', environment: 'dev' } },
       { name: 'csi-education-vertical', rg: 'appspacesragapp9b9f8efe', location: 'westus2', sku: 'Free' },
       { name: 'azvm-sku-lookup-swa', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Free' },
     ],
@@ -193,10 +194,10 @@ const SERVICES: AzureService[] = [
     displayName: 'AKS Clusters', icon: '/icons/kubernetes.svg', count: 4, mtdCost: 0, category: 'Containers', color: '#7c3aed',
     description: '4 AKS clusters across 4 regions (Canada, Australia, US, SE Asia) for helloworld demo app.',
     resources: [
-      { name: 'helloaks-aks', rg: 'rg-helloworld-canadacentral', location: 'canadacentral', sku: 'Free' },
-      { name: 'helloau-aks', rg: 'rg-helloworld-australiaeast', location: 'australiaeast', sku: 'Free' },
-      { name: 'hellous-aks', rg: 'rg-helloworld-eastus2', location: 'eastus2', sku: 'Free' },
-      { name: 'helloas-aks', rg: 'rg-helloworld-southeastasia', location: 'southeastasia', sku: 'Free' },
+      { name: 'helloaks-aks', rg: 'rg-helloworld-canadacentral', location: 'canadacentral', sku: 'Free', tags: { project: 'helloworld', environment: 'demo' } },
+      { name: 'helloau-aks', rg: 'rg-helloworld-australiaeast', location: 'australiaeast', sku: 'Free', tags: { project: 'helloworld', environment: 'demo' } },
+      { name: 'hellous-aks', rg: 'rg-helloworld-eastus2', location: 'eastus2', sku: 'Free', tags: { project: 'helloworld', environment: 'demo' } },
+      { name: 'helloas-aks', rg: 'rg-helloworld-southeastasia', location: 'southeastasia', sku: 'Free', tags: { project: 'helloworld', environment: 'demo' } },
     ],
     portalUrl: 'https://portal.azure.com/#browse/Microsoft.ContainerService%2FmanagedClusters',
   },
@@ -214,7 +215,7 @@ const SERVICES: AzureService[] = [
     displayName: 'AI/Cognitive Services', icon: '/icons/cognitive.svg', count: 5, mtdCost: 0.00, category: 'AI/ML', color: '#a78bfa',
     description: '5 accounts: Azure OpenAI (disk monitoring), AI Foundry (KV AI), and 3 standalone Cognitive accounts.',
     resources: [
-      { name: 'oai-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', kind: 'OpenAI', status: 'Active' },
+      { name: 'oai-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', kind: 'OpenAI', status: 'Active', tags: { project: 'diskmon', environment: 'poc' } },
       { name: 'kv-ai-d3ocert7badhy', rg: 'rg-kv-ai-4e8c9', location: 'swedencentral', kind: 'AIServices' },
       { name: 'aifastfox260227', rg: 'rg-fastfox260227', location: 'swedencentral', kind: 'AIServices' },
       { name: 'aiboldorca260227', rg: 'rg-boldorca260227', location: 'westus3', kind: 'AIServices' },
@@ -226,8 +227,8 @@ const SERVICES: AzureService[] = [
     displayName: 'PostgreSQL Flexible', icon: '/icons/postgresql.svg', count: 3, mtdCost: 5.21, category: 'Databases', color: '#0891b2',
     description: '3 PostgreSQL Flexible servers: 2 for AZVM compute (SKU lookup + ETL), 1 for restaurant directory.',
     resources: [
-      { name: 'azurevmsku-pg', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Standard_B1ms' },
-      { name: 'azvm-compute-pg', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Standard_B1ms' },
+      { name: 'azurevmsku-pg', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Standard_B1ms', tags: { project: 'azvm-compute', environment: 'dev' } },
+      { name: 'azvm-compute-pg', rg: 'rg-azvm-compute', location: 'canadacentral', sku: 'Standard_B1ms', tags: { project: 'azvm-compute', environment: 'dev' } },
       { name: 'restdir-db-3yj6wtfbtsi32', rg: 'restdir-rg', location: 'canadacentral', sku: 'Standard_B1ms' },
     ],
     portalUrl: 'https://portal.azure.com/#browse/Microsoft.DBforPostgreSQL%2FflexibleServers',
@@ -237,7 +238,7 @@ const SERVICES: AzureService[] = [
     displayName: 'Cosmos DB', icon: '/icons/cosmos-db.svg', count: 2, mtdCost: 5.37, category: 'Databases', color: '#2dd4bf',
     description: '2 Cosmos DB accounts: ARP dev (serverless, minimal use) and Global Sensor Storm demo.',
     resources: [
-      { name: 'arp-dev-cosmos', rg: 'rg-arp-dev-core', location: 'eastus2', kind: 'GlobalDocumentDB' },
+      { name: 'arp-dev-cosmos', rg: 'rg-arp-dev-core', location: 'eastus2', kind: 'GlobalDocumentDB', tags: { project: 'arp', environment: 'dev' } },
       { name: 'globalsensorstorm-cosmos', rg: 'rg-globalsensorstorm-global', location: 'canadacentral', kind: 'GlobalDocumentDB' },
     ],
     portalUrl: 'https://portal.azure.com/#browse/Microsoft.DocumentDB%2FdatabaseAccounts',
@@ -247,7 +248,7 @@ const SERVICES: AzureService[] = [
     displayName: 'Managed Grafana', icon: '/icons/grafana.svg', count: 1, mtdCost: 0, category: 'Monitoring', color: '#f97316',
     description: 'Azure Managed Grafana for disk performance dashboards. Connected to Log Analytics workspace.',
     resources: [
-      { name: 'grafana-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard', status: 'Active' },
+      { name: 'grafana-diskmon-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', sku: 'Standard', status: 'Active', tags: { project: 'diskmon', environment: 'poc' } },
     ],
     portalUrl: 'https://portal.azure.com/#browse/Microsoft.Dashboard%2Fgrafana',
   },
@@ -265,7 +266,7 @@ const SERVICES: AzureService[] = [
     displayName: 'Data Collection Rules', icon: '/icons/data-collection.svg', count: 1, mtdCost: 0, category: 'Monitoring', color: '#84cc16',
     description: 'DCR with 29 performance counters for AMA-based disk metrics collection at 60-second intervals.',
     resources: [
-      { name: 'dcr-diskmon-perf-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', status: 'Active' },
+      { name: 'dcr-diskmon-perf-poc', rg: 'rg-diskmon-poc-eastus2', location: 'eastus2', status: 'Active', tags: { project: 'diskmon', environment: 'poc' } },
     ],
     portalUrl: 'https://portal.azure.com/#browse/Microsoft.Insights%2FdataCollectionRules',
   },
@@ -312,6 +313,14 @@ export default function ServiceExplorerPage() {
   })).sort((a, b) => b.cost - a.cost);
 
   const topByCount = [...SERVICES].sort((a, b) => b.count - a.count).slice(0, 8);
+
+  const allResources = useMemo(() =>
+    SERVICES.flatMap(svc => svc.resources.map(r => ({ ...r, service: svc.displayName, serviceColor: svc.color }))),
+    []
+  );
+  const taggedResources = allResources.filter(r => r.tags && Object.keys(r.tags).length > 0);
+  const untaggedResources = allResources.filter(r => !r.tags || Object.keys(r.tags).length === 0);
+  const tagCoveragePct = Math.round((taggedResources.length / allResources.length) * 100);
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-200" role="main">
@@ -509,6 +518,98 @@ export default function ServiceExplorerPage() {
               </div>
             );
           })}
+        </div>
+
+        {/* Tag Coverage Tables */}
+        <div className="space-y-6 mt-8">
+          {/* Summary bar */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-bold text-white">Tag Coverage</h2>
+              <span className="text-sm text-slate-400">{taggedResources.length} tagged · {untaggedResources.length} untagged · {tagCoveragePct}% coverage</span>
+            </div>
+            <div className="w-full h-3 rounded-full bg-slate-700 overflow-hidden">
+              <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${tagCoveragePct}%` }} />
+            </div>
+          </div>
+
+          {/* Services WITHOUT Tags */}
+          <div className="rounded-xl border border-red-500/30 bg-slate-800 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-700 flex items-center gap-3">
+              <span className="flex items-center justify-center h-7 w-7 rounded-full bg-red-500/20 text-red-400 text-sm font-bold">!</span>
+              <div>
+                <h3 className="text-base font-bold text-white">Resources Without Tags ({untaggedResources.length})</h3>
+                <p className="text-sm text-slate-400">These resources have no tags — consider adding project, environment, and cost-center tags</p>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-700 text-slate-300 bg-slate-900/30">
+                    <th className="px-4 py-2.5 text-left font-semibold">Resource Name</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Service</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Resource Group</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Location</th>
+                    <th className="px-4 py-2.5 text-center font-semibold">Tags</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {untaggedResources.map((r, i) => (
+                    <tr key={i} className="border-b border-slate-700/30 hover:bg-slate-700/20">
+                      <td className="px-4 py-2.5 font-mono font-semibold text-blue-400">{r.name}</td>
+                      <td className="px-4 py-2.5"><span className="text-slate-300">{r.service}</span></td>
+                      <td className="px-4 py-2.5 text-slate-300">{r.rg}</td>
+                      <td className="px-4 py-2.5 text-slate-300">{r.location}</td>
+                      <td className="px-4 py-2.5 text-center"><span className="rounded-full px-2 py-0.5 text-xs font-semibold bg-red-500/20 text-red-400">none</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Services WITH Tags */}
+          <div className="rounded-xl border border-emerald-500/30 bg-slate-800 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-700 flex items-center gap-3">
+              <span className="flex items-center justify-center h-7 w-7 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold">✓</span>
+              <div>
+                <h3 className="text-base font-bold text-white">Resources With Tags ({taggedResources.length})</h3>
+                <p className="text-sm text-slate-400">These resources are properly tagged for cost tracking and governance</p>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-700 text-slate-300 bg-slate-900/30">
+                    <th className="px-4 py-2.5 text-left font-semibold">Resource Name</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Service</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Resource Group</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Location</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Tags</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {taggedResources.map((r, i) => (
+                    <tr key={i} className="border-b border-slate-700/30 hover:bg-slate-700/20">
+                      <td className="px-4 py-2.5 font-mono font-semibold text-blue-400">{r.name}</td>
+                      <td className="px-4 py-2.5"><span className="text-slate-300">{r.service}</span></td>
+                      <td className="px-4 py-2.5 text-slate-300">{r.rg}</td>
+                      <td className="px-4 py-2.5 text-slate-300">{r.location}</td>
+                      <td className="px-4 py-2.5">
+                        <div className="flex flex-wrap gap-1">
+                          {Object.entries(r.tags!).map(([k, v]) => (
+                            <span key={k} className="rounded-full px-2 py-0.5 text-xs font-medium bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                              {k}={v}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 
