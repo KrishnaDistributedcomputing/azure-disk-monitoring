@@ -838,6 +838,306 @@ export default function HelpPage() {
           ))}
         </div>
 
+        {/* ================================================================== */}
+        {/* SECTION 9: AI & Cognitive Services Report Guide */}
+        {/* ================================================================== */}
+        <SectionHeader id="ai-reports" title="AI & Cognitive Services Reports Guide" subtitle="Understanding the three new AI monitoring dashboards — data sources, metrics, and how they work" />
+
+        <div className="space-y-6">
+          {/* Cognitive Services Monitor */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden">
+            <div className="bg-gradient-to-r from-emerald-600/20 to-emerald-600/5 border-b border-slate-700 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🧠</span>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Cognitive Services Monitor</h3>
+                  <p className="text-xs text-slate-400">Route: <Link href="/cognitive-services" className="text-blue-400 hover:underline">/cognitive-services</Link></p>
+                </div>
+              </div>
+            </div>
+            <div className="px-6 py-5 space-y-4">
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">What It Does</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Provides a unified monitoring view of <strong className="text-white">all 12 Azure Cognitive Services accounts</strong> in the subscription — spanning Azure OpenAI (8 accounts), Speech Services, Computer Vision, Language (Text Analytics), and Translator. It tracks service health, API call volumes, latency, quota utilization, HTTP status codes, and cost across every endpoint.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Data Sources</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {[
+                    { source: 'Azure Resource Manager (ARM) API', desc: 'Lists all Microsoft.CognitiveServices/accounts in the subscription. Returns name, kind, SKU, endpoint, provisioning state, and tags.' },
+                    { source: 'Azure Monitor Metrics API', desc: 'Pulls per-account metrics: TotalCalls, TotalTokens, SuccessRate, Latency, TotalErrors. Aggregated at 1-hour grain over 30 days.' },
+                    { source: 'Azure Cost Management API', desc: 'MTD cost per account using the Cognitive Services meter category. Broken down by service type and region.' },
+                    { source: 'Azure Monitor Logs (Diagnostic Settings)', desc: 'HTTP status code distribution (200, 400, 401, 429, 500, 408) from diagnostic logs shipped to Log Analytics.' },
+                  ].map(s => (
+                    <div key={s.source} className="rounded-lg bg-slate-900/50 border border-slate-700/50 p-3">
+                      <p className="text-xs font-semibold text-blue-400">{s.source}</p>
+                      <p className="text-[11px] text-slate-400 mt-1">{s.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Metrics Explained</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead><tr className="border-b border-slate-700 text-[var(--text-tertiary)]">
+                      <th className="text-left py-2 pr-4">Metric</th><th className="text-left py-2 pr-4">Unit</th><th className="text-left py-2 pr-4">Source</th><th className="text-left py-2">What It Tells You</th>
+                    </tr></thead>
+                    <tbody className="text-slate-300">
+                      {[
+                        ['API Calls (30d)', 'count', 'Monitor Metrics', 'Total HTTP requests to each endpoint over 30 days — indicates usage volume'],
+                        ['Tokens Consumed (30d)', 'count', 'Monitor Metrics', 'Total tokens processed by OpenAI endpoints (prompt + completion combined)'],
+                        ['Avg Latency', 'milliseconds', 'Monitor Metrics', 'Mean end-to-end response time per account, averaged over 30 days'],
+                        ['Error Rate', '%', 'Monitor Metrics', 'Percentage of requests returning non-2xx status codes. Target: < 1%'],
+                        ['Quota Utilization', '%', 'ARM API + Metrics', 'Current usage vs provisioned capacity (TPM). High % = throttling risk'],
+                        ['MTD Cost', 'USD', 'Cost Management API', 'Month-to-date cost from April 1–9, 2026 per Azure meter category'],
+                        ['HTTP Status Codes', 'count', 'Diagnostic Logs', '7-day distribution: 200 (success), 429 (rate limited), 400/401/500/408'],
+                        ['Latency Percentiles', 'ms', 'Monitor Logs (KQL)', 'P50, P90, P95, P99 computed via KQL percentile() over 7-day window'],
+                      ].map(([metric, unit, source, desc]) => (
+                        <tr key={metric} className="border-b border-slate-700/30">
+                          <td className="py-2 pr-4 font-semibold text-white">{metric}</td>
+                          <td className="py-2 pr-4 text-slate-400">{unit}</td>
+                          <td className="py-2 pr-4 text-blue-400">{source}</td>
+                          <td className="py-2 text-slate-400">{desc}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">5 Tabs</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                  {[
+                    { tab: 'Overview', desc: '6 stat cards, 24h API call volume stacked area, cost donut, daily cost trend, quota bars, HTTP codes' },
+                    { tab: 'Service Inventory', desc: '12 expandable cards with endpoint, public access, quota %, tokens, tags, and Portal deep link' },
+                    { tab: 'Model Deployments', desc: '7 OpenAI deployments with token consumption bar chart and full detail table' },
+                    { tab: 'Latency & Errors', desc: 'P50–P99 latency by service type, error rate bar chart, HTTP status pie' },
+                    { tab: 'Cost Analysis', desc: 'Cost by account/region/type, April forecast, and 5 cost optimization recommendations' },
+                  ].map(t => (
+                    <div key={t.tab} className="rounded-lg bg-slate-900/50 border border-slate-700/50 p-3">
+                      <p className="text-xs font-bold text-white">{t.tab}</p>
+                      <p className="text-[10px] text-slate-400 mt-1">{t.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* AI Foundry Dashboard */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600/20 to-purple-600/5 border-b border-slate-700 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🔮</span>
+                <div>
+                  <h3 className="text-lg font-bold text-white">AI Foundry Dashboard</h3>
+                  <p className="text-xs text-slate-400">Route: <Link href="/ai-foundry" className="text-blue-400 hover:underline">/ai-foundry</Link></p>
+                </div>
+              </div>
+            </div>
+            <div className="px-6 py-5 space-y-4">
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">What It Does</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Focused view of <strong className="text-white">5 Azure AI Foundry projects</strong> (3 AIServices hubs + 2 standalone OpenAI accounts). Unlike the Cognitive Services Monitor which covers all AI service types, this dashboard zooms into the Foundry ecosystem: project-level metrics, connected resources (Storage, ACR, Key Vault, AppInsights), model deployments per project, token throughput (prompt vs. completion), throttling patterns, and content safety analysis.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Data Sources</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {[
+                    { source: 'AI Foundry REST API (ai.azure.com)', desc: 'Project metadata: hub association, connected resources, model deployment list, and endpoint configuration.' },
+                    { source: 'Azure OpenAI Metrics API', desc: 'Per-deployment: PromptTokens, CompletionTokens, TotalRequests, ThrottledRequests, ContentFilterBlocked. 30-day aggregation.' },
+                    { source: 'Azure OpenAI Diagnostic Logs', desc: 'Hourly request volume by model (GPT-4o, GPT-4o-mini, Embeddings, DALL-E 3). Throttled vs. succeeded breakdown.' },
+                    { source: 'Azure Content Safety API logs', desc: 'Content filter blocks by category: Hate, Sexual, Violence, Self-Harm, Profanity, Jailbreak Attempt, Protected Material.' },
+                  ].map(s => (
+                    <div key={s.source} className="rounded-lg bg-slate-900/50 border border-slate-700/50 p-3">
+                      <p className="text-xs font-semibold text-purple-400">{s.source}</p>
+                      <p className="text-[11px] text-slate-400 mt-1">{s.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Metrics Explained</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead><tr className="border-b border-slate-700 text-[var(--text-tertiary)]">
+                      <th className="text-left py-2 pr-4">Metric</th><th className="text-left py-2 pr-4">Unit</th><th className="text-left py-2">What It Tells You</th>
+                    </tr></thead>
+                    <tbody className="text-slate-300">
+                      {[
+                        ['Prompt Tokens (30d)', 'count', 'Input tokens sent to the model — represents context size and prompt engineering cost'],
+                        ['Completion Tokens (30d)', 'count', 'Output tokens generated — drives cost for GPT-4o ($10/1M) and GPT-4o-mini ($0.60/1M)'],
+                        ['Prompt:Completion Ratio', 'ratio', 'Higher = more input context per output. RAG patterns typically show 3:1 to 5:1'],
+                        ['Success Rate', '%', 'Percentage of requests with HTTP 2xx. Below 98% warrants investigation'],
+                        ['Throttled Requests', 'count', 'HTTP 429 responses when TPM/RPM quota exceeded. Remediation: increase capacity or add retry logic'],
+                        ['Content Filter Blocked', 'count', 'Requests blocked by Azure Content Safety. Categories: Hate, Sexual, Violence, Self-Harm, Jailbreak, Profanity'],
+                        ['MTD Cost by Project', 'USD', 'Cost attributed to each AI Foundry project using cost tags and meter sub-category'],
+                        ['TTFT (Time to First Token)', 'ms', 'Latency from request receipt to first token streamed — key UX metric for chat applications'],
+                      ].map(([metric, unit, desc]) => (
+                        <tr key={metric} className="border-b border-slate-700/30">
+                          <td className="py-2 pr-4 font-semibold text-white">{metric}</td>
+                          <td className="py-2 pr-4 text-slate-400">{unit}</td>
+                          <td className="py-2 text-slate-400">{desc}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">5 Tabs</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                  {[
+                    { tab: 'Overview', desc: '6 stat cards, 14-day token throughput (prompt vs. completion), cost donut by project, requests by model, throttle chart' },
+                    { tab: 'Projects', desc: '5 expandable cards with metrics, connected resources, and inline model deployment tables per project' },
+                    { tab: 'Model Deployments', desc: 'TTFT P50/P99 bar chart, project filter dropdown, and full 11-column deployment table' },
+                    { tab: 'Token Throughput', desc: 'Prompt:completion ratio, per-project token bars, 14-day line trend, throttled requests by deployment' },
+                    { tab: 'Content Safety', desc: 'Blocked by category chart, severity pie (High/Medium/Low), per-project filter bars, 4 safety recommendations' },
+                  ].map(t => (
+                    <div key={t.tab} className="rounded-lg bg-slate-900/50 border border-slate-700/50 p-3">
+                      <p className="text-xs font-bold text-white">{t.tab}</p>
+                      <p className="text-[10px] text-slate-400 mt-1">{t.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* AI Models Catalog */}
+          <div className="rounded-xl border border-slate-700 bg-slate-800 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600/20 to-blue-600/5 border-b border-slate-700 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🤖</span>
+                <div>
+                  <h3 className="text-lg font-bold text-white">AI Models Catalog</h3>
+                  <p className="text-xs text-slate-400">Route: <Link href="/ai-models" className="text-blue-400 hover:underline">/ai-models</Link></p>
+                </div>
+              </div>
+            </div>
+            <div className="px-6 py-5 space-y-4">
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">What It Does</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  The deepest-level dashboard — puts <strong className="text-white">every single model deployment</strong> on one screen with maximum metric detail. 12 deployments across 5 model families (GPT-4o, GPT-4o-mini, text-embedding-ada-002, text-embedding-3-large, DALL-E 3). Each deployment card is clickable for a full drill-down showing 14-day token/request/latency time series, latency percentiles (TTFT P50/P90/P95/P99 + TBT P50/P99), capacity utilization with peak markers, error breakdown (4xx/5xx/timeouts/throttled/retries), and per-category content safety bars.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Data Sources</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {[
+                    { source: 'Azure OpenAI Deployments API', desc: 'Lists all model deployments per account: deployment name, model, version, SKU, provisioned capacity (TPM/RPM).' },
+                    { source: 'Azure Monitor Metrics (per-deployment)', desc: 'Scoped to individual deployments: ProcessedPromptTokens, GeneratedCompletionTokens, AzureOpenAIRequests, ThrottledCount.' },
+                    { source: 'Azure Monitor Logs (KQL percentiles)', desc: 'TTFT and TBT latency percentiles via percentile() KQL function over AzureDiagnostics table. P50, P90, P95, P99 at daily granularity.' },
+                    { source: 'Azure OpenAI Content Filter metrics', desc: 'ContentFilteredCount scoped by category dimension: Hate, Sexual, Violence, SelfHarm, Jailbreak, Profanity.' },
+                    { source: 'Azure Cost Management (meter sub-category)', desc: 'Estimated 30-day cost per deployment using Azure pricing: GPT-4o ($2.50/$10 per 1M in/out), GPT-4o-mini ($0.15/$0.60), Embeddings ($0.10–$0.13).' },
+                    { source: 'Capacity utilization (computed)', desc: 'Avg utilization = (avgTpm / provisionedCapacity) × 100. Peak from max 1-min TPM sample over 30 days.' },
+                  ].map(s => (
+                    <div key={s.source} className="rounded-lg bg-slate-900/50 border border-slate-700/50 p-3">
+                      <p className="text-xs font-semibold text-blue-400">{s.source}</p>
+                      <p className="text-[11px] text-slate-400 mt-1">{s.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Full Metrics Reference</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead><tr className="border-b border-slate-700 text-[var(--text-tertiary)]">
+                      <th className="text-left py-2 pr-4">Metric</th><th className="text-left py-2 pr-4">Unit</th><th className="text-left py-2 pr-4">Source</th><th className="text-left py-2">What It Tells You</th>
+                    </tr></thead>
+                    <tbody className="text-slate-300">
+                      {[
+                        ['Total Tokens (30d)', 'count', 'Monitor Metrics', 'Sum of prompt + completion tokens. Primary volume indicator.'],
+                        ['Prompt Tokens', 'count', 'Monitor Metrics', 'Input tokens — represents context window usage and prompt engineering cost.'],
+                        ['Completion Tokens', 'count', 'Monitor Metrics', 'Output tokens — the expensive side for GPT-4o ($10/1M).'],
+                        ['Requests (30d)', 'count', 'Monitor Metrics', 'Total API calls. Used to compute success rate and avg tokens/request.'],
+                        ['Success Rate', '%', 'Computed', '(successfulRequests / totalRequests) × 100. Target: > 99%.'],
+                        ['E2E Latency', 'ms', 'Monitor Metrics', 'End-to-end: prompt processing + generation time. Weighted average across all requests.'],
+                        ['TTFT P50/P90/P95/P99', 'ms', 'KQL percentile()', 'Time to first token — the user-perceived latency before streaming starts.'],
+                        ['TBT P50/P99', 'ms', 'KQL percentile()', 'Time between tokens — streaming smoothness. High TBT = choppy output.'],
+                        ['Avg RPM / Peak RPM', 'req/min', 'Monitor Metrics', 'Requests per minute. Peak shows burst patterns; compare to RPM quota.'],
+                        ['Avg TPM / Peak TPM', 'tokens/min', 'Monitor Metrics', 'Tokens per minute. Compare to provisioned capacity for utilization %.'],
+                        ['Capacity Utilization', '%', 'Computed', '(avgTpm / provisionedCapacity) × 100. Below 20% = right-size down.'],
+                        ['Peak Utilization', '%', 'Computed', 'Max 1-min TPM sample / capacity. Above 95% = throttling imminent.'],
+                        ['Throttled Requests', 'count', 'Monitor Metrics', 'HTTP 429 responses. Caused by exceeding TPM or RPM quota.'],
+                        ['Rate Limit Retries', 'count', 'App Insights', 'Client-side retry count from SDK telemetry. Shows throttle recovery overhead.'],
+                        ['HTTP 4xx', 'count', 'Diagnostic Logs', 'Client errors: bad request (400), unauthorized (401), not found (404).'],
+                        ['HTTP 5xx', 'count', 'Diagnostic Logs', 'Server errors: internal error (500), bad gateway (502), unavailable (503).'],
+                        ['Timeouts', 'count', 'Diagnostic Logs', 'Requests that exceeded the server timeout (typically 120s for OpenAI).'],
+                        ['Content Filter Blocked', 'count', 'Content Safety', 'Requests blocked by category. Drill-down shows per-category breakdown.'],
+                        ['Estimated Cost (30d)', 'USD', 'Computed from pricing', 'promptTokens × inputPrice + completionTokens × outputPrice. DALL-E: $0.04/image.'],
+                        ['Cost per Million Tokens', 'USD/1M', 'Computed', 'Blended rate: estimatedCost / (totalTokens / 1M). Useful for budget planning.'],
+                      ].map(([metric, unit, source, desc]) => (
+                        <tr key={metric} className="border-b border-slate-700/30">
+                          <td className="py-2 pr-4 font-semibold text-white whitespace-nowrap">{metric}</td>
+                          <td className="py-2 pr-4 text-slate-400">{unit}</td>
+                          <td className="py-2 pr-4 text-blue-400 whitespace-nowrap">{source}</td>
+                          <td className="py-2 text-slate-400">{desc}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">5 Tabs</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                  {[
+                    { tab: 'Model Catalog', desc: 'Filterable/sortable cards for 12 deployments. Click any card for full drill-down with 14-day time series and percentile bars.' },
+                    { tab: 'Performance', desc: 'Cross-deployment TTFT comparison (P50–P99), E2E latency ranking, TBT streaming latency comparison.' },
+                    { tab: 'Throughput', desc: 'Token volume (prompt/completion stacked), capacity utilization avg vs. peak, aggregate TPM/RPM stats.' },
+                    { tab: 'Cost & Efficiency', desc: 'Cost by deployment and model family, blended $/M tokens, DALL-E spend analysis, 4 optimization tips.' },
+                    { tab: 'Health & Safety', desc: 'Throttle rate, error rate, content blocks, timeouts, aggregated safety categories, stacked error breakdown.' },
+                  ].map(t => (
+                    <div key={t.tab} className="rounded-lg bg-slate-900/50 border border-slate-700/50 p-3">
+                      <p className="text-xs font-bold text-white">{t.tab}</p>
+                      <p className="text-[10px] text-slate-400 mt-1">{t.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* How the 3 dashboards relate */}
+          <div className="rounded-xl border border-blue-500/30 bg-blue-500/5 p-6">
+            <h3 className="text-base font-bold text-white mb-3">🔗 How the Three Dashboards Relate</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="rounded-lg border border-slate-700/50 bg-slate-800/50 p-4">
+                <p className="text-xs font-bold text-emerald-400 mb-1">Cognitive Services Monitor</p>
+                <p className="text-[11px] text-slate-400"><strong className="text-white">Broadest scope.</strong> All 12 AI service accounts (OpenAI + Speech + Vision + Language + Translator). Best for: overall health, quota, and cross-service cost comparison.</p>
+              </div>
+              <div className="rounded-lg border border-slate-700/50 bg-slate-800/50 p-4">
+                <p className="text-xs font-bold text-purple-400 mb-1">AI Foundry Dashboard</p>
+                <p className="text-[11px] text-slate-400"><strong className="text-white">Project-level.</strong> 5 AI Foundry projects with connected resources and content safety. Best for: project managers tracking token spend and safety compliance.</p>
+              </div>
+              <div className="rounded-lg border border-slate-700/50 bg-slate-800/50 p-4">
+                <p className="text-xs font-bold text-blue-400 mb-1">AI Models Catalog</p>
+                <p className="text-[11px] text-slate-400"><strong className="text-white">Deepest level.</strong> Every model deployment with full drill-down. Best for: ML engineers optimizing latency, capacity, and cost per deployment.</p>
+              </div>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-4">
+              <strong className="text-white">Navigation:</strong> Start at Cognitive Services for the big picture → drill into AI Foundry for project-level analysis → dive into AI Models for per-deployment optimization. Each dashboard links to the others via header navigation.
+            </p>
+          </div>
+        </div>
+
         {/* ============= ABOUT THIS PLATFORM ============= */}
         <div className="rounded-xl border border-slate-700 bg-slate-800 p-6 mt-8">
           <h2 className="text-xl font-bold text-white mb-4">About This Platform</h2>
@@ -858,6 +1158,9 @@ export default function HelpPage() {
               { path: '/azure-advisor', name: 'Azure Advisor', desc: '359 recommendations across Security, Reliability, Cost, Operations' },
               { path: '/finops', name: 'FinOps', desc: 'All 23 resources with PAYG vs RI analysis, executive-friendly language' },
               { path: '/advisor', name: 'AI Disk Advisor', desc: 'Conversational AI for disk cost/performance Q&A with KQL generation' },
+              { path: '/cognitive-services', name: 'Cognitive Services Monitor', desc: '12 AI accounts: OpenAI, Speech, Vision, Language, Translator with latency, quota, cost' },
+              { path: '/ai-foundry', name: 'AI Foundry Dashboard', desc: '5 Foundry projects, token throughput, throttling, content safety, cost attribution' },
+              { path: '/ai-models', name: 'AI Models Catalog', desc: '12 model deployments with TTFT/TBT percentiles, capacity, cost, per-deployment drill-down' },
               { path: '/technical', name: 'Technical Details', desc: 'Architecture diagrams, 24 metrics catalog, live pricing, benchmarks' },
               { path: '/deep-dive', name: 'Deep Dive', desc: '17 KQL queries, 29 perf counters, 42 platform metrics by category' },
               { path: '/design', name: 'Design Document', desc: '8-section design doc with Mermaid diagrams for architecture decisions' },
